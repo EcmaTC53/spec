@@ -138,3 +138,16 @@ a:hover, a:focus, a:active {
   color: #2A6AA0;
   text-decoration: underline;
 }
+
+@media print {
+  #toc {
+    display:none;
+    width: 0;
+  }
+
+  #content {
+    width: 100%;
+    margin: 0 0 0 0;
+    padding: 0 1em 0 1em;
+  }
+}
