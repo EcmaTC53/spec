@@ -2,12 +2,25 @@
   width: 20em;
   float: left;
   background: #d9d9d9;
-  height: 100%;
+  height: 100vh;
   position: fixed;
   padding: 0 1em 0 1em;
+  overflow: scroll;
+}
+
+div#toc ul {
+  list-style-type: none;
+  padding: 0 0 0 0;
+}
+
+div#toc li {
+  list-style-type: none;
+  padding: 0 0 0 1em;
 }
 
 #content {
+  position: absolute;
+  overflow: hidden;
   margin-left:22em;
   float:right;
   padding: 0 1em 0 1em;
@@ -75,12 +88,6 @@ body {
   color: #111;
 }
 
-ol li {
-  padding: 1em;
-  font-size: 2em;
-  font-weight: bold;
-}
-
 code {
     font-weight: bold;
     font-family: Consolas, Monaco, monospace;
@@ -91,6 +98,12 @@ pre code {
   font-weight: inherit;
   margin: 0;
   padding: 0;
+}
+
+pre {
+  background-color: #fafafa;
+  padding: 1rem;
+  text-align: left;
 }
 
 blockquote {
@@ -116,116 +129,12 @@ thead {
     background-color: #eeeeee;
 }
 
-
-
-
-
-
-
-
-@media print {
-  *,
-  *:before,
-  *:after {
-    background: transparent !important;
-    color: #000 !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
-
-  a[href]:after {
-    content: " (" attr(href) ")";
-  }
-
-  abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
-
-  a[href^="#"]:after,
-  a[href^="javascript:"]:after {
-    content: "";
-  }
-
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  thead {
-    display: table-header-group;
-  }
-
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
+a, a:visited {
+  color: #2A6AA0;
+  text-decoration: none;
 }
 
-html {
-  font-size: 12px;
+a:hover, a:focus, a:active {
+  color: #2A6AA0;
+  text-decoration: underline;
 }
-
-@media screen and (min-width: 32rem) and (max-width: 48rem) {
-  html {
-    font-size: 15px;
-  }
-}
-
-@media screen and (min-width: 48rem) {
-  html {
-    font-size: 16px;
-  }
-}
-
-
-
-small,
-.air-small {
-  font-size: .707em;
-}
-
-/* https://github.com/mrmrs/fluidity */
-
-a,
-a:visited {
-  color: #3498db;
-}
-
-a:hover,
-a:focus,
-a:active {
-  color: #2980b9;
-}
-
-pre {
-  background-color: #fafafa;
-  padding: 1rem;
-  text-align: left;
-}
-
-
-ul,
-ol,
-li {
-  text-align: left;
-}
-
-
