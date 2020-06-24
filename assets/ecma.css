@@ -22,6 +22,7 @@ div#toc li {
   position: absolute;
   overflow: hidden;
   margin-left:22em;
+  width: calc(100vw - 24em);
   float:right;
   padding: 0 1em 0 1em;
 }
