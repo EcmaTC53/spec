@@ -19,7 +19,7 @@
 
 ### HTML Version
 
-Last committed draft Available via GitHub at [https://phoddie.github.io/tc53temp/#-11-sensor-classes-accelerometer](https://phoddie.github.io/tc53temp/#-11-sensor-classes-accelerometer).
+Last committed draft Available via GitHub at [https://phoddie.github.io/tc53temp](https://phoddie.github.io/tc53temp).
 
 ---
 
