@@ -1,6 +1,8 @@
 # To-Do
 
-- Temperature Sensor (Andy)
+- Complete VL6180 configuration options (Andy)
+
+- Review Atmospheric Pressure, Humidity, and Temperature sensor classes (Peter)
 
 - More Review and Proofing (everyone)
 
