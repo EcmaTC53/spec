@@ -2,8 +2,7 @@
 
 - Temperature Sensor (Andy)
 
-- Pixel Display Class Pattern (Peter)
-
+- More Review and Proofing (everyone)
 
 ## Done
 - Sensors Classes (Andy)
@@ -15,6 +14,8 @@
 - Ecma template / formatting (Lizzie)
 
 - Review and Proofing (everyone)
+
+- Pixel Display Class Pattern (Peter)
 
 
 ### HTML Version
