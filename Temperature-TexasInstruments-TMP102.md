@@ -24,34 +24,21 @@ The `TMP102` Sensor Class extends the `Temperature` Sensor Class with additional
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | An options object as specified in the following subsection. This property is required.
-| `alert` | An options object as specified in the subsequent subsection. This property is optional and may be omitted if the TMP102 alert pin will not be used.
-
-##### Properties of `sensor` Options Object
-
-All of the following properties are required. 
-
-| Property | Description |
-| :---: | :--- |
-| `data` | Number specifying the I²C data pin. 
-| `clock` | Number specifying the I²C clock pin.
-| `address` | Number specifying the I²C address. Must be in the range `0x48` to `0x4B`.
-
-##### Properties of `alert` Options Object
-
-| Property | Description |
-| :---: | :--- |
-| `pin` | Number specifying the digital pin for alerts. This property is required.
+| `sensor` | An `I2C` class constructor options object. This property is required. The TMP102 operates at a default frequency of `3_400_000` Hz and has a default I²C address of `0x48`: these values will be used for `hz` and `address` unless otherwise specified.
+| `alert` | A `Digital` class constructor options object. This property is optional and may be omitted if the TMP102 alert pin will not be used.
 
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.
+
+Most property names were chosen to reference the configuration options described in sections 7.5.3 and 7.5.4 of the data sheet. 
 
 | Property | Description |
 | :---: | :--- |
 | `highTemperature` | Number specifying the temperature above which an alert will be asserted. Range is -40 to 125 degrees Celsius. Default is 80 degrees Celsius.  
 | `lowTemperature` | Number specifying the temperature below which an alert pin will be asserted. Range is -40 to 125 degrees Celsius. Default is 75 degrees Celsius.
 | `polarity` | Number specifying the value to write to the alert pin when in an alert condition. Must be `0` or `1`. Default is `0`.
+| `onAlert` | Callback that will be invoked when the alert pin is asserted.
 | `shutdownMode` | Boolean specifying if the module should turn off between requested sample operations. Default is `false`.
 | `thermostatMode` | String specifying the thermostat operating mode. Must be either `"comparator"` or `"interrupt"`. Default is `"comparator"`.
 | `faultQueue` | Number specifying the number of consecutive readings exceeding the limits of `highTemperature` or `lowTemperature` required to trigger an alert. Must be one of `1`, `2`, `4`, or `6`. Default is `1`. 
