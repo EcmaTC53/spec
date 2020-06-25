@@ -1,9 +1,5 @@
 # To-Do
 
-- Complete VL6180 configuration options (Andy)
-
-- One more manufacturer sensor doc(Andy)
-
 - More Review and Proofing (everyone)
 
 ## Done
@@ -20,6 +16,10 @@
 - Pixel Display Class Pattern (Peter)
 
 - Review Atmospheric Pressure, Humidity, and Temperature sensor classes (Peter)
+
+- Complete VL6180 configuration options (Andy)
+
+- One more manufacturer sensor doc(Andy)
 
 
 ### HTML Version
