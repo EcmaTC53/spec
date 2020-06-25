@@ -7,7 +7,7 @@ This document defines the ECMAScript class supporting the VL6180 time-of-flight 
 
 ## 2 Conformance
 
-This class specification conforms to the Proximity Sensor Class of ECMAScript® Modules for Embedded Systems, ECMA-xxx.
+This class specification conforms to the Ambient Light and Proximity Sensor Classes of ECMAScript® Modules for Embedded Systems, ECMA-xxx.
 
 ## 3 Normative References
 
