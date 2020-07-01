@@ -1,40 +1,13 @@
-# To-Do
+# Ecma TC-53
 
-- More Review and Proofing (everyone)
+## Latest drafts (markdown) 
 
-## Done
-- Sensors Classes (Andy)
+- [ECMAScript Module for Embedded Systems](./docs/tc53.md)
+- [Ambient Light and Proximity sensor - STMicroelectronics Vl6180](./docs/sensors/AmbientLight-Proximity-STMicroelectronics-VL6180.md)
+- [Temperature sensor - Texas Instruments TMP102](./docs/sensors/Temperature-TexasInstruments-TMP102.md)
 
-- Providers (Peter)
-
-- SPI (Andy)
-
-- Ecma template / formatting (Lizzie)
-
-- Review and Proofing (everyone)
-
-- Pixel Display Class Pattern (Peter)
-
-- Review Atmospheric Pressure, Humidity, and Temperature sensor classes (Peter)
-
-- Complete VL6180 configuration options (Andy)
-
-- One more manufacturer sensor doc(Andy)
-
-
-### HTML Version
-
-Last committed draft Available via GitHub at [https://phoddie.github.io/tc53temp](https://phoddie.github.io/tc53temp).
-
----
-
-### Instructions to view draft spec locally
-
-1. Start HTTP server
-
-	```text
-	python -m SimpleHTTPServer
-	```
-	
-2. Go to [localhost:8000/tc53.html](http://localhost:8000/tc53.html)
-
+## Latest drafts (HTML) 
+ - [ECMAScript Module for Embedded Systems](https://phoddie.github.io/tc53temp/web/spec.html)
+ - [Ambient Light and Proximity sensor - STMicroelectronics Vl6180](https://phoddie.github.io/tc53temp/web/AmbientLight-Proximity-STMicroelectronics-VL6180.html)
+ - [Temperature sensor - Texas Instruments TMP102](https://phoddie.github.io/tc53temp/web/Temperature-TexasInstruments-TMP102.html)
+ 
