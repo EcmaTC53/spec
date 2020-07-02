@@ -12,7 +12,7 @@ This class specification conforms to the Temperature Sensor Class of ECMAScript�
 ## 3 Normative References
 
 - [TI TMP102 data sheet](https://www.ti.com/lit/ds/symlink/tmp102.pdf)
-- [ECMAScript® Modules for Embedded Systems](https://phoddie.github.io/tc53temp)
+- [ECMAScript® Modules for Embedded Systems](https://EcmaTC53.github.io/spec/web/spec.html)
 
 ## 4 Notational Conventions
 
