@@ -12,7 +12,7 @@ This class specification conforms to the Ambient Light and Proximity Sensor Clas
 ## 3 Normative References
 
 - [ST VL6180 data sheet](https://www.st.com/resource/en/datasheet/vl6180x.pdf)
-- [ECMAScript® Modules for Embedded Systems](https://phoddie.github.io/tc53temp)
+- [ECMAScript® Modules for Embedded Systems](https://EcmaTC53.github.io/spec/web/spec.html)
 
 ## 4 Notational Conventions
 
