@@ -35,14 +35,14 @@ Most property names were chosen to reference the configuration options described
 
 | Property | Description |
 | :---: | :--- |
-| `highTemperature` | Number specifying the temperature above which an alert will be asserted. Range is -40 to 125 degrees Celsius. Default is 80 degrees Celsius.  
-| `lowTemperature` | Number specifying the temperature below which an alert pin will be asserted. Range is -40 to 125 degrees Celsius. Default is 75 degrees Celsius.
-| `polarity` | Number specifying the value to write to the alert pin when in an alert condition. Must be `0` or `1`. Default is `0`.
+| `highTemperature` | Number specifying the temperature above which an alert will be asserted. Range is -40 to 125 degrees Celsius. Initial value is 80 degrees Celsius.  
+| `lowTemperature` | Number specifying the temperature below which an alert pin will be asserted. Range is -40 to 125 degrees Celsius. Initial value is 75 degrees Celsius.
+| `polarity` | Number specifying the value to write to the alert pin when in an alert condition. Must be `0` or `1`. Initial value is `0`.
 | `onAlert` | Callback that will be invoked when the alert pin is asserted.
-| `shutdownMode` | Boolean specifying if the module should turn off between requested sample operations. Default is `false`.
-| `thermostatMode` | String specifying the thermostat operating mode. Must be either `"comparator"` or `"interrupt"`. Default is `"comparator"`.
-| `faultQueue` | Number specifying the number of consecutive readings exceeding the limits of `highTemperature` or `lowTemperature` required to trigger an alert. Must be one of `1`, `2`, `4`, or `6`. Default is `1`. 
-| `conversionRate` | Number specifying the TMP102 conversion rate in Hz. Must be one of `0.25`, `1`, `4`, or `8`. Default is `4`.
+| `shutdownMode` | Boolean specifying if the module should turn off between requested sample operations. Initial value is `false`.
+| `thermostatMode` | String specifying the thermostat operating mode. Must be either `"comparator"` or `"interrupt"`. Initial value is `"comparator"`.
+| `faultQueue` | Number specifying the number of consecutive readings exceeding the limits of `highTemperature` or `lowTemperature` required to trigger an alert. Must be one of `1`, `2`, `4`, or `6`. Initial value is `1`. 
+| `conversionRate` | Number specifying the TMP102 conversion rate in Hz. Must be one of `0.25`, `1`, `4`, or `8`. Initial value is `4`.
 
 ### Properties of Sample Object
 `TMP102` extends the `Temperature` sample object to include the following properties.

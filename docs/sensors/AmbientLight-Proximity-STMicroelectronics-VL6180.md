@@ -30,18 +30,18 @@ All of the following properties are optional.
 
 | Property | Description |
 | :---: | :--- |
-| `includeSensorID` | Boolean specifying if `modelID`, `modelRevisionMajor`, `modelRevisionMinor`, `moduleRevisionMajor`, `moduleRevisionMinor`, and `manufacturedOn` properties will be included in the result returned from `sample`. Default![]() is `false`.
-| `rangingMode` | Number specifying ranging mode. `0` for single shot or `1` for continuous. Default is 0.  
-| `rangingFrequency` | Number specifying time delay between range measurements in continuous mode. Range 10 ms to 2550 ms. Default is 10 ms.
-| `averagingSamplePeriod` | Number specifying how many samples to average together for each range read. Range 0 to 255. Default is 48.
-| `maxConvergenceTime` | Number specifying maximum time to run measurements in ranging modes. Range 1 ms to 63 ms. Default is 49 ms.
-| `crosstalkCompensationRate` | Number specifying the crosstalk compensation rate in Mcps (9.7 format). Default is 0.
-| `crosstalkValidHeight` | Number specifying minimum range value in mm to qualify for cross-talk compensation. Default is 20 mm.
-| `earlyConvergenceEstimate` | Number specifying maximum convergence rate allowed without aborting ranging operation or 0 to disable convergence estimation. Default is 0.
-| `enableSampleReadyPolling` | Boolean specifying if "sample ready" bit should be set when samples are ready. Default is `false`.
-| `analogueGain` | Number specifying ALS analog gain. Options are `40`, `20`, `10`, `5`, `2.5`, `1.67`, `1.25`, and `1`. Default is 1.
-| `alsMode` | Number specifying the ALS mode. `0` for single shot or `1` for continuous. Default is 0.
-| `alsFrequency` | Number specifying time delay between range measurements in continuous mode. Range 10 ms to 2550 ms. Default is 2550 ms. 
+| `includeSensorID` | Boolean specifying if `modelID`, `modelRevisionMajor`, `modelRevisionMinor`, `moduleRevisionMajor`, `moduleRevisionMinor`, and `manufacturedOn` properties will be included in the result returned from `sample`. Initial value is `false`.
+| `rangingMode` | Number specifying ranging mode. `0` for single shot or `1` for continuous. Initial value is 0. 
+| `rangingFrequency` | Number specifying time delay between range measurements in continuous mode. Range 10 ms to 2550 ms. Initial value is 10 ms.
+| `averagingSamplePeriod` | Number specifying how many samples to average together for each range read. Range 0 to 255. Initial value is 48.
+| `maxConvergenceTime` | Number specifying maximum time to run measurements in ranging modes. Range 1 ms to 63 ms. Initial value is 49 ms.
+| `crosstalkCompensationRate` | Number specifying the crosstalk compensation rate in Mcps (9.7 format). Initial value is 0.
+| `crosstalkValidHeight` | Number specifying minimum range value in mm to qualify for cross-talk compensation. Initial value is 20 mm.
+| `earlyConvergenceEstimate` | Number specifying maximum convergence rate allowed without aborting ranging operation or 0 to disable convergence estimation. Initial value is 0.
+| `enableSampleReadyPolling` | Boolean specifying if "sample ready" bit should be set when samples are ready. Initial value is `false`.
+| `analogueGain` | Number specifying ALS analog gain. Options are `40`, `20`, `10`, `5`, `2.5`, `1.67`, `1.25`, and `1`. Initial value is 1.
+| `alsMode` | Number specifying the ALS mode. `0` for single shot or `1` for continuous. Initial value is 0.
+| `alsFrequency` | Number specifying time delay between range measurements in continuous mode. Range 10 ms to 2550 ms. Initial value is 2550 ms. 
 
 
 ### Properties of Sample Object
