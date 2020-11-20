@@ -3,6 +3,7 @@
 ## Latest drafts (markdown) 
 
 - [ECMAScript Modules for Embedded Systems](./docs/tc53.md)
+- [Formal algorithms](./docs/algorithms.md) for APIs in ECMAScript Modules for Embedded Systems.
 - [Ambient Light and Proximity sensor - STMicroelectronics Vl6180](./docs/sensors/AmbientLight-Proximity-STMicroelectronics-VL6180.md)
 - [Temperature sensor - Texas Instruments TMP102](./docs/sensors/Temperature-TexasInstruments-TMP102.md)
 - [Touch controller - FocalTech FT6x06](./docs/sensors/Touch-FocalTech-FT6x06.md)
