@@ -2,7 +2,7 @@
 <p id="subtitle">Recommendations and Best Practices for Scripts on Connected Sensing Devices / January 5, 2021</p>
 <p id="title">ECMAScript® Modules for Embedded Systems</p>
 
-<img src="../web/assets/ecma-logo.svg">
+<img src="../../web/assets/ecma-logo.svg">
 
 ## Table of contents
 
