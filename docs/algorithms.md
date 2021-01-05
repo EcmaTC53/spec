@@ -189,6 +189,50 @@ Every object conforming to a Class Pattern is expected to have one or several in
 | Param | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
 
+### Digital bank
+
+<!-- to do -->
+
+### Analog input
+
+<!-- to do -->
+
+### Pulse-width modulation
+
+<!-- to do -->
+
+### I²C
+
+<!-- to do -->
+
+### System management bus (SMBus)
+
+<!-- to do -->
+
+### Serial
+
+<!-- to do -->
+
+### Serial Peripheral Interface (SPI)
+
+<!-- to do -->
+
+### Pulse count
+
+<!-- to do -->
+
+### TCP socket
+
+<!-- to do -->
+
+### TCP listener socket
+
+<!-- to do -->
+
+### UDP socket
+
+<!-- to do -->
+
 ## Peripheral Class Pattern
 
 ### `constructor`(*options*)
@@ -294,6 +338,37 @@ Every object conforming to a Class Pattern is expected to have one or several in
 | y | Yes | Number | acceleration along the y axis in meters per second squared |
 | z | Yes | Number | acceleration along the z axis in meters per second squared |
 
+### Ambient light
+
+<!-- to do -->
+
+### Atmospheric pressure
+
+<!-- to do -->
+
+### Humidity
+
+<!-- to do -->
+
+### Proximity
+
+<!-- to do -->
+
+### Temperature
+
+<!-- to do -->
+
+### Touch
+
+<!-- to do -->
+
+## Display Class Pattern
+
+<!-- to do -->
+
+## Provenance Sensor Class Pattern
+
+<!-- to do -->
 
 ## IO Provider Class Pattern
 
@@ -342,3 +417,10 @@ Every object conforming to a Class Pattern is expected to have one or several in
 ### `close`()
 
 1. Execute all steps of the Peripheral Class Pattern `close` method
+
+
+## Host provider instance
+
+<!-- to do  -->
+
+Because this is only data structures, not logic, it may not require formal algorithms. 
