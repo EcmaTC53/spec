@@ -1,5 +1,5 @@
 ## Algorithms for TC53
-Updated November 20, 2020
+Updated January 6, 2020
 
 ### Notes
 - This document defines formal algorithms for the [draft](./tc53.md) of the TC53 specification
@@ -364,7 +364,113 @@ Every object conforming to a Class Pattern is expected to have one or several in
 
 ## Display Class Pattern
 
-<!-- to do -->
+### `constructor`(*options*)
+
+1. Execute all steps of the Peripheral Class Pattern constructor
+
+### `adaptInvalid`(*area*)
+
+1. **CheckInternalFields**(`this`)
+1. Throw if *area* is absent
+1. 	If **HasProperty**(*area*, `"x"`)
+	1. Let *x* be **GetProperty**(*area*, `"x"`)
+1. Else
+	1. Let *x* be `0`
+1. 	If **HasProperty**(*area*, `"y"`)
+	1. Let *y* be **GetProperty**(*area*, `"y"`)
+1. Else
+	1. Let *y* be `0`
+1. 	If **HasProperty**(*area*, `"width"`)
+	1. Let *width* be **GetProperty**(*area*, `"width"`)
+1. Else
+	1. Let *width* be the width of the frame buffer in pixels
+1. 	If **HasProperty**(*area*, `"height"`)
+	1. Let *height* be **GetProperty**(*area*, `"height"`)
+1. Else
+	1. Let *height* be the height of the frame buffer in pixels
+1. Adjust *x*, *y*, *width*, *height* to define a valid area to update
+1. **SetProperty**(*area*, `"x"`, *x*)
+1. **SetProperty**(*area*, `"y"`, *y*)
+1. **SetProperty**(*area*, `"width"`, *width*)
+1. **SetProperty**(*area*, `"height"`, *height*)
+
+### `close`()
+
+1. Execute all steps of the Peripheral Class Pattern `close` method
+
+### `begin`(*options*)
+
+1. **CheckInternalFields**(`this`)
+1. Let *status* be **GetInternalField**(`this`, `"status"`)
+1. Throw if *status* is null
+1. Let *x* be `0`
+1. Let *y* be `0`
+1. Let *width* be the width of the frame buffer in pixels
+1. Let *height* be the height of the frame buffer in pixels
+1. Let *continue* be `false`
+1. If *options* is present
+	1. 	If **HasProperty**(*options*, `"x"`)
+		1. Let *x* be **GetProperty**(*options*, `"x"`)
+	1. 	If **HasProperty**(*options*, `"y"`)
+		1. Let *y* be **GetProperty**(*options*, `"y"`)
+	1. 	If **HasProperty**(*options*, `"width"`)
+		1. Let *width* be **GetProperty**(*options*, `"width"`)
+	1. 	If **HasProperty**(*options*, `"height"`)
+		1. Let *height* be **GetProperty**(*options*, `"height"`)
+	1. 	If **HasProperty**(*options*, `"continue"`)
+		1. Let *continue* be **GetProperty**(*options*, `"continue"`)
+1. Throw if the area defined by *x*, *y*, *width* and *height* is invalid.
+1. If *status* is `ready`
+	1. **SetInternalField**(`this`, `"status"`, `"updating"`)
+1. Else
+	1. Throw if *continue* is false
+1. Use *x*, *y*, *width*, *height* to prepare the frame buffer to receive scanlines
+
+### `configure`(*options*)
+
+1. Execute all steps of the Peripheral Class Pattern `configure` method
+
+### `end`()
+
+1. **CheckInternalFields**(`this`)
+1. Let *status* be **GetInternalField**(`this`, `"status"`)
+1. Throw if *status* is not `"updating"`
+1. **SetInternalField**(`this`, `"status"`, `"finishing"`) 
+1. Make updated frame buffer visible
+1. **SetInternalField**(`this`, `"status"`, `"ready"`)
+
+### `send`(*scanlines*)
+
+1. **CheckInternalFields**(`this`)
+1. Let *status* be **GetInternalField**(`this`, `"status"`)
+1. Throw if *status* is not `"updating"`
+1. Throw if *scanlines* is absent
+1. Let *pointer* be **GetBytePointer**(*scanlines*)
+1. Let *n* be **GetProperty**(*lines*, `"byteLength"`)
+1. Transfer *n* bytes from *pointer* to the frame buffer
+
+### `get width`()
+
+1. **CheckInternalFields**(`this`)
+1. Return the width of the frame buffer in pixels
+
+### `get height`()
+
+1. **CheckInternalFields**(`this`)
+1. Return the height of the frame buffer in pixels
+
+#### Notes
+- **GetBytePointer**(*buffer*) is a host specific operator that returns a pointer to the data contained in an `ArrayBuffer`, `SharedArrayBuffer` or `TypedArray` instance. The operator throws if *buffer* is no instance of `ArrayBuffer`, `SharedArrayBuffer` or `TypedArray`, or if *buffer* is detached. For a `TypedArray` instance, the pointer takes the view byte offset into account.  
+- When the frame buffer is rotated 90 or 270 degrees, `get width` returns the height of the frame buffer in pixels and `get height` returns the width of the frame buffer in pixels.
+
+#### constructor *options*:
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| format | no | see text | |
+| rotation | no | 0, 90, 180, or 270 | |
+| brightness | no | 0.0 to 1.0 | |
+| flip | no | "", "h", "v", or "hv" | |
 
 ## Provenance Sensor Class Pattern
 
