@@ -162,13 +162,13 @@ Every object conforming to a Class Pattern is expected to have one or several in
 
 ### Digital
 
-#### constructor *options*:
+#### constructor *options*
 
 | Property | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
-| `pin` | yes | Host dependent pin specifier |
-| `mode` | yes| `Digital.Input`, `Digital.InputPullUp`, `Digital.InputPullDown`, `Digital.InputPullUpDown`, `Digital.Output`, or `Digital.OutputOpenDrain`.  |
-| `edge` | no* | `Digital.Rising`, `Digital.Falling`, and `Digital.Rising | Digital.Falling` | ??? |
+| `pin` | yes | pin specifier |
+| `mode` | yes | `Digital.Input`, `Digital.InputPullUp`, `Digital.InputPullDown`, `Digital.InputPullUpDown`, `Digital.Output`, or `Digital.OutputOpenDrain`.  |
+| `edge` | no* | `Digital.Rising`, `Digital.Falling`, and `Digital.Rising | Digital.Falling`  |
 | `onReadable` | no | `null` or `Function` | `null`|
 | `format` | no | `"number"` | `"number"` |
 
@@ -179,35 +179,199 @@ Every object conforming to a Class Pattern is expected to have one or several in
 | Format | Read | Write | 
 | :--- | :--- | :--- | 
 | `"number"` | `0` or `1` | `0` or `1` |
+
+#### `read` *params*
+
+None
+
+#### `write` *params*
+
+None
+
+### Digital bank
+
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `pins` | yes | Uint32 |
+| `mode` | yes | `Digital.Input`, `Digital.InputPullUp`, `Digital.InputPullDown`, `Digital.InputPullUpDown`, `Digital.Output`, or `Digital.OutputOpenDrain`. |
+| `rises` | no* | Uint32 | 0
+| `falls` | no* | Uint32 | 0
+| `bank` | no | number or string |
+| `onReadable` | no | `null` or `Function` | `null`|
+| `format` | no | `"number"` | `"number"` |
+
+* Both `rises` and `falls` cannot be `0`; at least one pin must be selected.
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"number"` | Uint32 compatible values | Uint32 compatible values |
+
+#### `read` *params*
+
+None
+
+#### `write` *params*
+
+None
+
+### Analog input
+
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `pin` | yes | pin specifier |
+| `resolution` | no | positive number | Host dependent
+| `format` | no | `"number"` | `"number"` |
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"number"` | all | none |
+
+#### `read` *params*
+
+None
+
+#### `write` *params*
+
+None
+
+### Pulse-width modulation
+
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `pin` | yes | pin specifier |
+| `hz` | no | positive number | Host dependent
+| `format` | no | `"number"` | `"number"` |
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"number"` | positive integers | none |
+
+#### `read` *params*
+
+None
+
+#### `write` *params*
+
+None
+
+### I²C
+
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `data` | yes | pin specifier |
+| `clock` | yes | pin specifier |
+| `hz` | yes | positive integer |
+| `address` | yes | 0 to 127 inclusive |
+| `port` | no | port specifier | host dependent
+| `onReadable` | no | `null` or `Function` | `null`|
+| `format` | no | `"buffer"` | `"buffer"` |
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"buffer"` | any | any |
+
 #### `read` *params*
 
 | Param | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
+| `count ` | yes | positive integer |
+| `stop` | no | `true` or `false` | `true`
+| `buffer` | no | `ArrayBuffer` with a `byteLength` of at least `count` | N/A
 
-#### `write` *params*:
+The `read` method supports the following alternate parameter list:
 
 | Param | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
+| `count ` | yes | positive integer |
+| `buffer` | no | `ArrayBuffer` with a `byteLength` of at least `count` | N/A
 
-### Digital bank
+#### `write` *params*
 
-<!-- to do -->
-
-### Analog input
-
-<!-- to do -->
-
-### Pulse-width modulation
-
-<!-- to do -->
-
-### I²C
-
-<!-- to do -->
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `buffer` | yes | `ArrayBuffer` |
+| `stop` | no | `true` or `false` | `true`
 
 ### System management bus (SMBus)
 
-<!-- to do -->
+#### constructor *options*
+
+All properties from I²C plus the following:
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `stop` | no | `true` or `false` | `false`
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"buffer"` | any | any |
+
+#### `read` *params*
+
+Same as I²C.
+
+#### `write` *params*
+
+Same as I²C.
+
+#### `readUint8` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `register` | yes | integer |
+
+####  `writeUint8` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `register` | yes | integer |
+| `value` | yes | 8-bit integer |
+
+#### `readUint16` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `register` | yes | integer |
+| `bigEndian` | no | `true` or `false` | `false`
+
+#### `writeUint16` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `register` | yes | integer |
+| `value` | yes | 16-bit integer |
+
+#### `readBuffer` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `register` | yes | integer |
+| `buffer` | yes | `ArrayBuffer` |
+
+#### `writeBuffer` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `register` | yes | integer |
+| `buffer` | yes | `ArrayBuffer` |
 
 ### Serial
 
@@ -219,7 +383,30 @@ Every object conforming to a Class Pattern is expected to have one or several in
 
 ### Pulse count
 
-<!-- to do -->
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `signal` | yes | pin specifier |
+| `control` | yes | pin specifier |
+| `onReadable` | no | `null` or `Function` | `null`|
+| `format` | no | `"number"` | `"number"` |
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"number"` |none | integer |
+
+#### `read` *params*
+
+None
+
+#### `write` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `count` | yes | integer |
 
 ### TCP socket
 
