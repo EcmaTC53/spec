@@ -1,5 +1,5 @@
 ## Algorithms for TC53
-Updated January 6, 2020
+Updated January 16, 2020
 
 ### Notes
 - This document defines formal algorithms for the [draft](./tc53.md) of the TC53 specification
@@ -39,6 +39,46 @@ Every object conforming to a Class Pattern is expected to have one or several in
 
 **SetInternalField** is trivial for JavaScript private fields, but can involve value conversion for C structure field like converting JavaScript `null` into C `NULL`.
 
+### Ranges
+
+#### Booleans
+
+For boolean ranges, the value is converted into a JavaScript boolean.
+
+#### Numbers
+
+For number ranges, the value is converted into a JavaScript number, then the value is checked to be in range. The special value `NaN` is never in range.
+
+For integer ranges, the value is converted into a JavaScript number, then the value is checked to be an integer, then the value is checked to be in range.
+
+| Range | From | To |
+| :--- | ---: | ---: |
+| number | `-Infinity` | `Infinity` |
+| negative number | `-Infinity` | `0` |
+| positive number | `0`| `Infinity` |
+| integer | `Number.MIN_SAFE_INTEGER` | `Number.MAX_SAFE_INTEGER` |
+| negative integer | `Number.MIN_SAFE_INTEGER` | `0` |
+| positive integer | `0` | `Number.MAX_SAFE_INTEGER` |
+| 8-bit integer | `-128` | `127` |
+| 8-bit unsigned integer | `0` | `255` |
+| 16-bit integer | `-32768` | `32767 ` |
+| 16-bit unsigned integer | `0` | `65535` |
+| 32-bit integer | `-2147483648` | `2147483647` |
+| 32-bit unsigned integer | `0` | `4294967295` |
+
+Further restrictions are specified with **from x to y**, meaning the value must be **>= x** and **<= y**.
+
+#### Objects
+
+For object ranges like `ArrayBuffer`, the value is checked to be an instance of one of specified class.
+
+Further restrictions can be specified, for instance on the `byteLength` of the `ArrayBuffer` instance.
+
+If the object can be `null`, it is explicitly specified like `Function` or `null`.
+
+#### Strings 
+
+For string ranges like `"buffer"`,  the value is converted into a JavaScript string, then checked to be strictly equal to one of the specified values.
 
 ## Base Class Pattern
 
@@ -194,10 +234,10 @@ None
 
 | Property | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
-| `pins` | yes | Uint32 |
+| `pins` | yes | 32-bit unsigned integer |
 | `mode` | yes | `Digital.Input`, `Digital.InputPullUp`, `Digital.InputPullDown`, `Digital.InputPullUpDown`, `Digital.Output`, or `Digital.OutputOpenDrain`. |
-| `rises` | no* | Uint32 | 0
-| `falls` | no* | Uint32 | 0
+| `rises` | no* | 32-bit unsigned integer | 0
+| `falls` | no* | 32-bit unsigned integer | 0
 | `bank` | no | number or string |
 | `onReadable` | no | `null` or `Function` | `null`|
 | `format` | no | `"number"` | `"number"` |
@@ -208,7 +248,7 @@ None
 
 | Format | Read | Write | 
 | :--- | :--- | :--- | 
-| `"number"` | Uint32 compatible values | Uint32 compatible values |
+| `"number"` | 32-bit unsigned integer | 32-bit unsigned integer |
 
 #### `read` *params*
 
@@ -225,7 +265,7 @@ None
 | Property | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
 | `pin` | yes | pin specifier |
-| `resolution` | no | positive number | Host dependent
+| `resolution` | no | positive number | host dependent
 | `format` | no | `"number"` | `"number"` |
 
 #### *data*
@@ -249,7 +289,7 @@ None
 | Property | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
 | `pin` | yes | pin specifier |
-| `hz` | no | positive number | Host dependent
+| `hz` | no | positive number | host dependent
 | `format` | no | `"number"` | `"number"` |
 
 #### *data*
@@ -275,7 +315,7 @@ None
 | `data` | yes | pin specifier |
 | `clock` | yes | pin specifier |
 | `hz` | yes | positive integer |
-| `address` | yes | 0 to 127 inclusive |
+| `address` | yes | 8-bit unsigned integer from 0 to 127 |
 | `port` | no | port specifier | host dependent
 | `onReadable` | no | `null` or `Function` | `null`|
 | `format` | no | `"buffer"` | `"buffer"` |
@@ -343,7 +383,7 @@ Same as I²C.
 | Param | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
 | `register` | yes | integer |
-| `value` | yes | 8-bit integer |
+| `value` | yes | 8-bit unsigned integer |
 
 #### `readUint16` *params*
 
@@ -357,7 +397,7 @@ Same as I²C.
 | Param | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
 | `register` | yes | integer |
-| `value` | yes | 16-bit integer |
+| `value` | yes | 16-bit unsigned integer |
 
 #### `readBuffer` *params*
 
