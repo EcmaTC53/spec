@@ -61,7 +61,7 @@ For integer ranges, the value is converted into a JavaScript number, then the va
 | positive integer | `0` | `Number.MAX_SAFE_INTEGER` |
 | 8-bit integer | `-128` | `127` |
 | 8-bit unsigned integer | `0` | `255` |
-| 16-bit integer | `-32768` | `32767 ` |
+| 16-bit integer | `-32768` | `32767` |
 | 16-bit unsigned integer | `0` | `65535` |
 | 32-bit integer | `-2147483648` | `2147483647` |
 | 32-bit unsigned integer | `0` | `4294967295` |
@@ -85,7 +85,7 @@ For string ranges like `"buffer"`,  the value is converted into a JavaScript str
 ### `constructor`(*options*)
 
 1. **ClearInternalFields**(`this`)
-2. Throw if *options* is `undefined` or `null`
+2. Throw if *options* is not an object
 3. Let *params* be an empty object
 4. For each supported option
 	1. Let *name* be the name of the supported option
@@ -330,7 +330,7 @@ None
 
 | Param | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
-| `count ` | yes | positive integer |
+| `count` | yes | positive integer |
 | `stop` | no | `true` or `false` | `true`
 | `buffer` | no | `ArrayBuffer` with a `byteLength` of at least `count` | N/A
 
@@ -338,7 +338,7 @@ The `read` method supports the following alternate parameter list:
 
 | Param | Required | Range | Default |
 | :--- | :---: | :--- | :--- |
-| `count ` | yes | positive integer |
+| `count` | yes | positive integer |
 | `buffer` | no | `ArrayBuffer` with a `byteLength` of at least `count` | N/A
 
 #### `write` *params*
@@ -415,11 +415,95 @@ Same as I²C.
 
 ### Serial
 
-<!-- to do -->
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `receive` | no* | pin specifier |
+| `transmit` | no* | pin specifier |
+| `baud` | yes | positive integer |
+| `flowControl` | no | `"hardware"` and `"none"` | `"none"`
+| `dataTerminalReady` | no | pin specifier |
+| `requestToSend` | no | pin specifier |
+| `clearToSend` | no | pin specifier |
+| `dataSetReady` | no | pin specifier |
+| `port` | no | port specifier |
+| `onReadable` | no | `null` or `Function` | `null`|
+| `onWritable` | no | `null` or `Function` | `null`|
+| `format` | no | `"number"` | `"number"` |
+
+* A host may require the `receive` and/or `transmit` properties.
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"number"` | 8-bit unsigned integer | 8-bit unsigned integer |
+| `"buffer"` | ArrayBuffer | ArrayBuffer, TypedArray |
+
+#### `read` *params*
+
+If format is "buffer":
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `count` | no | positive integer | number of bytes available to read
+
+If format is "number":
+
+> None
+
+#### `write` *params*
+
+If format is "buffer":
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `data` | yes | ArrayBuffer, TypedArray |
+
+If format is "number":
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `data` | yes | 8-bit unsigned integer |
+
+<!-- to do flush, set, get -->
 
 ### Serial Peripheral Interface (SPI)
 
-<!-- to do -->
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `out` | no* | pin specifier |
+| `in` | no* | pin specifier |
+| `clock` | yes | pin specifier |
+| `select` | no* | pin specifier |
+| `active` | no | 0 or 1 | 0
+| `hz` | yes | positive integer |
+| `mode` | no | 0, 1, 2, or 3 | 0
+| `port` | no | port specifier |
+| `format` | no | `"ArrayBuffer"` | `"ArrayBuffer"` |
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"buffer"` | ArrayBuffer | ArrayBuffer |
+
+#### `read` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `buffer` | yes | ArrayBuffer |
+
+#### `write` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `buffer` | yes | ArrayBuffer |
+
+<!-- to do transfer, flush -->
 
 ### Pulse count
 
@@ -436,7 +520,7 @@ Same as I²C.
 
 | Format | Read | Write | 
 | :--- | :--- | :--- | 
-| `"number"` |none | integer |
+| `"number"` | none | integer |
 
 #### `read` *params*
 
@@ -450,15 +534,113 @@ None
 
 ### TCP socket
 
-<!-- to do -->
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `address` | yes* | string |
+| `host` | yes* | string |
+| `port` | yes | 16-bit unsigned integer |
+| `noDelay` | no | `true` or `false` | `false`
+| `keepAlive` | no | positive integer | N/A
+| `from` | no | instance of TCP Socket | N/A
+| `onError` | no | `null` or `Function` | `null`
+| `onWritable` | no | `null` or `Function` | `null`
+| `onReadable` | no | `null` or `Function` | `null`
+| `format` | no | `"number"` or `"buffer"` | `"buffer"`
+
+* Either the `address` or `host` must be present, but not both.
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"buffer"` | ArrayBuffer | ArrayBuffer, TypedArray |
+| `"number"` | 8-bit unsigned integer | 8-bit unsigned integer |
+
+#### `read` *params*
+
+If format is `"buffer"`:
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `count` | no | positive integer | number of bytes available to read
+
+If format is `"number"`:
+
+> None
+
+#### `write` *params*
+
+When format is `"buffer"`:
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `buffer` | yes | ArrayBuffer, TypeArray |
+
+When format is `"number"`:
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `byte` | yes |  8-bit unsigned integer |
 
 ### TCP listener socket
 
-<!-- to do -->
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `port` | yes | 16-bit unsigned integer |
+| `address` | no | string | N/A
+| `onError` | no | `null` or `Function` | `null`
+| `onReadable` | no | `null` or `Function` | `null`
+| `format` | no | `"socket/tcp"` | `"socket/tcp"`
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"socket/tcp"` | instance of TCP Socket |  |
+
+#### `read` *params*
+
+None
+
+#### `write` *params*
+
+None
 
 ### UDP socket
 
-<!-- to do -->
+#### constructor *options*
+
+| Property | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `address` | no | string | N/A
+| `port` | no | 16-bit signed integer | N/A
+| `multicast` | no | string | N/A
+| `timeToLive` | yes, if multicast used | integer from 1 to  255 | N/A
+| `onError` | no | `null` or `Function` | `null`
+| `onWritable` | no | `null` or `Function` | `null`
+| `format` | no | `"buffer"` | `"buffer"`
+
+* Either the `address` or `host` must be present, but not both.
+
+#### *data*
+
+| Format | Read | Write | 
+| :--- | :--- | :--- | 
+| `"buffer"` | ArrayBuffer | ArrayBuffer, TypedArray |
+
+#### `read` *params*
+
+None
+
+#### `write` *params*
+
+| Param | Required | Range | Default |
+| :--- | :---: | :--- | :--- |
+| `address` | yes | string |
+| `port` | yes | 16-bit unsigned integer |
+| `buffer` | yes | ArrayBuffer, TypeArray |
 
 ## Peripheral Class Pattern
 
