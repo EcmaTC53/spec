@@ -736,40 +736,94 @@ None
 
 #### `sample` *params*:
 
-| Param | Required | Range | Default |
-| :--- | :---: | :--- | :--- |x
+None
 
 #### `sample` *result*:
 
 | Property | Required | Range | Description
 | :---: | :---: | :--- | :--- |
-| x | Yes | Number | acceleration along the x axis in meters per second squared |
-| y | Yes | Number | acceleration along the y axis in meters per second squared |
-| z | Yes | Number | acceleration along the z axis in meters per second squared |
+| `x` | yes | number | acceleration along the x axis in meters per second squared |
+| `y` | yes | number | acceleration along the y axis in meters per second squared |
+| `z` | yes | number | acceleration along the z axis in meters per second squared |
 
-### Ambient light
+#### `sample` *params*:
 
-<!-- to do -->
+None
+
+#### `sample` *result*:
+
+| Property | Required | Range | Description
+| :---: | :---: | :--- | :--- |
+| `illuminance` | yes | positive number | ambient light level in lux |
 
 ### Atmospheric pressure
 
-<!-- to do -->
+#### `sample` *params*:
+
+None
+
+#### `sample` *result*:
+
+| Property | Required | Range | Description
+| :---: | :---: | :--- | :--- |
+| `pressure` | yes | number | atmospheric pressure in Pascal |
 
 ### Humidity
 
-<!-- to do -->
+#### `sample` *params*:
+
+None
+
+#### `sample` *result*:
+
+| Property | Required | Range | Description
+| :---: | :---: | :--- | :--- |
+| `humidity` | yes | positive number from 0 to 1 | relative humidity as a percentage |
 
 ### Proximity
 
-<!-- to do -->
+#### `sample` *params*:
+
+None
+
+#### `sample` *result*:
+
+| Property | Required | Range | Description
+| :---: | :---: | :--- | :--- |
+| `near` | yes | boolean | indicator of a detected proximate object |
+| `distance` | yes | positive number or `null` | distance to the nearest sensed object in centimeters or `null` if no object is detected |
+| `max` | yes | positive number | maximum sensing range of the sensor in centimeters |
 
 ### Temperature
 
-<!-- to do -->
+#### `sample` *params*:
+
+None
+
+#### `sample` *result*:
+
+| Property | Required | Range | Description
+| :---: | :---: | :--- | :--- |
+| `temperature` | yes | number | temperature in degrees Celsius |
 
 ### Touch
 
-<!-- to do -->
+#### `sample` *params*:
+
+None
+
+#### `sample` *result*:
+
+`Array` of `touch` objects or `undefined` if no touch is in progress.
+
+
+#### `touch` object:
+
+| Property | Required | Range | Description
+| :---: | :---: | :--- | :--- |
+| `x` | yes | number | X coordinate of the touch point |
+| `y` | yes | number | Y coordinate of the touch point |
+| `id` | yes | positive integer | indicator of which touch point this entry corresponds to |
 
 ## Display Class Pattern
 
