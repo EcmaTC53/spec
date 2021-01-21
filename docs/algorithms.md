@@ -1,3 +1,5 @@
+# This document has been merged into the main specification. It will be removed soon.
+
 ## Algorithms for TC53
 Updated January 16, 2020
 
@@ -987,9 +989,3 @@ None
 
 1. Execute all steps of the Peripheral Class Pattern `close` method
 
-
-## Host provider instance
-
-<!-- to do  -->
-
-Because this is only data structures, not logic, it may not require formal algorithms. 
