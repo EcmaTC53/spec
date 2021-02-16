@@ -16,7 +16,7 @@ This class specification conforms to the IO Provider Class Pattern of ECMAScript
 
 ## 4 Notational Conventions
 
-## 5 MCP23X08 Provider
+## 5 MCP23X08 IO Provider
 
 The MCP23X08 uses the following mappings from the GPIO pins in the data sheet to pin specifiers and pin bit masks.
 
@@ -31,7 +31,9 @@ The MCP23X08 uses the following mappings from the GPIO pins in the data sheet to
 | `GP6` | 6 | 0x40
 | `GP7` | 7 | 0x80
 
-### `MCP23X08` Provider Class
+### `MCP23X08` IO Provider Class
+
+**Module Specifier**: `embedded:io/provider/MCP23X08`
 
 The `MCP23X08` IO Provider Class implements the IO Provider Class Pattern. This section describes the properties of the `constructor` options object.
 

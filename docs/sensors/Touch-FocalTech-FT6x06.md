@@ -19,6 +19,8 @@ This class specification conforms to the Touch Sensor Class of ECMAScript® Modu
 
 ## 5 `FT6x06` Sensor Class
 
+**Module Specifier**: `embedded:sensor/touch/FT6x06`
+
 The `FT6X06` Sensor Class extends the `Touch` Sensor Class with additional properties on the options objects passed to the `configure` method and returned by the `sample` method.
 
 #### Properties of `constructor` Options Object

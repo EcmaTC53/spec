@@ -18,6 +18,8 @@ This class specification conforms to the Display Class Pattern of ECMAScript® M
 
 ## 5 `ILI9341` Display Class
 
+**Module Specifier**: `embedded:display/LCD/ILI9341`
+
 The `ILI9341` Display Class implements the Display Class Pattern. It extends the pattern with additional properties on the option objects passed to the `constructor` and `configure` method.
 
 #### Properties of `constructor` Options Object

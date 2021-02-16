@@ -18,6 +18,8 @@ This class specification conforms to the Ambient Light and Proximity Sensor Clas
 
 ## 5 `VL6180` Sensor Class
 
+**Module Specifier**: `embedded:sensor/AmbientLight-Proximity/VL6180`
+
 The `VL6180` Sensor Class extends the `AmbientLight` and `Proximity` Sensor Classes with additional properties on the option objects passed to the `configure` method and returned by the `sample` method.
 
 #### Properties of `constructor` Options Object
