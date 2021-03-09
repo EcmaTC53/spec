@@ -17,7 +17,15 @@
 <a id="introduction"></a>
 ## Introduction
 
-Class Specifications for Embedded Hardware Components is a project of Ecma International's Technical Committee 53 with the goal of collecting and disseminating ECMAScript class definitions for specific hardware components and host providers. The repository consists of individual class definition documents developed by committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA TC53, ECMAScript® Modules for Embedded Systems are applied to specific hardware components and specific embedded hosts. The repository is publicly available at [https://github.com/EcmaTC53/spec/tree/master/docs/](https://github.com/EcmaTC53/spec/tree/master/docs/). 
+Class Specifications for Embedded Hardware Components is a project of Ecma International's Technical Committee 53 with the goal of collecting and disseminating ECMAScript class definitions for specific embedded hardware components. An embedded hardware component is a physical device in an embedded system, such as:
+ 
+ - Microcontrollers
+ - Sensors
+ - Actuators
+ - I/O providers and expanders
+ - Displays
+
+Class Specifications for Embedded Hardware Components is a repository of individual class definition documents developed by committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA TC53, ECMAScript® Modules for Embedded Systems are applied to specific hardware components. The repository is publicly available at [https://github.com/EcmaTC53/spec/tree/master/docs/](https://github.com/EcmaTC53/spec/tree/master/docs/). 
 <!-- TODO: reorganize spec repo to put all hardware component class definitions in one folder. -->
 
 <a id="scope"></a>
