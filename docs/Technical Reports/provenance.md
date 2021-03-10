@@ -1,5 +1,5 @@
 <p></p>
-<p id="subtitle">Recommendations and Best Practices for Scripts on Connected Sensing Devices / January 5, 2021</p>
+<p id="subtitle">Recommendations and Best Practices for Scripts on Connected Sensing Devices / March 10, 2021</p>
 <p id="title">ECMAScript® Embedded Systems API Specification</p>
 
 <img src="../../web/assets/ecma-logo.svg">
