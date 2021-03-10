@@ -18,6 +18,8 @@ This class specification conforms to the Temperature Sensor Class of ECMAScriptÂ
 
 ## 5 `TMP102` Sensor Class
 
+**Module Specifier**: `embedded:sensor/temperature/TMP102`
+
 The `TMP102` Sensor Class extends the `Temperature` Sensor Class with additional properties on the option objects passed to the `constructor` and `configure` method and returned by the `sample` method. 
 
 #### Properties of `constructor` Options Object
