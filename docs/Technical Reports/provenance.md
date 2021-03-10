@@ -10,12 +10,10 @@
 2. [References](#references)
 3. [Terms and Definitions](#termsanddefs)
 4. [Abbreviations](#abbreviations)
-5. [Status](#status)
-6. [Contributions](#contributions)
-7. [Best Practices for Scripts on Connected Sensing Devices](#bpscsd)
-8. [Best Practices for Propagating Static Device Metadata](#bppsdm)
-9. [Best Practices for Propagating Dynamic Device State Metadata](#bpddsm)
-10. [Best Practices for Propagating Sensor Samples](#bppss)
+5. [Best Practices for Scripts on Connected Sensing Devices](#bpscsd)
+6. [Best Practices for Propagating Static Device Metadata](#bppsdm)
+7. [Best Practices for Propagating Dynamic Device State Metadata](#bpddsm)
+8. [Best Practices for Propagating Sensor Samples](#bppss)
 
 ## Introduction<a name="introduction"></a>
 
@@ -38,18 +36,6 @@ For the purposes of this document, the terms and definitions from [1] apply.
 <a id="abbreviations"></a>
 ## Abbreviations
 TC53        Ecma International Technical Committee 53
-
-<a id="status"></a>
-## Status
-
-Development of the Class Specifications for Embedded Hardware Components repository is an on-going and open-ended process. Each class definition describes the ECMAScript module for a specific hardware component or embedded host. Because countless such hardware components and hosts exist and new hardware components and hosts are continuously being developed, there will never be a full and complete set of class definitions in the repository. 
-
-As of February 2021, the repository consists of example class definitions created by members of TC53. As additional definitions are contributed by TC53 members, hardware component manufacturers, and the community, the repository will be continuously updated at [https://github.com/EcmaTC53/spec/tree/master/docs/](https://github.com/EcmaTC53/spec/tree/master/docs/), which references the git `master` branch of the repository.
-
-<a id="contributions"></a>
-## Contributions
-
-The Class Specifications for Embedded Hardware Components repository is initially composed of contributions from TC53 members. It is anticipated that additional contributions will come primarily from hardware component manufacturers and members of the community.
 
 ## Best Practices for Scripts on Connected Sensing Devices<a name="bpscsd"></a>
 
