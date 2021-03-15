@@ -12,7 +12,7 @@
 4. [Abbreviations](#abbreviations)
 5. [Status](#status)
 6. [Contributions](#contributions)
-7. [Relation to ECMA TC53, ECMAScript® Modules for Embedded Systems](#relation-to-tc53)
+7. [Relation to ECMA-4xx, ECMAScript® Embedded Systems API Specification](#relation-to-tc53)
 
 <a id="introduction"></a>
 ## Introduction
@@ -25,20 +25,20 @@ Class Specifications for Embedded Hardware Components is a project of Ecma Inter
  - I/O providers and expanders
  - Displays
 
-Class Specifications for Embedded Hardware Components is a repository of individual class definition documents developed by committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA TC53, ECMAScript® Modules for Embedded Systems are applied to specific hardware components. The repository is publicly available at [https://github.com/EcmaTC53/spec/tree/master/docs/](https://github.com/EcmaTC53/spec/tree/master/docs/). 
+Class Specifications for Embedded Hardware Components is a repository of individual class definition documents developed by committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA-4xx, ECMAScript® Embedded Systems API Specification are applied to specific hardware components. The repository is publicly available at [https://github.com/EcmaTC53/spec/tree/master/docs/](https://github.com/EcmaTC53/spec/tree/master/docs/). 
 <!-- TODO: reorganize spec repo to put all hardware component class definitions in one folder. -->
 
 <a id="scope"></a>
 ## Scope
 
-This Ecma Technical Report describes a repository of embedded hardware component class definitions developed by TC53 members and other contributors to document ECMAScript modules for specific hardware components. It is assumed that the reader is familiar with ECMA TC53, ECMAScript® Modules for Embedded Systems.
+This Ecma Technical Report describes a repository of embedded hardware component class definitions developed by TC53 members and other contributors to document ECMAScript modules for specific hardware components. It is assumed that the reader is familiar with ECMA-4xx, ECMAScript® Embedded Systems API Specification.
 
 <a id="references"></a>
 ## References
 
 The following documents, in whole or in part, are normatively referenced in this document and are indispensable for its application. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies. 
 
-ECMA TC53, ECMAScript® Modules for Embedded Systems
+ECMA-4xx, ECMAScript® Embedded Systems API Specification, 1st Edition (June 2021)
 
 <a id="abbreviations"></a>
 ## Abbreviations
@@ -62,11 +62,11 @@ A guide for contributions can be found at https://github.com/tc39/test262#contri
 requests community users to sign the CLA and documents test authoring guidelines -->
 
 <a id="relation-to-tc53"></a>
-## Relation to ECMA TC53, ECMAScript® Modules for Embedded Systems
+## Relation to ECMA-4xx, ECMAScript® Embedded Systems API Specification
 
-ECMA TC53, ECMAScript® Modules for Embedded Systems provides normative definitions of Class Patterns and the Host Provider. For example, the Sensor Class Pattern defines the requirements and guidelines for ECMAScript Modules that provide access to sensor hardware. The Class Specifications for Embedded Hardware Components repository is a non-normative collection of documentation for specific instances of those class patterns—i.e., ECMAScript modules for specific hardware components and embedded hosts.
+ECMA-4xx, ECMAScript® Embedded Systems API Specification provides normative definitions of Class Patterns and the Host Provider. For example, the Sensor Class Pattern defines the requirements and guidelines for ECMAScript Modules that provide access to sensor hardware. The Class Specifications for Embedded Hardware Components repository is a non-normative collection of documentation for specific instances of those class patterns—i.e., ECMAScript modules for specific hardware components and embedded hosts.
 
-The Class Patterns in ECMA TC53, ECMAScript® Modules for Embedded Systems specify the baseline API for hardware components that fill common roles in an embedded system: sensor, display, IO provider, etc. The implementation of a class for a specific hardware component adapts the API to the unique capabilities of the component. This is done in ways permitted by the class pattern. The Class Specifications for Embedded Hardware Components describe the ways in which a specific hardware component has adapted a given class pattern.
+The Class Patterns in ECMA-4xx, ECMAScript® Embedded Systems API Specification specify the baseline API for hardware components that fill common roles in an embedded system: sensor, display, IO provider, etc. The implementation of a class for a specific hardware component adapts the API to the unique capabilities of the component. This is done in ways permitted by the class pattern. The Class Specifications for Embedded Hardware Components describe the ways in which a specific hardware component has adapted a given class pattern.
 
 These are some ways that the class patterns may be adapted to provide access to the diverse capabilities of individual hardware components:
 

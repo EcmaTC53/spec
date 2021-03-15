@@ -62,7 +62,7 @@ If a connected sensing device makes efforts to ensure trust and integrity of its
 # References
 For  dated  references,  only  the  edition  cited  applies.  For  undated  references,  the  latest  edition  of  the  referenced document (including any amendments) applies. 
 
-[1] ECMA TC53, ECMAScript® Modules for Embedded Systems
+[1] ECMA-4xx, ECMAScript® Embedded Systems API Specification, 1st Edition (June 2021)
 
 <a id="copyright"></a>
 ## Copyright
