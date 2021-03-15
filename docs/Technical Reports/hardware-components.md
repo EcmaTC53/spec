@@ -1,5 +1,5 @@
 <p></p>
-<p id="subtitle">Class Specifications for Embedded Hardware Components / February 16, 2021</p>
+<p id="subtitle">Class Specifications for Embedded Hardware Components / March 15, 2021</p>
 <p id="title">ECMAScript® Modules for Embedded Systems</p>
 
 <img src="../../web/assets/ecma-logo.svg">
@@ -81,25 +81,22 @@ In addition, the specification gives the host responsibility for some choices. T
 - Values of pin specifiers
 - Values of port specifiers
 
-## Copyright & software license
+<a id="copyright"></a>
+## Copyright
 
-Ecma International<br/>
-Rue du Rhone 114<br/>
-CH-1204 Geneva<br/>
-Tel: +41 22 849 6000<br/>
-Fax: +41 22 849 6001<br/>
-Web: [https://ecma-international.org/](https://ecma-international.org/)
-
-### Copyright notice
+"COPYRIGHT NOTICE
 
 © 2021 Ecma International
 
 This document may be copied, published and distributed to others, and certain derivative works of it may be prepared, copied, published, and distributed, in whole or in part, provided that the above copyright notice and this Copyright License and Disclaimer are included on all such copies and derivative works. The only derivative works that are permissible under this Copyright License and Disclaimer are: 
 
-1.  works which incorporate all or portion of this document for the purpose of providing commentary or explanation (such as an annotated version of the document),
-2. works which incorporate all or portion of this document for the purpose of incorporating features that provide accessibility,
-3. translations of this document into languages other than English and into different formats and
-4. works by making use of this specification in standard conformant products by implementing (e.g. by copy and paste wholly or partly) the functionality therein.
+(i)	works which incorporate all or portion of this document for the purpose of providing commentary or explanation (such as an annotated version of the document),
+
+(ii)	works which incorporate all or portion of this document for the purpose of incorporating features that provide accessibility,
+
+(iii)	translations of this document into languages other than English and into different formats and
+
+(iv)	works by making use of this specification in standard conformant products by implementing (e.g. by copy and paste wholly or partly) the functionality therein.
 
 However, the content of this document itself may not be modified in any way, including by removing the copyright notice or references to Ecma International, except as required to translate it into languages other than English or into a different format.
 
