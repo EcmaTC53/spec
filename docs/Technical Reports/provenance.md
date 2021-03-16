@@ -1,30 +1,41 @@
 <p></p>
-<p id="subtitle">Recommendations and Best Practices for Scripts on Connected Sensing Devices / January 5, 2021 (Updated March 15, 2021)</p>
+<p id="subtitle">Recommendations and Best Practices for Scripts on Connected Sensing Devices / March 16, 2021</p>
 <p id="title">ECMAScript® Modules for Embedded Systems</p>
 
 <img src="../../web/assets/ecma-logo.svg">
 
-## Table of contents
+## Contents
 
-1. [Introduction](#introduction)
-2. [Scope](#scope)
+1. [Scope](#scope)
+2. [References](#references)
 3. [Terms and Definitions](#termsanddefs)
-4. [Best Practices for Scripts on Connected Sensing Devices](#bpscsd)
-5. [Best Practices for Propagating Static Device Metadata](#bppsdm)
-6. [Best Practices for Propagating Dynamic Device State Metadata](#bpddsm)
-7. [Best Practices for Propagating Sensor Samples](#bppss)
+4. [Abbreviations](#abbreviations)
+5. [Best Practices for Scripts on Connected Sensing Devices](#bpscsd)
+6. [Best Practices for Propagating Static Device Metadata](#bppsdm)
+7. [Best Practices for Propagating Dynamic Device State Metadata](#bpddsm)
+8. [Best Practices for Propagating Sensor Samples](#bppss)
 
 ## Introduction<a name="introduction"></a>
 
 This document, related to the TC53 Provenance Sensor Class Pattern Specification, describes a set of best practices for scripts running on connected sensing devices that propagate sensor readings beyond the connected sensing device and to some remote endpoint, such as a server, cloud application, or another (non-embedded) computing system (these best practices are not applicable to sensing devices with sensors that act exclusively locally on the sensed data). 
-<!--best practices for using the PSCP to support running scripts on connected sensing devices, for propagating static and dynamic device and state metadata, and for accurately propagating sensor samples.-->
+
+<!-- This Ecma Technical Report was developed by Technical Committee 53 and was adopted by the General Assembly of <month> <year>. -->
 
 ## Scope<a name="scope"></a>
 
 This document is non-normative and intended to provide TC53 practitioners with guidance related to designing and implementing connected systems capable of capturing and transmitting useful and integrous data. 
 
+## References<a name="references"></a>
+The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
+
+[1] ECMA TC53, ECMAScript® Embedded Systems API Specification
+
 ## Terms and Definitions<a name="termsanddefs"></a>
-For the purposes of this Technical Report, refer to the definitions listed in [1]. 
+For the purposes of this document, the terms and definitions from [1] apply.
+
+<a id="abbreviations"></a>
+## Abbreviations
+TC53        Ecma International Technical Committee 53
 
 ## Best Practices for Scripts on Connected Sensing Devices<a name="bpscsd"></a>
 
@@ -56,9 +67,6 @@ If data stemming from a connected sensing device transits through intermediate d
 
 If a connected sensing device makes efforts to ensure trust and integrity of its derivative provenance data, then associated meta-provenance data related to trust and integrity in the provenance chain may be queryable. 
 
-
-
-
 # References
 For  dated  references,  only  the  edition  cited  applies.  For  undated  references,  the  latest  edition  of  the  referenced document (including any amendments) applies. 
 
@@ -82,9 +90,6 @@ This document may be copied, published and distributed to others, and certain de
 (iv)	works by making use of this specification in standard conformant products by implementing (e.g. by copy and paste wholly or partly) the functionality therein.
 
 However, the content of this document itself may not be modified in any way, including by removing the copyright notice or references to Ecma International, except as required to translate it into languages other than English or into a different format.
-
 The official version of an Ecma International document is the English language version on the Ecma International website. In the event of discrepancies between a translated version and the official version, the official version shall govern.
-
 The limited permissions granted above are perpetual and will not be revoked by Ecma International or its successors or assigns.
-
 This document and the information contained herein is provided on an "AS IS" basis and ECMA INTERNATIONAL DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
