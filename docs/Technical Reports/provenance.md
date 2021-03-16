@@ -1,5 +1,5 @@
 <p></p>
-<p id="subtitle">ECMA TR/xxx, Recommendations and Best Practices for Scripts on Connected Sensing Devices / January 5, 2021 (Updated March 15, 2021)</p>
+<p id="subtitle">Recommendations and Best Practices for Scripts on Connected Sensing Devices / March 16, 2021</p>
 <p id="title">ECMAScript® Modules for Embedded Systems</p>
 
 <img src="../../web/assets/ecma-logo.svg">
