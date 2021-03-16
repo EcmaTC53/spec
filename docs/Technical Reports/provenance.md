@@ -75,7 +75,7 @@ For  dated  references,  only  the  edition  cited  applies.  For  undated  refe
 <a id="copyright"></a>
 ## Copyright
 
-COPYRIGHT NOTICE
+"COPYRIGHT NOTICE
 
 © 2021 Ecma International
 
