@@ -28,7 +28,7 @@ This document is non-normative and intended to provide TC53 practitioners with g
 ## References<a name="references"></a>
 The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
 
-[1] ECMA-4xx, ECMAScript® Embedded Systems API Specification, 1st Edition (June 2021)
+[1] ECMA-4xx, ECMAScript® Embedded Systems API Specification
 
 ## Terms and Definitions<a name="termsanddefs"></a>
 For the purposes of this document, the terms and definitions from [1] apply.
