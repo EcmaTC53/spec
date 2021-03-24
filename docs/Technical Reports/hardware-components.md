@@ -25,8 +25,7 @@ Class Specifications for Embedded Hardware Components is a project of Ecma Inter
  - I/O providers and expanders
  - Displays
 
-Class Specifications for Embedded Hardware Components is a repository of individual class definition documents developed by committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA-4xx, ECMAScript® Embedded Systems API Specification are applied to specific hardware components. The repository is publicly available at [https://github.com/EcmaTC53/spec/tree/master/docs/](https://github.com/EcmaTC53/spec/tree/master/docs/). 
-<!-- TODO: reorganize spec repo to put all hardware component class definitions in one folder. -->
+Class Specifications for Embedded Hardware Components is a repository of individual class definition documents developed by committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA-4xx, ECMAScript® Embedded Systems API Specification are applied to specific hardware components. The repository is publicly available at [https://github.com/EcmaTC53/spec/tree/master/docs/Hardware%20Components](https://github.com/EcmaTC53/spec/tree/master/docs/Hardware%20Components). 
 
 <a id="scope"></a>
 ## Scope
@@ -49,17 +48,12 @@ TC53        Ecma International Technical Committee 53
 
 Development of the Class Specifications for Embedded Hardware Components repository is an on-going and open-ended process. Each class definition describes the ECMAScript module for a specific hardware component or embedded host. Because countless such hardware components and hosts exist and new hardware components and hosts are continuously being developed, there will never be a full and complete set of class definitions in the repository. 
 
-As of February 2021, the repository consists of example class definitions created by members of TC53. As additional definitions are contributed by TC53 members, hardware component manufacturers, and the community, the repository will be continuously updated at [https://github.com/EcmaTC53/spec/tree/master/docs/](https://github.com/EcmaTC53/spec/tree/master/docs/), which references the git `master` branch of the repository.
+As of February 2021, the repository consists of example class definitions created by members of TC53. As additional definitions are contributed by TC53 members, hardware component manufacturers, and the community, the repository will be continuously updated at [https://github.com/EcmaTC53/spec/tree/master/docs/Hardware%20Components](https://github.com/EcmaTC53/spec/tree/master/docs/Hardware%20Components), which references the git `master` branch of the repository.
 
 <a id="contributions"></a>
 ## Contributions
 
 The Class Specifications for Embedded Hardware Components repository is initially composed of contributions from TC53 members. It is anticipated that additional contributions will come primarily from hardware component manufacturers and members of the community.
-
-<!-- The test262 TR contains the following text. It makes sense for TC53 to also have a guide for contributing and a CLA, I think?
-
-A guide for contributions can be found at https://github.com/tc39/test262#contributing-to-test262 which
-requests community users to sign the CLA and documents test authoring guidelines -->
 
 <a id="relation-to-tc53"></a>
 ## Relation to ECMA-4xx, ECMAScript® Embedded Systems API Specification
