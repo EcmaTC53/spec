@@ -7,12 +7,12 @@ This document defines the ECMAScript class supporting the ILI9341 single-chip SO
 
 ## 2 Conformance
 
-This class specification conforms to the Display Class Pattern of ECMAScript® Modules for Embedded Systems, ECMA-xxx.
+This class specification conforms to the Display Class Pattern of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
 - [ILI9341 data sheet](https://www.crystalfontz.com/controllers/Ilitek/ILI9341/142/)
-- [ECMAScript® Modules for Embedded Systems](https://EcmaTC53.github.io/spec/web/spec.html)
+- [ECMA-4xx, ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/web/spec.html)
 
 ## 4 Notational Conventions
 
