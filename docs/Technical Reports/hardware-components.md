@@ -1,6 +1,6 @@
 <p></p>
 <p id="subtitle">Class Specifications for Embedded Hardware Components / March 15, 2021</p>
-<p id="title">ECMAScript® Modules for Embedded Systems</p>
+<p id="title">ECMAScript® Embedded Systems API Specification</p>
 
 <img src="../../web/assets/ecma-logo.svg">
 
