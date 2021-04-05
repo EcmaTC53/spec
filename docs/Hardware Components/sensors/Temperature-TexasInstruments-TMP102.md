@@ -7,12 +7,12 @@ This document defines the ECMAScript class supporting the TMP102 temperature sen
 
 ## 2 Conformance
 
-This class specification conforms to the Temperature Sensor Class of ECMAScript® Modules for Embedded Systems, ECMA-xxx.
+This class specification conforms to the Temperature Sensor Class of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
 - [TI TMP102 data sheet](https://www.ti.com/lit/ds/symlink/tmp102.pdf)
-- [ECMAScript® Modules for Embedded Systems](https://EcmaTC53.github.io/spec/web/spec.html)
+- [ECMA-4xx, ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/web/spec.html)
 
 ## 4 Notational Conventions
 

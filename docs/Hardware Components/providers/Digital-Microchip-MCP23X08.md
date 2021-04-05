@@ -7,12 +7,12 @@ This document defines the ECMAScript class supporting the MCP23008 and MCP24S08 
 
 ## 2 Conformance
 
-This class specification conforms to the IO Provider Class Pattern of ECMAScript® Modules for Embedded Systems, ECMA-xxx.
+This class specification conforms to the IO Provider Class Pattern of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
 - [MCP23X08 data sheet](http://ww1.microchip.com/downloads/en/DeviceDoc/MCP23008-MCP23S08-Data-Sheet-20001919F.pdf)
-- [ECMAScript® Modules for Embedded Systems](https://EcmaTC53.github.io/spec/web/spec.html)
+- [ECMA-4xx, ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/web/spec.html)
 
 ## 4 Notational Conventions
 
@@ -48,12 +48,12 @@ The `MCP23X08` IO Provider Class implements the IO Provider Class Pattern. This 
 
 ### `Digital` Class
 
-An instance of the `MCP23X08` IO Provider class contains a `Digital` IO class of ECMAScript® Modules for Embedded Systems, ECMA-xxx.
+An instance of the `MCP23X08` IO Provider class contains a `Digital` IO class of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
 
 The `Digital.OutputOpenDrain` option is not available for the `mode` property in the options object passed to the provided Digital `constructor`. If `Digital.OutputOpenDrain` is specified to the `Digital` constructor, an `Error` exception is thrown. 
 
 ### `DigitalBank`  Class
 
-An instance of the `MCP23X08` IO Provider class contains a `DigitalBank` IO class of ECMAScript® Modules for Embedded Systems, ECMA-xxx.
+An instance of the `MCP23X08` IO Provider class contains a `DigitalBank` IO class of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
 
 The `Digital.OutputOpenDrain` value is not supported for the `mode` property in the options object passed to the provided DigitalBank `constructor`. If `Digital.OutputOpenDrain` is specified to the `DigitalBank` constructor, an `Error` exception is thrown.
