@@ -38,7 +38,8 @@ All of the following properties are optional.
 
 | Property | Description |
 | :---: | :--- |
-| `length` | Number specifying the number of touch points to track with the controller. Range is 1 to 2. Initial value is 2.
+| `length` | Number specifying the number of touch points to track with the controller. Range is `1` to `2`. Initial value is `2`.
+| `threshold` | Number specifying the threshold for touch detection. Range is `0` to `255`. Initial value is `128`. 
 | `flip` | A String indicating whether the sampled touch points should be flipped horizontally or vertically. Allowed values are `"none"`, `"h"`, `"v"`, and `"hv"`. Initial value is `"none"`.
 | `active` | Boolean specifying if the FT6x06 will remain in Active Mode when there is no touching. Initial value is `false`.
 | `timeout` | Number specifying the number of milliseconds the device should stay in Active Mode when there is no touching. Range is `0` to `255`. Initial value is `10`.
