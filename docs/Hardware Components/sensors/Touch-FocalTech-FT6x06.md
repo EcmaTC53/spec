@@ -54,6 +54,6 @@ The `length` property of sample object has a range of `1` to `2`.
 | Property | Description |
 | :---: | :--- |
 | `weight` | Number indicating the weight of the touch. Range is `0` to `255`.
-| `area` | Number indicating the area of the touch. Range is `0` to `255`.
+| `area` | Number indicating the area of the touch. Range is `0` to `15`.
 
 These properties are included in the `touch` object only if `weight` and `area`, respectively, have been configured to `true` via the `configure` method. 
