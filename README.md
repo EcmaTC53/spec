@@ -23,3 +23,7 @@
  - [Display - ILITEK ILI9341](https://EcmaTC53.github.io/spec/web/ILITEK-ILI9341.html)
  - [Digital provider - Microchip MCP23X08](https://EcmaTC53.github.io/spec/web/Digital-Microchip-MCP23X08.html)
  - [Digital provider - Microchip MCP23X17](https://EcmaTC53.github.io/spec/web/Digital-Microchip-MCP23X17.html)
+
+## Draft proposals for Ecma-419 Second Edition (markdown)
+- [Network classes](./docs/proposals/Network%20Classes.md)
+- [Sensor classes](./docs/proposals/Sensor%20Classes%202022.md)
