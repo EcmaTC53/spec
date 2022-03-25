@@ -1,5 +1,5 @@
 # Network Class Proposals for Ecma-419
-Updated February 23, 2022<br>
+Updated March 25, 2022<br>
 Copyright 2022 Moddable Tech Inc.<br>
 
 This document is a draft of classes to support operations on TCP/IP networks.  It builds on the [Ecma-419](https://419.ecma-international.org), particularly the [TCP](https://419.ecma-international.org/#-10-io-classes-tcp-socket) and [UDP](https://419.ecma-international.org/#-10-io-classes-udp-socket) sockets. The APIs are intended to follow the conventions established in the first edition of Ecma-419.
@@ -30,7 +30,7 @@ Network Interface event values:
 | :---: | :--- |
 | `"ready"` | Network interface ready for connection |
 | `"connected"` | Network connection status changed |
-| `"address"` | Interface has an IP address assigned changed |
+| `"address"` | Interface has an IP address assigned |
 
 ### close()
 
@@ -267,7 +267,7 @@ resolve({
 import HTTPRequest from "embedded:network/http/request";
 ```
 
-The HTTP Request Class makes one or more HTTP requests to a single host.
+The HTTP Request Class makes one or more HTTP (RFC 7230-7237) requests to a single host.
 
 ### constructor(options)
 
@@ -299,10 +299,10 @@ The options object supports the following properties:
 | `path` |  The HTTP resource to access as a String. This property is optional and defaults to `"/"`. |
 | `method` |  The HTTP method to use to access the resource as as a String. This property is optional and defaults to `"GET"`. |
 | `headers` |  A `Map` instance containing request headers. The map keys are the header names and their values are the header values. This property is optional. |
-| `onHeaders(status, headers)` |  A function that is invoked to provide the HTTP status result code and a Map containing the response headers. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional. |
-| `onReadable(count)` |  A function that is invoked when bytes are available to read from the HTTP response body. The `count` argument is a Number indicating the number of bytes available to read. This property is optional. |
-| `onWritable(count)` |  A function that is invoked when the HTTP request is ready to receive bytes for the request body. The `count` argument is a Number indicating the maximum number of bytes that may be written. This property is optional. |
-| `onDone()` |  A function that is invoked with the HTTP request has been completed successfully. This property is optional. |
+| `onHeaders(status, headers)` |  A function to invoke to provide the HTTP status result code and a Map containing the response headers. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional. |
+| `onReadable(count)` |  A function to invoke when bytes are available to read from the HTTP response body. The `count` argument is a Number indicating the number of bytes available to read. This property is optional. |
+| `onWritable(count)` |  A function to invoke when the HTTP request is ready to receive bytes for the request body. The `count` argument is a Number indicating the maximum number of bytes that may be written. This property is optional. |
+| `onDone()` |  A function to invoke when the HTTP request has been completed successfully. This property is optional. |
 
 The return value of the `request` method is a request instance. This instance is the receiver when the callback functions of the options object are invoked. The request instance has `read` and `write` methods.
 
@@ -315,3 +315,110 @@ When bytes are available to be read from the response body, `read` returns an `A
 Writes the `ArrayBuffer` specified by the `data` argument to the request body. If more bytes are provided than can be written, no bytes are written and an exception is thrown and no bytes are written. If this HTTP request is not currently sending the request body, `write` throws an exception.
 
 To signal that a request has a request body, set either the `content-length` header to a non-zero value or the `transfer-encoding` header to `"chunked"`. The `onWritable` callback is only invoked if a request has a request body. To indicate the end of the request body when using `"chunked"` transfer-encoding, call `write` with no arguments.
+
+## WebSocket Client Class
+
+```
+import WebSocketClient from "embedded:network/websocket/client";
+```
+
+The WebSocket Client Class establishes a connection to a remote endpoint hosting a WebSocket server and exchanges messages using the WebSocket protocol ([RFC 6455](https://www.rfc-editor.org/rfc/rfc6455.html)). It allows messages of unlimited size to be sent and received, and supports all control messages.
+
+The WebSocket Client replies to `ping` and `close` messages by replying with a `pong` or `close` message with the same payload received, as required by the protocol.
+
+### constructor(options)
+
+| Property | Description |
+| :---: | :--- |
+| `socket` |  An object containing a Socket constructor and its constructor options object (details TBD). This property is required. |
+| `port` |  The remote port number to connect to as a Number. This property is required. |
+| `host` |  The remote hostname to connect to as a String. This property is optional. |
+| `address` |  The remote address to connect to as a String. This property is optional. |
+| `resolver` |  A DNS Resolver instance to use to resolve the `address`. This property is optional. |
+| `onReadable` |  A function to invoke when part of a WebSocket binary or text message  is available to read. The first argument is the number of bytes  available to read. The second argument is an options object. It  has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. It has a `binary`  property set to `true` for binary messages and `false` for text messages. This property is optional. |
+| `onWritable` |  A function to invoke when more data may be written to the connection. The sole argument indicates the number of bytes that maybe written. This property is optional. |
+| `onError` |  A function to invoke when the remote connection terminates  unexpectedly. This property is optional. |
+| `onControl` |  A function to invoke when a control message is received. The first argument is the control message opcode. The second argument is an `ArrayBuffer` containing the complete control message payload. This property is optional. |
+| `onClose` |  A function to invoke when the connection closes cleanly. This property is optional. |
+
+Either `address` is required or both `host` and `resolver` are required.
+
+### close()
+
+Releases all resources associated with this instance. The `close` method does not initiate a clean close, as defined by the WebSocket protocol, of the connection (use `write` with a `close` opcode instead).
+
+### read(count)
+
+The `read` method returns an `ArrayBuffer` with the number of bytes specified by count. If count specifies more bytes than are available, all available bytes are returned. If no bytes are available to read, returns `undefined`.
+
+A single call to `read` only returns bytes from a single message. Once the current message has been completely read, the `onReadable` callback is invoked when the next message is available to read.
+
+### write(data[, options])
+
+The `write` method sends both message data and control messages. The data argument is an `ArrayBuffer` with the message payload.
+
+The options object has the following properties to specify the binary, text, or control message to send..
+
+| Property | Description |
+| :---: | :--- |
+| `binary` |  A  boolean value set to `true` for a binary payload and `false` for a text payload. This property is optional and defaults to `true`. |
+| `more` |  A Boolean value set to `false` for the last fragment of a message and `true` for all others. This property is optional and defaults to `false`. |
+| `opcode` |  This property is a number specifying the `opcode` of a control message (the `data` argument is the control message's payload). This property is optional. Because control messages cannot be fragmented, the `more` property is ignored when `opcode` is present. |
+
+The options object is optional. If not provided, the default values are used.
+
+The return value is the number of bytes that may be written.
+
+#### Examples
+Send two binary messages:
+
+```js
+this.write(new ArrayBuffer(10));
+this.write(new ArrayBuffer(10), {binary: true});
+```
+
+Send one binary message in two fragments:
+
+```js
+this.write(new ArrayBuffer(10), {more: true});
+this.write(new ArrayBuffer(10));
+```
+
+Send a text message:
+
+```js
+let encoder = new TextEncoder;
+this.write(encoder.encode("hello"), {text: true});
+```
+
+Send a ping message:
+
+```js
+this.write(Uint32Array.of(1).buffer, {opcode: WebSocketClient.ping});
+```
+
+Send an unsolicited pong message:
+
+```js
+this.write(Uint32Array.of(2).buffer, {opcode: WebSocketClient.pong});
+```
+
+
+Initiate a clean close:
+
+```js
+this.write(Uint16Array.of(0).buffer, {opcode: WebSocketClient.close});
+```
+
+### Static properties of the constructor
+
+The following properties are present on the constructor. The property names and values correspond to WebSocket opcodes. The values are numbers and the properties are read-only.
+
+
+| Property | Value |
+| :---: | :--- |
+| `text` |  1 |
+| `binary` |  2 |
+| `close` |  8 |
+| `ping` |  9 |
+| `pong` |  10 |
