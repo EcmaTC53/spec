@@ -47,8 +47,14 @@ Most property names were chosen to reference the configuration options described
 | `conversionRate` | Number specifying the TMP102 conversion rate in Hz. Must be one of `0.25`, `1`, `4`, or `8`. Initial value is `4`.
 
 ### Properties of Sample Object
-`TMP102` extends the `Temperature` sample object to include the following property.
+`TMP102` implements the sample object specified in the `Temperature` Sensor Class and extends it to include the following properties.
 
 | Property | Description |
 | :---: | :--- |
 | `alert` | Boolean indicating if a high temperature or low temperature alert has been asserted in the Configuration Register.
+
+#### Inherited Property from `Temperature`
+
+| Property | Description |
+| :---: | :--- |
+| `temperature` | A number that represents the sampled temperature in degrees Celsius.

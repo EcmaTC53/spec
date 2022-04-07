@@ -49,7 +49,7 @@ All of the following properties are optional.
 ### Properties of Sample Object
 The `length` property of sample object has a range of `1` to `2`.
 
-`FT6X06` extends the `touch` object described in the `Touch` Sensor Class to include the following properties. 
+`FT6X06` implements the sample array specified in the `Touch` Sensor Class and extends the `touch` object described in the `Touch` Sensor Class to include the following properties. 
 
 | Property | Description |
 | :---: | :--- |
@@ -57,3 +57,11 @@ The `length` property of sample object has a range of `1` to `2`.
 | `area` | Number indicating the area of the touch. Range is `0` to `15`.
 
 These properties are included in the `touch` object only if `weight` and `area`, respectively, have been configured to `true` via the `configure` method. 
+
+##### Inherited Properties of `touch` Object from `Touch` Sensor Class
+
+| Property | Description |
+| :---: | :--- |
+| `x` | Number indicating the X coordinate of the touch point
+| `y` | Number indicating the Y coordinate of the touch point
+| `id` | Number indicating which touch point this entry corresponds to
