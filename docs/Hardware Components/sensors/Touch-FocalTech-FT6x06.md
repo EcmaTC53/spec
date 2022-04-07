@@ -7,13 +7,13 @@ This document defines the ECMAScript class supporting the FT6x06 capacitive touc
 
 ## 2 Conformance
 
-This class specification conforms to the Touch Sensor Class of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Touch Sensor Class of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
 - [FocalTech FT6x06 data sheet](https://cdn-shop.adafruit.com/datasheets/FT6x06+Datasheet_V0.1_Preliminary_20120723.pdf)
 - [FocalTech FT6x06 application note and register map](https://cdn-shop.adafruit.com/datasheets/FT6x06_AN_public_ver0.1.3.pdf)
-- [ECMA-4xx, ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/web/spec.html)
+- [ECMA-419, ECMAScript® Embedded Systems API Specification](https://419.ecma-international.org)
 
 ## 4 Notational Conventions
 
