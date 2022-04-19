@@ -32,20 +32,22 @@ All of the following properties are optional.
 
 | Property | Default Value | Description |
 | :---: | :---: | :--- |
-| `series_resistance` | `10000` | A number specifying the resistance in Ohms of the series resistor.
-| `thermistor_resistance` | `10000` | A number specifying the resistance of the Thermistor.
+| `series_resistance` | `10_000` | A number specifying the resistance in Ohms of the series resistor.
+| `thermistor_resistance` | `10_000` | A number specifying the resistance of the Thermistor.
 | `beta` | `3435` | A number specifying the `beta` value of the Thermistor.
 | `averaging` | `1` | A number of readings to average per sample.
 | `pullup` | `false` | If true, series resistor is connected to Vcc, otherwise series resistor is connected to GND.
 
 ### Properties of Sample Object
-`NTC_THERMISTOR` implements the `Temperature` sample object to include the following property.
+`NTC_THERMISTOR` implements the sample object defined by the  `Temperature` Sensor Class.
+
+#### Inherited Property from `Temperaturer`
 
 | Property | Description |
 | :---: | :--- |
-| `temperature` | A number representing temperature in degrees Celsius.
+| `temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

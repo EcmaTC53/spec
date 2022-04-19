@@ -6,7 +6,7 @@ This document defines the ECMAScript class supporting Smart Prototyping's Zio Qw
 
 ## 2 Conformance
 
-This class specification conforms to the Sensor Class Pattern of ECMA-419, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the SoilMoistureSensor Sensor Class of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
@@ -16,9 +16,9 @@ This class specification conforms to the Sensor Class Pattern of ECMA-419, ECMAS
 
 ## 5 `ZIOQWIICMOISTURE` Sensor Class
 
-**Module Specifier**: `embedded:sensor/Moisture/ZIOQWIICMOISTURE`
+**Module Specifier**: `embedded:sensor/SoilMoistureSensor/ZIOQWIICMOISTURE`
 
-The `ZIOQWIICMOISTURE` Sensor Class implmenets a `Moisture` Sensor Class.
+The `ZIOQWIICMOISTURE` Sensor Class implements a `SoilMoistureSensor` Sensor Class.
 
 #### Properties of `constructor` Options Object
 
@@ -37,13 +37,15 @@ All of the following properties are optional.
 | `averaging` | `1` | Number of readings to average per sample.
 
 ### Properties of Sample Object
-`ZIOQWIICMOISTURE` returns a sample object with the following property.
+`ZIOQWIICMOISTURE` implements the sample object defined by the `SoilMoistureSensor` Sensor Class.
+
+#### Inherited Properties from `SoilMoistureSensor`
 
 | Property | Description |
 | :---: | :--- |
-| `value` | A number representing relative moisture level from 1023 (dry) to 0 (wet).
+| `moisture` | A number between 0 and 1 (inclusive) that represents the sampled relative soil moisture level, with 0 being the most dry and 1 the most wet.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

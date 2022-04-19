@@ -6,7 +6,7 @@ This document defines the ECMAScript class supporting the AK8963 Magnetic sensor
 
 ## 2 Conformance
 
-This class specification conforms to the Sensor Class pattern of ECMA-419, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Magnetometer Sensor Class of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
@@ -25,7 +25,7 @@ The `AK8963` Sensor Class implements a `Magnetometer` Sensor Class with properti
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the AK8963. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x0C`.
+| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the AK8963. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x0C`.
 
 
 #### Properties of `configure` Options Object
@@ -39,15 +39,15 @@ All of the following properties are optional.
 
 
 ### Properties of Sample Object
-`AK8963` implements a `Magnetometer` sample object to include the following properties.
+`AK8963` implements the sample object defined by the `Magnetometer` Sensor Class.
 
 | Property | Description |
 | :---: | :--- |
-| `x` | A number representing the magnetic field of the X-axis in Tesla.
-| `y` | A number representing the magnetic field of the Y-axis in Tesla.
-| `z` | A number representing the magnetic field of the Z-axis in Tesla.
+| `x` | A number that represents the sampled magnetic field around the x axis in microtesla.
+| `y` | A number that represents the sampled magnetic field around the y axis in microtesla.
+| `z` | A number that represents the sampled magnetic field around the z axis in microtesla.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

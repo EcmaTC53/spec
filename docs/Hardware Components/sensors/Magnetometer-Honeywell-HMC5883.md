@@ -6,7 +6,7 @@ This document defines the ECMAScript class supporting the HMC5883 Magnetic senso
 
 ## 2 Conformance
 
-This class specification conforms to the Sensor Class pattern of ECMA-419, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Magnetometer Sensor Class of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
@@ -43,15 +43,15 @@ All of the following properties are optional.
 
 
 ### Properties of Sample Object
-`HMC5883` implements a `Magnetometer` sample object to include the following properties.
+`HMC5883` implements the sample object defined by the `Magnetometer` Sensor Class.
 
 | Property | Description |
 | :---: | :--- |
-| `x` | A number representing the magnetic field of the X-axis in Tesla.
-| `y` | A number representing the magnetic field of the Y-axis in Tesla.
-| `z` | A number representing the magnetic field of the Z-axis in Tesla.
+| `x` | A number that represents the sampled magnetic field around the x axis in microtesla.
+| `y` | A number that represents the sampled magnetic field around the y axis in microtesla.
+| `z` | A number that represents the sampled magnetic field around the z axis in microtesla.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

@@ -3,7 +3,7 @@
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the AM2320 humidity and temperature sensor from Aosong
+This document defines the ECMAScript class supporting the AM2320 humidity and temperature sensor from Aosong.
 
 ## 2 Conformance
 
@@ -20,7 +20,7 @@ This class specification conforms to the Humidity and Temperature Sensor Classes
 
 **Module Specifier**: `embedded:sensor/Humidity-Temperature/AM2320`
 
-The `AM2320` Sensor Class implements the `Humidity` and `Temperature` Sensor Classes.
+The `AM2320` Sensor Class implements the `Humidity` and `Temperature` Sensor Classes as a compound sensor.
 
 #### Properties of `constructor` Options Object
 
@@ -34,14 +34,17 @@ The `AM2320` Sensor Class implements the `Humidity` and `Temperature` Sensor Cla
 There are no configurable properties of the AM2320.
 
 ### Properties of Sample Object
-`AM2320` implements the `Humidity` and `Temperature` sample objects to include the following properties.
+
+`AM2320` implements the sample object properties `hygrometer` and `thermometer` as specified in, respectively, the `Humidity` and `Temperature` Sensor Classes.
+
+#### Inherited Properties from `Humidity` and `Temperature`
 
 | Property | Description |
 | :---: | :--- |
-| `humidity` | A number representing relative humidity as a percentage.
-| `temperature` | A number representing temperature in degrees Celsius.
+| `hygrometer.humidity` | A number that represents the sampled relative humidity as a percentage.
+| `thermometer.temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

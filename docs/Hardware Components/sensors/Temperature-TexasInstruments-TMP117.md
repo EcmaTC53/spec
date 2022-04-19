@@ -25,7 +25,7 @@ The `TMP117` Sensor Class extends the `Temperature` Sensor Class with additional
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the TMP117. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x48`.
+| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the TMP117. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x48`.
 | `alert` | A `Digital` class constructor options object with the configuration of the TMP117 alert pin. This property is required for instances that use the `onAlert` callback.
 | `onAlert` | Callback that will be invoked when the alert pin is asserted. This property is required if `alert` is provided.
 
@@ -44,14 +44,19 @@ All of the following properties are optional.
 | `conversionRate` | `4` | A number from 0 - 7 indicating the Conversion Cycle time during continuous conversion. See table 7-7 in the datasheet.
 
 ### Properties of Sample Object
-`TMP117` extends the `Temperature` sample object to include the following properties.
+`TMP117` implements the sample object specified in the `Temperature` Sensor Class and extends it to include the following properties.
 
 | Property | Description |
 | :---: | :--- |
-| `temperature` | A number representing the temperature in degrees Celsius.
 | `alert` | A boolean indicating if a high temperature or low temperature alert has been asserted in the Configuration Register.
+
+#### Inherited Property from `Temperature`
+
+| Property | Description |
+| :---: | :--- |
+| `temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

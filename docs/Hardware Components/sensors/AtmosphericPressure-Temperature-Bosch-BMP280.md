@@ -3,11 +3,11 @@
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the BMP280 atmospheric pressure and temperature sensor from Bosch
+This document defines the ECMAScript class supporting the BMP280 atmospheric pressure and temperature sensor from Bosch.
 
 ## 2 Conformance
 
-This class specification conforms to the Atmospheric Pressure and Temperature Sensor Classes of ECMA-419, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Barometer and Temperature Sensor Classes of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
@@ -18,15 +18,15 @@ This class specification conforms to the Atmospheric Pressure and Temperature Se
 
 ## 5 `BMP280` Sensor Class
 
-**Module Specifier**: `embedded:sensor/AtmosphericPressure-Temperature/BMP280`
+**Module Specifier**: `embedded:sensor/Barometer-Temperature/BMP280`
 
-The `BMP280` Sensor Class implements the `Atmospheric Pressure` and `Temperature` Sensor Classes.
+The `BMP280` Sensor Class implements the `Barometer` and `Temperature` Sensor Classes as a compound sensor.
 
 #### Properties of `constructor` Options Object
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the BMP280. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x76`.
+| `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the BMP280. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x76`.
 
 
 #### Properties of `configure` Options Object
@@ -43,15 +43,17 @@ All of the following properties are optional.
 
 
 ### Properties of Sample Object
-`BMP280` implements the `Atmospheric pressure` and `Temperature` sample objects to include the following properties.
+`BMP280` implements the sample object properties `barometer` and `thermometer` as specified in, respectively, the `Barometer` and `Temperature` Sensor Classes.
+
+#### Inherited Properties from `Barometer` and `Temperature`
 
 | Property | Description |
 | :---: | :--- |
-| `pressure` | A number representing atmospheric pressure in Pascal.
-| `temperature` | A number representing temperature in degrees Celsius.
+| `barometer.pressure` | A number that represents the sampled barometric pressure in Pascal.
+| `thermometer.temperature` | A number representing temperature in degrees Celsius.
 
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

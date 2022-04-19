@@ -20,13 +20,13 @@ This class specification conforms to the Proximity and Temperature Sensor Classe
 
 **Module Specifier**: `embedded:sensor/Proximity-Temperature/URM09`
 
-The `URM09` Sensor Class implements the `Proximity` and `Temperature` Sensor Classes.
+The `URM09` Sensor Class implements the `Proximity` and `Temperature` Sensor Classes as a compound sensor.
 
 #### Properties of `constructor` Options Object
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the URM09. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x11`.
+| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the URM09. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x11`.
 
 
 #### Properties of `configure` Options Object
@@ -39,16 +39,18 @@ All of the following properties are optional.
 | `range` | `2` | Number specifying the range of measurement. Options are `0` for 150 cm, `1` for 300 cm, and `2` for 500 cm.
 
 ### Properties of Sample Object
-`URM09` implements the `Proximity` and `Temperature` sample objects to include the following properties.
+`URM09` implements the sample object properties `proximity` and `thermometer` as specified in, respectively, the `Proximity` and `Temperature` Sensor Classes.
+
+#### Inherited Properties from `Proximity` and `Temperature`
 
 | Property | Description |
 | :---: | :--- |
-| `near` | A boolean that indicates if a proximate object is detected.
-| `distance` | A number that represents the distance to the nearest sensed object in centimeters or `null` if no object is detected.
-| `max` | A number that represents the maximum sensing range of the sensor in centimeters.
-| `temperature` | A number representing temperature in degrees Celsius.
+| `proximity.near` | A boolean that indicates if a proximate object is detected.
+| `proximity.distance` | A number that represents the distance to the nearest sensed object in centimeters or `null` if no object is detected.
+| `proximity.max` | A number that represents the maximum sensing range of the sensor in centimeters.
+| `thermometer.temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

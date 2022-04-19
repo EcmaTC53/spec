@@ -3,7 +3,7 @@
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the AHT10 humidity and temperature sensor from Aosong
+This document defines the ECMAScript class supporting the AHT10 humidity and temperature sensor from Aosong.
 
 ## 2 Conformance
 
@@ -20,13 +20,13 @@ This class specification conforms to the Humidity and Temperature Sensor Classes
 
 **Module Specifier**: `embedded:sensor/Humidity-Temperature/AHT10`
 
-The `AHT10` Sensor Class implements the `Humidity` and `Temperature` Sensor Classes.
+The `AHT10` Sensor Class implements the `Humidity` and `Temperature` Sensor Classes as a compound sensor.
 
 #### Properties of `constructor` Options Object
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the AHT10. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x38`.
+| `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the AHT10. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x38`.
 
 
 #### Properties of `configure` Options Object
@@ -35,14 +35,16 @@ There are no configurable properties of the AHT10.
 
 
 ### Properties of Sample Object
-`AHT10` implements the `Humidity` and `Temperature` sample objects to include the following properties.
+`AHT10` implements the sample object properties `hygrometer` and `thermometer` as specified in, respectively, the `Humidity` and `Temperature` Sensor Classes.
+
+#### Inherited Properties from `Humidity` and `Temperature`
 
 | Property | Description |
 | :---: | :--- |
-| `humidity` | A number representing relative humidity as a percentage.
-| `temperature` | A number representing temperature in degrees Celsius.
+| `hygrometer.humidity` | A number that represents the sampled relative humidity as a percentage.
+| `thermometer.temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

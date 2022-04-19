@@ -3,7 +3,7 @@
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the SHTC3 humidity and temperature sensor from Sensirion
+This document defines the ECMAScript class supporting the SHTC3 humidity and temperature sensor from Sensirion.
 
 ## 2 Conformance
 
@@ -20,7 +20,7 @@ This class specification conforms to the Humidity and Temperature Sensor Classes
 
 **Module Specifier**: `embedded:sensor/Humidity-Temperature/SHTC3`
 
-The `SHTC3` Sensor Class implements the `Humidity` and `Temperature` Sensor Classes.
+The `SHTC3` Sensor Class implements the `Humidity` and `Temperature` Sensor Classes as a compound sensor.
 
 #### Properties of `constructor` Options Object
 
@@ -39,14 +39,16 @@ All of the following properties are optional.
 | `autoSleep` | `1` | Boolean specifying whether to sleep between readings.
 
 ### Properties of Sample Object
-`SHTC3` implements the `Humidity` and `Temperature` sample objects to include the following properties.
+`SHTC3` implements the sample object properties `hygrometer` and `thermometer` as specified in, respectively, the `Humidity` and `Temperature` Sensor Classes.
+
+#### Inherited Properties from `Humidity` and `Temperature`
 
 | Property | Description |
 | :---: | :--- |
-| `humidity` | A number representing relative humidity as a percentage.
-| `temperature` | A number representing temperature in degrees Celsius.
+| `hygrometer.humidity` | A number that represents the sampled relative humidity as a percentage.
+| `thermometer.temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

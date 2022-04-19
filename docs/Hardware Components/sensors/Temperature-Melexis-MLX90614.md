@@ -2,7 +2,7 @@
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the MLX90614 temperature sensor from NXP Semiconductors.
+This document defines the ECMAScript class supporting the MLX90614 temperature sensor from Melexis.
 
 ## 2 Conformance
 
@@ -19,7 +19,7 @@ This class specification conforms to the Temperature Sensor Class of ECMA-419, E
 
 **Module Specifier**: `embedded:sensor/Temperature/MLX90614`
 
-The `MLX90614` Sensor Class extends the `Temperature` Sensor Class with additional properties returned by the `sample` method. 
+The `MLX90614` Sensor Class extends the `Temperature` Sensor Class with additional properties on the object returned by the `sample` method. 
 
 #### Properties of `constructor` Options Object
 
@@ -33,14 +33,19 @@ There are no configurable properties of the MLX90614.
 
 
 ### Properties of Sample Object
-`MLX90614` extends the `Temperature` sample object to include the following properties.
+`MLX90614` implements the sample object specified in the `Temperature` Sensor Class and extends it to include the following properties.
 
 | Property | Description |
 | :---: | :--- |
-| `temperature` | A number representing temperature in degrees Celsius.
 | `ambientTemperature` | A number representing ambient temperature in degrees Celsius.
+
+#### Inherited Property from `Temperature`
+
+| Property | Description |
+| :---: | :--- |
+| `temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

@@ -7,7 +7,7 @@ This document defines the ECMAScript class supporting the BMP180 atmospheric pre
 
 ## 2 Conformance
 
-This class specification conforms to the Atmospheric Pressure and Temperature Sensor Classes of ECMA-419, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Barometer and Temperature Sensor Classes of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
@@ -18,9 +18,9 @@ This class specification conforms to the Atmospheric Pressure and Temperature Se
 
 ## 5 `BMP180` Sensor Class
 
-**Module Specifier**: `embedded:sensor/AtmosphericPressure-Temperature/BMP180`
+**Module Specifier**: `embedded:sensor/Barometer-Temperature/BMP180`
 
-The `BMP180` Sensor Class implements the `Atmospheric Pressure` and `Temperature` Sensor Classes.
+The `BMP180` Sensor Class implements the `Barometer` and `Temperature` Sensor Classes as a compound sensor.
 
 #### Properties of `constructor` Options Object
 
@@ -39,15 +39,17 @@ All of the following properties are optional.
 
 
 ### Properties of Sample Object
-`BMP180` implements the `Atmospheric pressure` and `Temperature` sample objects to include the following properties.
+`BMP180` implements the sample object properties `barometer` and `thermometer` as specified in, respectively, the `Barometer` and `Temperature` Sensor Classes.
+
+#### Inherited Properties from `Barometer` and `Temperature`
 
 | Property | Description |
 | :---: | :--- |
-| `pressure` | A number representing atmospheric pressure in Pascal.
-| `temperature` | A number representing temperature in degrees Celsius.
+| `barometer.pressure` | A number that represents the sampled barometric pressure in Pascal.
+| `thermometer.temperature` | A number representing temperature in degrees Celsius.
 
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

@@ -25,7 +25,7 @@ The `LM75` Sensor Class extends the `Temperature` Sensor Class with additional p
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the LM75. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x48`.
+| `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the LM75. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x48`.
 | `alert` | A `Digital` class constructor options object with the configuration of the LM75 alert pin. This property is required for instances that use the `onAlert` callback.
 | `onAlert` | Callback that will be invoked when the alert pin is asserted. This property is required if `alert` is provided.
 
@@ -43,14 +43,19 @@ All of the following properties are optional.
 | `faultQueue` | `1` | A number specifying the number of consecutive readings exceeding the limits of `highTemperature` or `lowTemperature` required to trigger an alert. Must be one of `1`, `2`, `4`, or `6`.
 
 ### Properties of Sample Object
-`LM75` implements the `Temperature` sample object to include the following properties.
+`LM75` implements the sample object specified in the `Temperature` Sensor Class and extends it to include the following properties.
 
 | Property | Description |
 | :---: | :--- |
-| `temperature` | A number representing the temperature in degrees Celsius.
 | `alert` | A boolean indicating if a high temperature or low temperature alert has been asserted in the Configuration Register.
+
+#### Inherited Property from `Temperature`
+
+| Property | Description |
+| :---: | :--- |
+| `temperature` | A number that represents the sampled temperature in degrees Celsius.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

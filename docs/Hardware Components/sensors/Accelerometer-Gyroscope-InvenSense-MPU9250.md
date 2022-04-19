@@ -2,11 +2,11 @@
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the MPU9250 Accelerometer and Gyroscope sensor from STMicroelectronics. The MPU9250 also includes a AK8963 Magnetometer which is documented separately.
+This document defines the ECMAScript class supporting the MPU9250 Accelerometer and Gyroscope sensor from InvenSense. The MPU9250 also includes a AK8963 Magnetometer which is documented separately.
 
 ## 2 Conformance
 
-This class specification conforms to the Sensor Class pattern of ECMA-419, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Accelerometer and Gyroscope Sensor Classes of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
@@ -20,7 +20,7 @@ This class specification conforms to the Sensor Class pattern of ECMA-419, ECMAS
 
 **Module Specifier**: `embedded:sensor/Accelerometer-Gyroscope/MPU9250`
 
-The `MPU9250` Sensor Class implements an `Accelerometer` Sensor Class with properties returned by the `sample` method. Additional properties of a `Gyroscope` Sensor Class are also included.
+The `MPU9250` Sensor Class implements an `Accelerometer` and `Gyroscope` Sensor Classes as a compound sensor.
 
 The `MPU9250` device also hosts an `AK8963` sensor. To access the `AK8963`, the MPU9250 must be instantiated first to allow passthrough access to the sensor.
 
@@ -28,7 +28,7 @@ The `MPU9250` device also hosts an `AK8963` sensor. To access the `AK8963`, the 
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the MPU9250. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x68`.
+| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the MPU9250. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x68`.
 | `alert` | A `Digital` class constructor options object with the configuration of the MPU9250 alert pin. This property is required for instances that use the `onAlert` callback.
 | `onAlert` | Callback that will be invoked when the alert pin is asserted. This property is required if `alert` is provided.
 
@@ -46,19 +46,21 @@ All of the following properties are optional.
 
 
 ### Properties of Sample Object
-`MPU9250` implements an `Accelerometer` sample object to include the following properties.
+Samples returned from `MPU9250` instances include the the `accelerometer` and `gyroscope` objects defined, respectively, in the `Accelerometer` and `Gyroscope` Sensor Classes.
+
+#### Inherited Properties from `Accelerometer` and `Gyroscope`
 
 | Property | Description |
 | :---: | :--- |
-| `x` | A number representing the acceleration along the X-axis in m/s²
-| `y` | A number representing the acceleration along the Y-axis in m/s²
-| `z` | A number representing the acceleration along the Z-axis in m/s²
-| `gyroX` | A number representing the rotation along the X-axis in º/s
-| `gyroY` | A number representing the rotation along the Y-axis in º/s
-| `gyroZ` | A number representing the rotation along the Z-axis in º/s
+| `accelerometer.x` | A number that represents the sampled acceleration along the x axis in meters per second squared.
+| `accelerometer.y` | A number that represents the sampled acceleration along the y axis in meters per second squared.
+| `accelerometer.z` | A number that represents the sampled acceleration along the z axis in meters per second squared.
+| `gyroscope.x` | A number that represents the sampled angular velocity around the x axis in radian per second.
+| `gyroscope.y` | A number that represents the sampled angular velocity around the y axis in radian per second.
+| `gyroscope.z` | A number that represents the sampled angular velocity around the z axis in radian per second.
 
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 

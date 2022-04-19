@@ -6,7 +6,7 @@ This document defines the ECMAScript class supporting the DFRobot Capacitive Moi
 
 ## 2 Conformance
 
-This class specification conforms to the Sensor Class pattern of ECMA-419, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the SoilMoistureSensor Sensor Class of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
@@ -17,9 +17,9 @@ This class specification conforms to the Sensor Class pattern of ECMA-419, ECMAS
 
 ## 5 `CapacitiveMoisture` Sensor Class
 
-**Module Specifier**: `embedded:sensor/Moisture/Capacitive`
+**Module Specifier**: `embedded:sensor/SoilMoistureSensor/Capacitive`
 
-The `CapacitiveMoisture` Sensor Class implements a `Moisture` Sensor Class.
+The `CapacitiveMoisture` Sensor Class implements a `SoilMoistureSensor` Sensor Class.
 
 #### Properties of `constructor` Options Object
 
@@ -36,13 +36,15 @@ All of the following properties are optional.
 | `averaging` | `1` | A number of readings to average per sample.
 
 ### Properties of Sample Object
-`CapacitiveMoisture` implements a `sample` object to include the following property.
+`CapacitiveMoisture` implements the sample object defined by the `SoilMoistureSensor` Sensor Class.
+
+#### Inherited Properties from `SoilMoistureSensor`
 
 | Property | Description |
 | :---: | :--- |
-| `value` | A number representing relative moisture level from 1023 (dry) to 0 (wet).
+| `moisture` | A number between 0 and 1 (inclusive) that represents the sampled relative soil moisture level, with 0 being the most dry and 1 the most wet.
 
 ### Copyright notice
 
-© 2021 Moddable Tech, Inc.
+© 2021-2022 Moddable Tech, Inc.
 
