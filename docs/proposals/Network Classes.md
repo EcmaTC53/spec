@@ -1,9 +1,32 @@
 # Network Class Proposals for Ecma-419
-Updated March 25, 2022<br>
+Updated May 20, 2022<br>
 Copyright 2022 Moddable Tech Inc.<br>
 
 This document is a draft of classes to support operations on TCP/IP networks.  It builds on the [Ecma-419](https://419.ecma-international.org), particularly the [TCP](https://419.ecma-international.org/#-10-io-classes-tcp-socket) and [UDP](https://419.ecma-international.org/#-10-io-classes-udp-socket) sockets. The APIs are intended to follow the conventions established in the first edition of Ecma-419.
 
+### Class specifications
+
+- [Network Interface](#network-interface)
+- [DNS Resolver](#network-dns-resolver)
+- [HTTP Request](#network-http-request)
+- [WebSocket Client](#network-websocket-client)
+- [MQTT Client](#network-mqtt-client)
+
+### References
+
+When this draft is merged into Ecma-419, the following references need to be added.
+
+#### Normative
+- HTTP RFC
+- WebSocket RFC
+- MQTT OASIS Standard
+- DNS RFC 
+- DoH RFC
+
+#### Non-normative
+- MQTT module for Node
+
+<a id="network-interface"></a>
 ## Network Interface Class Pattern
 
 Instances of the Network Interface Class Pattern provide scripts with access to  each network interface on the device. It is used to:
@@ -145,6 +168,7 @@ const eth0 = new device.network.interfaces.Ethernet0({});
 console.log(`Ethernet addresss: ${eth0.get("address")}`);
 ```
 
+<a id="network-dns-resolver"></a>
 ## DNS Resolver Class Pattern
 
 ```
@@ -154,7 +178,6 @@ import Resolver from "embedded:network/dns/resolver";
 ### constructor(options)
 
 The DNS Resolver Class Pattern does not define any properties for the options object. These are defined by specific uses  of the DNS Resolver Class Pattern, such as DNS over UDP and DNS over HTTP
-
 
 ### close()
 
@@ -167,8 +190,8 @@ Any pending `resolve` requests are canceled by close and their callbacks will no
 | Property | Description |
 | :---: | :--- |
 | `host` | A string indicating the hostname to resolve. This property is required. |
-| `onResolved(address)` | A function that will be called with the resolved address. This property is required. |
-| `onError()` | A function that will be called if the hostname cannot be resolved to an address. This property is optional. |
+| `onResolved(host, address)` | A function to invoke with the resolved address. This property is required. |
+| `onError(host)` | A function to invoke if the hostname cannot be resolved to an address. This property is optional. |
 
 Either `onResolved`  or `onError` is called once.
 
@@ -261,6 +284,7 @@ resolve({
 });
 ```
 
+<a id="network-http-request"></a>
 ## HTTP Request Class
 
 ```
@@ -316,6 +340,7 @@ Writes the `ArrayBuffer` specified by the `data` argument to the request body. I
 
 To signal that a request has a request body, set either the `content-length` header to a non-zero value or the `transfer-encoding` header to `"chunked"`. The `onWritable` callback is only invoked if a request has a request body. To indicate the end of the request body when using `"chunked"` transfer-encoding, call `write` with no arguments.
 
+<a id="network-websocket-client"></a>
 ## WebSocket Client Class
 
 ```
@@ -335,7 +360,7 @@ The WebSocket Client replies to `ping` and `close` messages by replying with a `
 | `host` |  The remote hostname to connect to as a String. This property is optional. |
 | `address` |  The remote address to connect to as a String. This property is optional. |
 | `resolver` |  A DNS Resolver instance to use to resolve the `address`. This property is optional. |
-| `onReadable` |  A function to invoke when part of a WebSocket binary or text message  is available to read. The first argument is the number of bytes  available to read. The second argument is an options object. It  has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. It has a `binary`  property set to `true` for binary messages and `false` for text messages. This property is optional. |
+| `onReadable` |  A function to invoke when part of a WebSocket binary or text message  is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It  has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. It has a `binary`  property set to `true` for binary messages and `false` for text messages. This property is optional. |
 | `onWritable` |  A function to invoke when more data may be written to the connection. The sole argument indicates the number of bytes that maybe written. This property is optional. |
 | `onError` |  A function to invoke when the remote connection terminates  unexpectedly. This property is optional. |
 | `onControl` |  A function to invoke when a control message is received. The first argument is the control message opcode. The second argument is an `ArrayBuffer` containing the complete control message payload. This property is optional. |
@@ -349,7 +374,7 @@ Releases all resources associated with this instance. The `close` method does no
 
 ### read(count)
 
-The `read` method returns an `ArrayBuffer` with the number of bytes specified by count. If count specifies more bytes than are available, all available bytes are returned. If no bytes are available to read, returns `undefined`.
+The `read` method returns an `ArrayBuffer` with the number of bytes specified by `count`. If `count` specifies more bytes than are available, all available bytes are returned. If no bytes are available, `read` returns `undefined`.
 
 A single call to `read` only returns bytes from a single message. Once the current message has been completely read, the `onReadable` callback is invoked when the next message is available to read.
 
@@ -357,7 +382,7 @@ A single call to `read` only returns bytes from a single message. Once the curre
 
 The `write` method sends both message data and control messages. The data argument is an `ArrayBuffer` with the message payload.
 
-The options object has the following properties to specify the binary, text, or control message to send..
+The options object has the following properties to specify the binary, text, or control message to send.
 
 | Property | Description |
 | :---: | :--- |
@@ -403,7 +428,6 @@ Send an unsolicited pong message:
 this.write(Uint32Array.of(2).buffer, {opcode: WebSocketClient.pong});
 ```
 
-
 Initiate a clean close:
 
 ```js
@@ -414,11 +438,170 @@ this.write(Uint16Array.of(0).buffer, {opcode: WebSocketClient.close});
 
 The following properties are present on the constructor. The property names and values correspond to WebSocket opcodes. The values are numbers and the properties are read-only.
 
-
 | Property | Value |
-| :---: | :--- |
+| :---: | ---: |
 | `text` |  1 |
 | `binary` |  2 |
 | `close` |  8 |
 | `ping` |  9 |
 | `pong` |  10 |
+
+<a id="network-mqtt-client"></a>
+## MQTT Client Class
+
+```
+import MQTTClient from "embedded:network/mqtt/client";
+```
+
+The MQTT Client Class establishes a connection to a remote endpoint hosting an MQTT server (broker) and exchanges messages using the MQTT protocol ([MQTT Version 3.1.1, OASIS Standard, 29 October 2014 6455](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.doc)). It allows messages of unlimited size to be sent and received, and supports all control messages.
+
+The MQTT Client must implement the following:
+
+- Transmit keep alive message if configured with a non-zero keepalive interval
+- Reply to `PINGREQ` messages with `PINGREQ`
+- Reply to `PUBLISH` with `PUBACK` for quality of service 1
+- Reply to `PUBLISH` with `PUBREC` for quality of service 2
+- Reply to `PUBREL` with `PUBCOMP` for quality of service 2
+- Reply to `PUBREC` with `PUBREL` for quality of service 2
+
+The MQTT client does not cache messages and therefore does not retransmit messages. The MQTT client does not implement reconnect. The MQTT client does not maintain a list of active subscriptions. These capabilities may be implemented by higher layers.
+
+> **Note**: This specification supports MQTT Version 3. It is intended to be extensible to support MQTT Version 5.
+
+### constructor(options)
+
+| Property | Description |
+| :---: | :--- |
+| `socket` |  An object containing a Socket constructor and its constructor options object (details TBD). This property is required. |
+| `port` |  The remote port number to connect to as a Number. This property is required. |
+| `host` |  The remote hostname to connect to as a String. This property is optional. |
+| `address` |  The remote address to connect to as a String. This property is optional. |
+| `resolver` |  A DNS Resolver instance to use to resolve the `address`. This property is optional. |
+| `onReadable` |  A function to invoke when part of an MQTT message  is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment.   For the first fragment of a message, the options object contains `topic` property with a String indicating the message topic, a `QoS` property with a Number indicating the quality of service, and a `byteLength` property with a Number indicating the total number of bytes in the message. The `onReadable` property is optional. |
+| `onWritable` |  A function to invoke when more data may be written to the connection. The sole argument indicates the number of bytes that maybe written. This property is optional. |
+| `onError` |  A function to invoke when the remote connection terminates. This property is optional. |
+| `onControl` |  A function to invoke when a control message is received. The first argument is the control message opcode. The second argument is an object containing an `operation` property indicating the control message (`CONNACK`, `PUBACK`, `PUBREC `, `PUBREL`, `PUBCOMP`, `SUBACK`, `UNSUBACK`, `PINGREQ `, etc.) and an `id` property if included in the message. The `SUBACK` message payload is provided on the `payload` property as an array of byte values. The `onControl` property is optional. |
+| `id` |   The MQTT client identifier as a String. This property is optional and defaults to an empty string. |
+| `user` |   The MQTT user for establishing a connection as a String. This property is optional and defaults to an empty string. |
+| `password` |   The MQTT password for establishing a connection as a String or ArrayBuffer. This property is optional and defaults to an empty string. |
+| `keepalive` |   The MQTT connection keep-alive time in milliseconds as a Number.  This property is optional and defaults to 0. |
+| `will.topic` |   The topic for the MQTT will for this connection as a String. This property is optional. |
+| `will.message` |   The message for the MQTT will for this connection as a String or ArrayBuffer. This property is optional. |
+| `will.QoS` |   The requested quality of service for the will message for this connection as number with values 0, 1, or 2. This property is optional and defaults to 0. |
+| `will.retain` |   A Boolean indicating whether the will message should be retained by the server. This property is optional and defaults to `false`. |
+
+Either `address` is required or both `host` and `resolver` are required.
+
+### close()
+
+Releases all resources associated with this instance. The `close` method does not send an MQTT `close` messages (use `write` with a `DISCONNECT` opcode to do initiate a disconnect).
+
+### read(count)
+
+The `read` method returns an `ArrayBuffer` with the number of bytes specified by `count`. If `count` specifies more bytes than are available, all available bytes are returned. If no bytes are available, `read` returns `undefined`.
+
+A single call to `read` only returns bytes from a single message. Once the current message has been completely read, the `onReadable` callback is invoked when the next message is available to read.
+
+### write(data[, options])
+
+The `write` method sends both message data and control messages. The data argument is an `ArrayBuffer` with the message payload.
+
+The options object has the following properties to specify the message to publish or control message to send.
+
+| Property | Description |
+| :---: | :--- |
+| `operation` |  This property is a number specifying the `opcode` of a control message (the `data` argument is the control message's payload). This property is optional and defaults to `PUBLISH`.  |
+| `id` |  A number specifying the `id` for the message. If an `id` is not provided the MQTT client generates one. As a rule, either the caller should provide the `id` for all messages or none, to avoid the possibility of values colliding. This property is optional.  |
+| `topic` |  A string specifying an MQTT topic for a `PUBLISH` message.  This property is for `PUBLISH` messages only. It is required.  |
+| `QoS` |  A number specifying the quality of service of `PUBLISH` message.  Allowed values are 0, 1, and 2. This property is for `PUBLISH` messages only. It is optional and defaults to 0.  |
+| `retain` |  A boolean indicating if a `PUBLISH` message should be retained by the server.  This property is for `PUBLISH` messages only. It is optional and default to `false`.  |
+| `duplicate` |  A boolean indicating if a `PUBLISH` message is being retransmitted by the client.  This property is for `PUBLISH` messages only. It is optional and default to `false`.  |
+| `items` |  An array of objects indicating the topics to subscribe or unsubscribe from. Each object must contain a `topic` property with a string indicating the topic and, for `SUBSCRIBE` messages, may contain an optional `QoS` property with the requested quality of service as a value of 0, 1, or 2. This property is for `SUBSCRIBE` and `UNSUBSCRIBE` messages only. It is required and must contain at least one element.  |
+
+The options object is required, except when writing fragments of a `PUBLISH` message after the first fragment.
+
+It is an error to call `write` before the `CONNACK` control message has been received.
+
+The return value is the number of bytes that may be written.
+
+### Static properties of the constructor
+
+The following properties are present on the constructor. The property names and values correspond to MQTT Control Packet types in Section 2.1.1 of the MQTT 3.1.1 Standard. The values are numbers and the properties are read-only.
+
+
+| Property | Value |
+| :---: | ---: |
+| `CONNECT ` |  1 |
+| `CONNACK ` |  2 |
+| `PUBLISH ` |  3|
+| `PUBACK ` |  4 |
+| `PUBREC ` |  5 |
+| `PUBREL ` |  6 |
+| `PUBCOMP ` |  7 |
+| `SUBSCRIBE ` |  8 |
+| `SUBACK ` |  9 |
+| `UNSUBSCRIBE ` |  10 |
+| `UNSUBACK ` |  11 |
+| `PINGREQ ` |  12 |
+| `PINGRESP ` |  13 |
+| `DISCONNECT ` |  14 |
+
+
+### Examples
+
+Subscribe to two topics, with quality of service 2 and 0:
+
+```js
+this.write(null, {
+	operation: MQTTClient.SUBSCRIBE,
+	items: [
+		{topic: "foo/bar/+", QoS: 2},
+		{topic: "bar/foo"}
+	]
+});
+```
+
+Unsubscribe from two topics:
+
+```js
+this.write(null, {
+	operation: MQTTClient.UNSUBSCRIBE,
+	items: [
+		{topic: "frogs"},
+		{topic: "bar/foo"}
+	]
+});
+```
+
+Publish a message with quality of service 0:
+
+```js
+this.write(ArrayBuffer.fromString("small"), {
+	topic: "foo/bar/small"
+});
+```
+
+Publish a message with quality of service 2:
+
+```js
+this.write(ArrayBuffer.fromString("small"), {
+	topic: "foo/bar/small",
+	QoS: 2
+});
+```
+
+Publish a message in two fragments:
+
+```js
+this.write(ArrayBuffer.fromString("SM"), {
+	topic: "foo/bar/small",
+	byteLength: 6
+});
+this.write(ArrayBuffer.fromString("ALL\n"));
+```
+
+Request a ping:
+
+```js
+this.write(null, {operation: MQTTClient.PINGREQ});
+```
