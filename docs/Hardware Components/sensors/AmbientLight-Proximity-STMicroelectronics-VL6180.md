@@ -7,12 +7,12 @@ This document defines the ECMAScript class supporting the VL6180 time-of-flight 
 
 ## 2 Conformance
 
-This class specification conforms to the Ambient Light and Proximity Sensor Classes of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Ambient Light and Proximity Sensor Classes of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
 - [ST VL6180 data sheet](https://www.st.com/resource/en/datasheet/vl6180x.pdf)
-- [ECMA-4xx, ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/web/spec.html)
+- [ECMA-419, ECMAScript® Embedded Systems API Specification](https://419.ecma-international.org)
 
 ## 4 Notational Conventions
 
@@ -47,7 +47,7 @@ All of the following properties are optional.
 
 
 ### Properties of Sample Object
-`VL6180` extends the `AmbientLight` and `Proximity` sample objects to include the following properties.
+Samples returned from `VL6180` instances include the `lightmeter` and `proximity` objects defined, respectively, in the `AmbientLight` and `Proximity` Sensor Classes and the following additional properties.
 
 The instance can be configured to provide less information on each sample, as described above.
 
@@ -60,3 +60,12 @@ The instance can be configured to provide less information on each sample, as de
 | `moduleRevisionMinor` | A number indicating the module minor revision.
 | `manufacturedOn` | An object with properties `year`, `month`, `day`, `phase`, and `time` (all numbers) that indicate when the module was manufactured.
 | `identification` | A number indicating the identification code of the module.
+
+#### Inherited Properties from `AmbientLight` and `Proximity`
+
+| Property | Description |
+| :---: | :--- |
+| `lightmeter.illuminance` | A number that represents the sampled ambient light level in Lux.
+| `proximity.near` | A boolean that indicates if a proximate object is detected.
+| `proximity.distance` | A number that represents the distance to the nearest sensed object in centimeters or `null` if no object is detected.
+| `proximity.max` | A number that represents the maximum sensing range of the sensor in centimeters.

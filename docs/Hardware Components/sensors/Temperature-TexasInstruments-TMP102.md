@@ -7,12 +7,12 @@ This document defines the ECMAScript class supporting the TMP102 temperature sen
 
 ## 2 Conformance
 
-This class specification conforms to the Temperature Sensor Class of ECMA-4xx, ECMAScript® Embedded Systems API Specification.
+This class specification conforms to the Temperature Sensor Class of ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ## 3 Normative References
 
 - [TI TMP102 data sheet](https://www.ti.com/lit/ds/symlink/tmp102.pdf)
-- [ECMA-4xx, ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/web/spec.html)
+- [ECMA-419, ECMAScript® Embedded Systems API Specification](https://419.ecma-international.org)
 
 ## 4 Notational Conventions
 
@@ -47,8 +47,14 @@ Most property names were chosen to reference the configuration options described
 | `conversionRate` | Number specifying the TMP102 conversion rate in Hz. Must be one of `0.25`, `1`, `4`, or `8`. Initial value is `4`.
 
 ### Properties of Sample Object
-`TMP102` extends the `Temperature` sample object to include the following property.
+`TMP102` implements the sample object specified in the `Temperature` Sensor Class and extends it to include the following properties.
 
 | Property | Description |
 | :---: | :--- |
 | `alert` | Boolean indicating if a high temperature or low temperature alert has been asserted in the Configuration Register.
+
+#### Inherited Property from `Temperature`
+
+| Property | Description |
+| :---: | :--- |
+| `temperature` | A number that represents the sampled temperature in degrees Celsius.
