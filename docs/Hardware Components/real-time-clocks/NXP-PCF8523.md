@@ -1,9 +1,9 @@
 
-# Peripheral Class for NXP Semiconductors PCF8523 Real-Time Clock (RTC)
+# Real-Time Clock Class for NXP Semiconductors PCF8523
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the PCF8523 Real-Time Clock from NXP Semiconductors.
+This document defines the ECMAScript class supporting the PCF8523 Real-Time Clock (RTC) from NXP Semiconductors.
 
 ## 2 Conformance
 
@@ -18,7 +18,7 @@ This class specification conforms to the Real-Time Clock class pattern of ECMA-4
 
 ## 5 `PCF8523` Real-Time Clock Class
 
-**Module Specifier**: `embedded:peripheral/RTC/PCF8523`
+**Module Specifier**: `embedded:RTC/PCF8523`
 
 
 #### Properties of `constructor` Options Object
@@ -36,9 +36,9 @@ There are no configurable properties of the PCF8523.
 
 #### `time` property
 
-The current time of the RTC as a standard ECMAScript time value. Set this property to change the current time of the RTC. This value is a Number.
+The current time of the RTC as a standard ECMAScript time value. Set this property to change the current time of the RTC. This value is a `Number`.
 
-If the RTC is not enabled or has not been set, the returned value is undefined.
+If the RTC is not enabled or has not been set, the returned value is `undefined`.
 
 
 ### Copyright notice

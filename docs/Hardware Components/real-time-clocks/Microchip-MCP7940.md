@@ -1,9 +1,9 @@
 
-# Peripheral Class for Microchip MCP7940 Real-Time Clock (RTC)
+# Real-Time Clock Class for Microchip MCP7940
 
 ## 1 Scope
 
-This document defines the ECMAScript class supporting the MCP7940 Real-Time Clock from Microchip
+This document defines the ECMAScript class supporting the MCP7940 Real-Time Clock (RTC) from Microchip.
 
 ## 2 Conformance
 
@@ -18,7 +18,7 @@ This class specification conforms to the Real-Time Clock class pattern of ECMA-4
 
 ## 5 `MCP7940` Real-Time Clock Class
 
-**Module Specifier**: `embedded:peripheral/RTC/MCP7940`
+**Module Specifier**: `embedded:RTC/MCP7940`
 
 
 #### Properties of `constructor` Options Object
@@ -37,9 +37,9 @@ There are no configurable properties of the MCP7940.
 
 #### `time` property
 
-The current time of the RTC as a standard ECMAScript time value. Set this property to change the current time of the RTC. This value is a Number.
+The current time of the RTC as a standard ECMAScript time value. Set this property to change the current time of the RTC. This value is a `Number`.
 
-If the RTC is not enabled or has not been set, the returned value is undefined.
+If the RTC is not enabled or has not been set, the returned value is `undefined`.
 
 
 ### Copyright notice
