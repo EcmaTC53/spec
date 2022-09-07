@@ -8,9 +8,9 @@ This repository hosts a collection of ECMAScript class definitions for specific 
  - I/O providers and expanders
  - Displays
 
-The class definition documents in this repository are developed and maintained by [Ecma TC-53](https://www.ecma-international.org/technical-committees/tc53/) committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA-4xx, ECMAScript® Embedded Systems API Specification are applied to specific hardware components.
+The class definition documents in this repository are developed and maintained by [Ecma TC-53](https://www.ecma-international.org/technical-committees/tc53/) committee members, hardware component manufacturers, and the community. These class definitions describe how the Class Patterns and Host Provider specified in ECMA-419, ECMAScript® Embedded Systems API Specification are applied to specific hardware components.
 
-This repository and its relation to [ECMA-4xx, ECMAScript® Embedded Systems API Specification](https://ecmatc53.github.io/spec/web/spec.html) are formalized in [Ecma TR/XXX](https://github.com/EcmaTC53/spec/blob/master/docs/Technical%20Reports/hardware-components.md).
+This repository and its relation to [ECMA-419, ECMAScript® Embedded Systems API Specification](https://ecmatc53.github.io/spec/web/spec.html) are formalized in [Ecma TR/109](https://github.com/EcmaTC53/spec/blob/master/docs/Technical%20Reports/hardware-components.md).
 
 ## Contributing a Class Specification
 
@@ -30,7 +30,7 @@ The following guidelines are provided to ensure a consistent format across class
 
 Documents are named with the convention `<Component Type>/[<Component Class>-]<Manufacturer>-<Part Name>.md`. When multiple words are needed within an element, use a capital letter for each word (e.g. `LikeThis`).
 
- - `Component Type`: The ECMA-4xx, ECMAScript® Embedded Systems API Specification [class pattern](https://ecmatc53.github.io/spec/web/spec.html#-6-overview-class-patterns) to which the documented class conforms. For example, `display` or `io`.
+ - `Component Type`: The ECMA-419, ECMAScript® Embedded Systems API Specification [class pattern](https://ecmatc53.github.io/spec/web/spec.html#-6-overview-class-patterns) to which the documented class conforms. For example, `display` or `io`.
  - `Component Class`: For class patterns that have specific defined classes, such as [Sensor Classes](https://ecmatc53.github.io/spec/web/spec.html#-14-sensor-classes). For example, `AmbientLight` or `Proximity`. If more than one class applies, use internal hyphens (e.g. `AmbientLight-Proximity`). If no defined class is relevant, `Component Class` may be omitted from the name.
  - `Manufacturer`: The manufacturer of the hardware component. For example, `TexasInstruments` or `Microchip`.
  - `Part Name`: The name of the part driven by the documented class. For example, `TMP102` or `ILI9341`. When a class works with multiple components, a wildcard character such as `X` or `N` can be used to indicate multiple components. Where possible, follow the convention used in the manufacturer's data sheet. (E.g. `MCP23X08`).
@@ -51,15 +51,15 @@ Statement of what ECMAScript class or classes are being documented and the hardw
 
 ##### Conformance
 
-This section should describe what class patterns or specific classes from ECMA-4xx, ECMAScript® Embedded Systems API Specification the documented class conforms to.
+This section should describe what class patterns or specific classes from ECMA-419, ECMAScript® Embedded Systems API Specification the documented class conforms to.
 
 ##### Normative References
 
-References to relevant standardized documentation. This section usually includes at least a link to ECMA-4xx, ECMAScript® Embedded Systems API Specification and to the data sheet of the hardware component.
+References to relevant standardized documentation. This section usually includes at least a link to ECMA-419, ECMAScript® Embedded Systems API Specification and to the data sheet of the hardware component.
 
 ##### Notational Conventions
 
-Any special notations used in the document that are not standard to conventions used in ECMA-4xx, ECMAScript® Embedded Systems API Specification.
+Any special notations used in the document that are not standard to conventions used in ECMA-419, ECMAScript® Embedded Systems API Specification.
 
 ##### `<Class Name>` <Component Type> Class
 
@@ -72,7 +72,7 @@ The first item in this section should be the module specifier used to identify t
 The contents of the remainder of this section will vary among hardware component types. Example potential contents include:
 
  - Pin specifiers for the component
- - Explanations of what ECMA-4xx, ECMAScript® Embedded Systems API Specification classes or class patterns are implemented or extended by the class
+ - Explanations of what ECMA-419, ECMAScript® Embedded Systems API Specification classes or class patterns are implemented or extended by the class
  - Details of choices made in implementing the class, such as additional methods, removed standard methods, etc.
  - Tables of properties of objects used as arguments or return values from methods
 
