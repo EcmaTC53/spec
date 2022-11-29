@@ -1,5 +1,5 @@
 # Network Class Proposals for Ecma-419
-Updated May 20, 2022<br>
+Updated November 29, 2022<br>
 Copyright 2022 Moddable Tech Inc.<br>
 
 This document is a draft of classes to support operations on TCP/IP networks.  It builds on the [Ecma-419](https://419.ecma-international.org), particularly the [TCP](https://419.ecma-international.org/#-10-io-classes-tcp-socket) and [UDP](https://419.ecma-international.org/#-10-io-classes-udp-socket) sockets. The APIs are intended to follow the conventions established in the first edition of Ecma-419.
@@ -359,6 +359,7 @@ The WebSocket Client replies to `ping` and `close` messages by replying with a `
 | `port` |  The remote port number to connect to as a Number. This property is required. |
 | `host` |  The remote hostname to connect to as a String. This property is optional. |
 | `address` |  The remote address to connect to as a String. This property is optional. |
+| `headers` |  A `Map` of HTTP headers to add to the request. This property is optional. |
 | `resolver` |  A DNS Resolver instance to use to resolve the `address`. This property is optional. |
 | `onReadable` |  A function to invoke when part of a WebSocket binary or text message  is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It  has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. It has a `binary`  property set to `true` for binary messages and `false` for text messages. This property is optional. |
 | `onWritable` |  A function to invoke when more data may be written to the connection. The sole argument indicates the number of bytes that maybe written. This property is optional. |
