@@ -22,17 +22,16 @@ This class specification conforms to the Ambient Light and Proximity Sensor Clas
 
 The `VL6180` Sensor Class extends the `AmbientLight` and `Proximity` Sensor Classes with additional properties on the option objects passed to the `configure` method and returned by the `sample` method.
 
-#### Properties of `constructor` Options Object
+### Properties of `constructor` Options Object
 
 The `VL6180` constructor takes an `I2C` class constructor options object. The VL6180 has a default I²C address of `0x29` which will be used for `address` unless otherwise specified.
 
-#### Properties of `configure` Options Object
+### Properties of `configure` Options Object
 
 All of the following properties are optional.
 
 | Property | Description |
 | :---: | :--- |
-| `includeSensorID` | Boolean specifying if `modelID`, `modelRevisionMajor`, `modelRevisionMinor`, `moduleRevisionMajor`, `moduleRevisionMinor`, and `manufacturedOn` properties will be included in the result returned from `sample`. Initial value is `false`.
 | `rangingMode` | Number specifying ranging mode. `0` for single shot or `1` for continuous. Initial value is 0. 
 | `rangingFrequency` | Number specifying time delay between range measurements in continuous mode. Range 10 ms to 2550 ms. Initial value is 10 ms.
 | `averagingSamplePeriod` | Number specifying how many samples to average together for each range read. Range 0 to 255. Initial value is 48.
@@ -47,19 +46,7 @@ All of the following properties are optional.
 
 
 ### Properties of Sample Object
-Samples returned from `VL6180` instances include the `lightmeter` and `proximity` objects defined, respectively, in the `AmbientLight` and `Proximity` Sensor Classes and the following additional properties.
-
-The instance can be configured to provide less information on each sample, as described above.
-
-| Property | Description |
-| :---: | :--- |
-| `modelID` | The device model identification number, as a number.
-| `modelRevisionMajor` | A number indicating the model major revision.
-| `modelRevisionMinor` | A number indicating the model minor revision.
-| `moduleRevisionMajor` | A number indicating the module major revision.
-| `moduleRevisionMinor` | A number indicating the module minor revision.
-| `manufacturedOn` | An object with properties `year`, `month`, `day`, `phase`, and `time` (all numbers) that indicate when the module was manufactured.
-| `identification` | A number indicating the identification code of the module.
+Samples returned from `VL6180` instances include the `lightmeter` and `proximity` objects defined, respectively, in the `AmbientLight` and `Proximity` Sensor Classes.
 
 #### Inherited Properties from `AmbientLight` and `Proximity`
 
@@ -69,3 +56,21 @@ The instance can be configured to provide less information on each sample, as de
 | `proximity.near` | A boolean that indicates if a proximate object is detected.
 | `proximity.distance` | A number that represents the distance to the nearest sensed object in centimeters or `null` if no object is detected.
 | `proximity.max` | A number that represents the maximum sensing range of the sensor in centimeters.
+
+### Instance Properties Inherited from the Provenance Sensor Class Pattern
+
+`VL6180` implements the `configuration` and `identification` properties of the Provenance Sensor Class Pattern, including the optional `uniqueID` property of `identification`. 
+
+| Property | Description |
+| :---: | :--- |
+| `configuration` | Object describing the sensor's current configuration. Properties match the `configure` options object above.
+| `identification` | Object that uniquely identifies an individual `VL6180` component.
+
+#### Properties of Identification Object
+
+| Property | Description |
+| :---: | :--- |
+| `model` | String `"ST VL6180X"`.
+| `classification` | String `"AmbientLight-Proximity"`.
+| `revision` | Object with 5 Numbers describing the model and module revision: `modelID`, `modelRevMajor`, `modelRevMinor`, `moduleRevMajor`, and `moduleRevMinor`.
+| `uniqueID` | A unique identifier for the particular VL6180 hardware, generated from the Identification Date and Time registers on the device.
