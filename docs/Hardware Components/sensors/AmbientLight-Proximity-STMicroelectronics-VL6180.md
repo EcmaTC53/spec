@@ -22,9 +22,11 @@ This class specification conforms to the Ambient Light and Proximity Sensor Clas
 
 The `VL6180` Sensor Class extends the `AmbientLight` and `Proximity` Sensor Classes with additional properties on the option objects passed to the `configure` method and returned by the `sample` method.
 
-### Properties of `constructor` Options Object
+#### Properties of `constructor` Options Object
 
-The `VL6180` constructor takes an `I2C` class constructor options object. The VL6180 has a default I²C address of `0x29` which will be used for `address` unless otherwise specified.
+| Property | Description |
+| :---: | :--- |
+| `sensor` | An `I2C` class constructor options object with the configuration to use for communication with the VL6180. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x29`.
 
 ### Properties of `configure` Options Object
 

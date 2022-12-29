@@ -27,7 +27,7 @@ The `FT6X06` Sensor Class extends the `Touch` Sensor Class with additional prope
 
 | Property | Description |
 | :---: | :--- |
-| `i2c` | An `I2C` class constructor options object with the configuration of the I2C controller connected to the FT6x06. This property is required.
+| `sensor` | An `I2C` class constructor options object with the configuration of the I2C controller connected to the FT6x06. This property is required.
 | `interrupt` | A `Digital` class constructor options object with the configuration of the FT6x06 interrupt pin. This property is required for instances that use the `onSample` callback.
 | `reset` | A `Digital` class constructor options object with the configuration of the FT6x06 reset pin. This property is optional. If present, a hardware reset is performed when the class is instantiated.
 | `onSample` | Callback to invoke when touch points are available from the `sample` method. This property is required if `interrupt` is provided.

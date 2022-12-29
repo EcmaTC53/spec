@@ -27,8 +27,10 @@ The `HMC5883` is at default I²C address of `0x1E`. The `LIS3DH` is at I²C addr
 
 ```
 let accelerometer = new LIS3DH({
-	address: 0x19,
-	...
+	sensor: {
+		address: 0x19,
+		...	
+	}
 });
 ```
 
