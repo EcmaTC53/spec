@@ -28,6 +28,7 @@ The `AK8963` Sensor Class implements a `Magnetometer` Sensor Class with properti
 | `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the AK8963. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x0C`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

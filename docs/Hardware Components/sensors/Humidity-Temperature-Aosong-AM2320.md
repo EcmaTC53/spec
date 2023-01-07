@@ -29,6 +29,7 @@ The `AM2320` Sensor Class implements the `Humidity` and `Temperature` Sensor Cla
 | `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the AM2320. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x5C`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 There are no configurable properties of the AM2320.

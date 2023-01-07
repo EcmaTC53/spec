@@ -29,6 +29,7 @@ The `SI7020` Sensor Class implements the `Humidity` and `Temperature` Sensor Cla
 | `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the Si7020. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x40`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 There are no configurable properties of the SI7020.

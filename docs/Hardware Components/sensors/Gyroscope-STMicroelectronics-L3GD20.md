@@ -30,6 +30,7 @@ The `L3GD20H` Sensor Class implements a `Gyroscope` Sensor Class with properties
 | `onAlert` | Callback that will be invoked when the alert pin is asserted. This property is required if `alert` is provided.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

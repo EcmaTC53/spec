@@ -29,6 +29,7 @@ The `URM09` Sensor Class implements the `Proximity` and `Temperature` Sensor Cla
 | `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the URM09. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x11`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

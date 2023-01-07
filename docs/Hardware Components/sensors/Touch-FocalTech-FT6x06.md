@@ -32,6 +32,7 @@ The `FT6X06` Sensor Class extends the `Touch` Sensor Class with additional prope
 | `reset` | A `Digital` class constructor options object with the configuration of the FT6x06 reset pin. This property is optional. If present, a hardware reset is performed when the class is instantiated.
 | `onSample` | Callback to invoke when touch points are available from the `sample` method. This property is required if `interrupt` is provided.
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

@@ -27,6 +27,7 @@ The `CapacitiveMoisture` Sensor Class implements a `SoilMoistureSensor` Sensor C
 | :---: | :--- |
 | `sensor` | An `Analog` class constructor options object with the Analog configuration to use for communication with the Capacitive Moisture sensor. This property is required.
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

@@ -29,6 +29,7 @@ The `CCS811` Sensor Class implements the `CarbonDioxideGasSensor` and `VOCSensor
 | `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the CCS811. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x5A`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

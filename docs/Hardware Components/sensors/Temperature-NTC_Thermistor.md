@@ -26,6 +26,7 @@ The `NTC_THERMISTOR` Sensor Class extends the `Temperature` Sensor Class with ad
 | :---: | :--- |
 | `sensor` | An `Analog` class constructor options object with the Analog configuration to use for communication with the NTC_THERMISTOR. This property is required.
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

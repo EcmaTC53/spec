@@ -30,6 +30,7 @@ The `LIS3DH` Sensor Class implements an `Accelerometer` Sensor Class with proper
 | `onAlert` | Callback that will be invoked when the alert pin is asserted. This property is required if `alert` is provided.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

@@ -29,6 +29,7 @@ The `SHT3x` Sensor Class implements the `Humidity` and `Temperature` Sensor Clas
 | `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the SHT3x. This property is required. Its `hz` property defaults to `1_000_000` and its `address` property to `0x44`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 There are no configurable properties of the SHT3x.

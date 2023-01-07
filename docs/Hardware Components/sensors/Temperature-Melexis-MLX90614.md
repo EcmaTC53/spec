@@ -27,6 +27,7 @@ The `MLX90614` Sensor Class extends the `Temperature` Sensor Class with addition
 | :---: | :--- |
 | `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the MLX90614. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x5A`.
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 There are no configurable properties of the MLX90614.

@@ -29,6 +29,7 @@ The `TMP117` Sensor Class extends the `Temperature` Sensor Class with additional
 | `alert` | A `Digital` class constructor options object with the configuration of the TMP117 alert pin. This property is required for instances that use the `onAlert` callback.
 | `onAlert` | Callback that will be invoked when the alert pin is asserted. This property is required if `alert` is provided.
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

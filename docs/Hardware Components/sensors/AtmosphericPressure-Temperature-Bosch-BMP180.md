@@ -29,6 +29,7 @@ The `BMP180` Sensor Class implements the `Barometer` and `Temperature` Sensor Cl
 | `sensor` | An `I2C` class constructor options object with the I²C configuration to use for communication with the BMP180. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x77`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

@@ -27,6 +27,7 @@ The `ZIOQWIICMOISTURE` Sensor Class implements a `SoilMoistureSensor` Sensor Cla
 | `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the ZIO QWIIC Moisture sensor. This property is required. Its `hz` property defaults to `100_000` and its `address` property to `0x28`.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.

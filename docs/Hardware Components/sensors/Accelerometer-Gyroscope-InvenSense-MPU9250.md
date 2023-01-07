@@ -33,6 +33,7 @@ The `MPU9250` device also hosts an `AK8963` sensor. To access the `AK8963`, the 
 | `onAlert` | Callback that will be invoked when the alert pin is asserted. This property is required if `alert` is provided.
 
 
+<a id="configuration"></a>	
 #### Properties of `configure` Options Object
 
 All of the following properties are optional.
