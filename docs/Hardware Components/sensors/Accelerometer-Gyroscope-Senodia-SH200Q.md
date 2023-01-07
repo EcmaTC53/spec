@@ -25,7 +25,7 @@ The `SH200Q` Sensor Class implements the `Accelerometer` and `Gyroscope` Sensor 
 
 | Property | Description |
 | :---: | :--- |
-| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the SH200Q. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x68`.
+| `sensor` | A `SMBus` class constructor options object with the SMBus configuration to use for communication with the SH200Q. This property is required. Its `hz` property defaults to `400_000` and its `address` property to `0x6C`.
 
 
 <a id="configuration"></a>	
