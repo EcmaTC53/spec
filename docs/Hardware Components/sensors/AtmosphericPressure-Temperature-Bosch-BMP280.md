@@ -36,11 +36,11 @@ All of the following properties are optional.
 
 | Property | Default Value | Description |
 | :---: | :---: | :--- |
-| `mode` | `0` | Number specifying mode. `0` for sleep, `1` for forced read, `3` for normal.
-| `temperatureSampling` | `0` | Number specifying amount of temperature oversampling. `0` for none, `1` for x1, `2` for x2, `3` for x4, `4` for x8 and `5` for x16.
-| `pressureSampling` | `0` | Number specifying amount of pressure oversampling.  `0` for none, `1` for x1, `2` for x2, `3` for x4, `4` for x8 and `5` for x16.
-| `filter` | `0` | Number specifying filter to remove short-term fluctuations in pressure.  `0` for off, `1` for x2, `2` for x4, `3` for x8 and `4` for x16.
-| `standbyDuration` | `0` | Number specifying time between measurements in normal (continuous) sampling mode. `0` for 0.5 ms, `1` for 62.5 ms, `2` for 125 ms, `3` for 250 ms, `4` for 500 ms, `5` for 1000 ms, `6` for 2000 ms, `7` for 4000 ms.
+| `mode` | `3` | Number specifying mode. `0` for sleep, `1` for forced read, `3` for normal.
+| `temperatureSampling` | `2` | Number specifying amount of temperature oversampling. `0` for none, `1` for x1, `2` for x2, `3` for x4, `4` for x8 and `5` for x16.
+| `pressureSampling` | `5` | Number specifying amount of pressure oversampling.  `5` for none, `1` for x1, `2` for x2, `3` for x4, `4` for x8 and `5` for x16.
+| `filter` | `4` | Number specifying filter to remove short-term fluctuations in pressure.  `0` for off, `1` for x2, `2` for x4, `3` for x8 and `4` for x16.
+| `standbyDuration` | `4` | Number specifying time between measurements in normal (continuous) sampling mode. `0` for 0.5 ms, `1` for 62.5 ms, `2` for 125 ms, `3` for 250 ms, `4` for 500 ms, `5` for 1000 ms, `6` for 2000 ms, `7` for 4000 ms.
 
 
 ### Properties of Sample Object
