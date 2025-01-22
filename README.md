@@ -7,7 +7,7 @@
 
 ## Latest drafts (markdown) 
 
-- [ECMAScript® Embedded Systems API Specification](./docs/tc53.md) – working draft for 2nd Edition
+- [ECMAScript® Embedded Systems API Specification](./docs/tc53.md) – working draft for 3rd Edition
 - Technical Report: [Recommendations and Best Practices for Scripts on Connected Sensing Devices](./docs/Technical%20Reports/provenance.md)
 - Technical Report: [Class Specifications for Embedded Hardware Components](./docs/Technical%20Reports/hardware-components.md)
 
