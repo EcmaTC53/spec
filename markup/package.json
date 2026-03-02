@@ -1,0 +1,17 @@
+{
+  "name": "@moddable/md2xml",
+  "version": "1.0.0",
+  "dependencies": {
+    "marked": "^4.2.0"
+  },
+  "imports": {
+  },
+  "main": "./md2xml.js",
+  "type": "module",
+  "scripts": {
+    "build": "./build.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,0 +1,56 @@
+<emu-annex id="sec-bibliography" back-matter>
+  <h1>Bibliography</h1>
+  <ol>
+    <li>
+      <p>IO</p>
+
+      <ul>
+        <li><em>I²C-bus specification and user manual, Rev. 6</em>.
+          <a href="https://www.nxp.com/docs/en/user-guide/UM10204.pdf">https://www.nxp.com/docs/en/user-guide/UM10204.pdf</a>
+        </li>
+        <li><em>System Management Bus (SMBus) Specification Version 3.1</em>.
+          <a href="http://smbus.org/specs/SMBus_3_1_20180319.pdf">http://smbus.org/specs/SMBus_3_1_20180319.pdf</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <p>W3C Sensor</p>
+
+      <ul>
+        <li><em>W3C Generic Sensor specification</em>.
+          <a href="https://www.w3.org/TR/generic-sensor/">https://www.w3.org/TR/generic-sensor/</a></li>
+        <li><em>W3C Accelerometer draft</em>.
+          <a href="https://w3c.github.io/accelerometer/">https://w3c.github.io/accelerometer/</a></li>
+        <li><em>W3C Ambient Light Sensor draft</em>.
+          <a href="https://www.w3.org/TR/ambient-light/">https://www.w3.org/TR/ambient-light/</a></li>
+        <li><em>W3C Proximity Sensor draft</em>.
+          <a href="https://w3c.github.io/proximity/">https://w3c.github.io/proximity/</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <p>Hardened JavaScript</p>
+
+      <ul>
+        <li><em>Ecma TC39 - Compartments Proposal</em>.
+          <a href="https://github.com/tc39/proposal-compartments">https://github.com/tc39/proposal-compartments</a></li>
+        <li><em>Ecma TC39 - SES Proposal</em>.
+          <a href="https://github.com/tc39/proposal-ses">https://github.com/tc39/proposal-ses</a></li>
+        <li><em>Draft Specification for Standalone SES</em>.
+          <a href="https://github.com/Agoric/SES-shim/blob/master/packages/ses/docs/source/draft-standalone-spec.md">https://github.com/Agoric/SES-shim/blob/master/packages/ses/docs/source/draft-standalone-spec.md</a>
+        </li>
+      </ul>
+    </li>
+
+    <li>
+      <p>WHATWG</p>
+
+      <ul>
+        <li><em>HTML Living Standard</em>
+          <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a></li>
+      </ul>
+    </li>
+  </ol>
+</emu-annex>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en-GB-oxendict">
+<head>
+  <meta charset="UTF-8">
+  <title>ECMAScript&reg; Embedded Systems API Specification</title>
+</head>
+<body>
+
+<pre class="metadata">
+  title: ECMAScript&reg; Embedded Systems API Specification
+  description: This Standard defines APIs for use on embedded systems
+  shortname: ECMA-419
+  status: draft
+  location: https://tc39.es/ecma402/
+  date: 2026-02-11
+  committee: 53
+  version: 4<sup>th</sup> Edition
+</pre>
+<p><img src="./ecma-logo.svg" id="ecma-logo"></p>
+
+<emu-biblio href="./biblio.json"></emu-biblio>

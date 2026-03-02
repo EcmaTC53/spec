@@ -1,0 +1,50 @@
+{
+  "location": "https://tc39.es/ecma262/",
+  "entries": [
+    {
+      "type": "op",
+      "id": "sec-abstract-closure",
+      "aoid": "Abstract Closure"
+    },
+    {
+      "type": "op",
+      "id": "sec-call",
+      "aoid": "Call"
+    },
+    {
+      "type": "op",
+      "id": "sec-construct",
+      "aoid": "Construct"
+    },
+    {
+      "type": "op",
+      "id": "sec-definepropertyorthrow",
+      "aoid": "DefineProperty"
+    },
+    {
+      "type": "op",
+      "id": "sec-get-o-p",
+      "aoid": "GetProperty"
+    },
+    {
+      "type": "op",
+      "id": "sec-hasproperty",
+      "aoid": "HasProperty"
+    },
+    {
+      "type": "op",
+      "id": "sec-iscallable",
+      "aoid": "IsCallable"
+    },
+    {
+      "type": "op",
+      "id": "sec-set-o-p-v-throw",
+      "aoid": "SetProperty"
+    },
+    {
+      "type": "op",
+      "id": "sec-toindex",
+      "aoid": "ToIndex"
+    }
+  ]
+}

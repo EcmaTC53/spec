@@ -1,0 +1,4080 @@
+## Introduction
+
+This Standard defines APIs for use on embedded systems. Embedded systems are far more diverse than personal computers, smartphones, and web servers where ECMAScript is most widely used. The diversity of embedded hardware is a consequence of devices being optimized for a specific product or class of products.
+
+It is not enough for these APIs to support the features embedded systems have in common. To be truly useful, they must allow access to the unique hardware capabilities of each embedded system. This requirement makes this Standard very different from that of a computer language which is grounded in the formality and rigor of mathematics. Hardware can be inconsistent, even sometimes messy, but it needs to be accommodated.
+
+The ability for scripts to access unique hardware capabilities has an important consequence. It means that not all correct scripts will run correctly on all hardware. If a script requires a feature that is unavailable, it cannot run. While it is common in ECMAScript to emulate missing language and runtime features with a "polyfill", this is usually impractical, if not impossible, for hardware capabilities. Therefore, the goal of this Standard is to make it possible to write portable scripts for specific operations, not to guarantee that all scripts execute correctly on any conformant deployment.
+
+One important consideration when designing hardware products is cost. The APIs are designed to allow efficient execution with minimal resource use. They assume no minimum or maximum configuration. Advances in the state-of-the-art of ECMAScript engines, microcontrollers, and runtime libraries will determine where these APIs may be used.
+
+This Standard is influenced by the [Extensible Web Manifesto](https://github.com/extensibleweb/manifesto#the-extensible-web-manifesto). It aims to provide low-level APIs that do things — primarily related to hardware and communication — that the ECMAScript language cannot do by itself. These low-level APIs are functional, simple, and efficient. The APIs may be used directly. However, it is expected that many developers will interact with them indirectly through higher-level modules and frameworks that build upon the low-level APIs. This layered approach keeps the low-level APIs small and focused while allowing a variety of uses and API styles to be built upon them.
+
+The first edition is built around the IO Class Pattern which provides consistent, efficient, extensible access to the IO capabilities of embedded systems. Driver-style classes for IO extenders, sensors, and displays build on the IO foundation. The first edition was adopted by the General Assembly of June 2021.
+
+The second edition extends IO with asynchronous capabilities used by I²C and the system management bus. It introduces new sensor classes, including many gas sensors; classes to manage and monitor network interfaces; client support for common network protocols including HTTP, MQTT, NTP, DNS, WebSocket, and TLS; server support for the HTTP and WebSocket protocols; and a real-time clock peripheral class. It was adopted by the General Assembly of June 2023.
+
+The third edition introduces new IO classes for audio input, audio output, and image input, such as cameras. It includes persistent storage classes for files, flash memory partitions, and key-value pair stores, and to apply over-the-air firmware updates.
+
+
+
+This Ecma Standard was developed by Technical Committee 53 and was adopted by the General Assembly of June 2025.
+
+## 1 Scope
+
+This Standard defines application programming interfaces (APIs) for ECMAScript modules that support programs executing on embedded systems.
+
+This Standard defines APIs for capabilities found in common across embedded systems. Implementations for embedded systems that include additional capabilities are encouraged to provide ECMAScript APIs for those using the many extensibility options provided by this Standard.
+
+This Standard does not make any changes to the ECMAScript language as defined by ECMAScript Language Specification (ECMA-262). It does strongly encourage all deployments to execute only in strict-mode. It recommends hosts incorporate an engine that supports Hardened JavaScript and that script code is written to conform to the Hardened JavaScript runtime constraints.
+
+## 2 Conformance
+
+A conforming implementation of the ECMAScript Embedded Systems API Specification must conform to ECMA-262 and must provide and support all the objects, properties, functions, and program semantics required by this specification.
+
+A conforming implementation of the ECMAScript Embedded Systems API Specification is permitted to provide additional objects, properties, and functions beyond those described in this specification.
+
+In particular, a conforming implementation of this Standard is permitted to provide properties not described herein, and values for those properties, for objects that are described in this specification. A conforming implementation is permitted to add optional arguments to the functions defined in this specification only where noted.
+
+Because implementation differences are permitted (for example, to accommodate differentiating hardware features), this Standard does not guarantee that all scripts execute correctly on every conformant deployment.
+
+Self-hosted implementations are permitted as long as they conform to the requirements of this Standard (for example, ensuring internal properties are not visible).
+
+## 3 Normative references
+
+The following referenced documents are required for the application of this document. For dated references, only the edition cited applies. For references without a date or version number, the latest edition of the referenced document (including any amendments) applies.
+
+- ECMA-262, *ECMAScript Language Specification* <br>[https://www.ecma-international.org/publications/standards/Ecma-262.htm](https://www.ecma-international.org/publications/standards/Ecma-262.htm)
+- ECMA-402, *ECMAScript Internationalization API* <br>[https://www.ecma-international.org/publications/standards/Ecma-402.htm](https://www.ecma-international.org/publications/standards/Ecma-402.htm)
+- IETF RFC 2119, *Key words for use in RFCs to Indicate Requirement Levels* <br>[https://tools.ietf.org/html/rfc2119](https://tools.ietf.org/html/rfc2119)
+- IETF RFC 7230 - 7240, *Hypertext Transfer Protocol (HTTP/1.1)* <br>[https://tools.ietf.org/html/rfc7230](https://tools.ietf.org/html/rfc7230)
+- IETF RFC 6455, *The WebSocket Protocol* <br>[https://tools.ietf.org/html/rfc6455](https://tools.ietf.org/html/rfc6455)
+- IETF RFC 4346, *The Transport Layer Security (TLS) Protocol Version 1.1* <br>[https://tools.ietf.org/html/rfc4346](https://tools.ietf.org/html/rfc4346)
+- IETF RFC 5246, *The Transport Layer Security (TLS) Protocol Version 1.2* <br>[https://tools.ietf.org/html/rfc5246](https://tools.ietf.org/html/rfc5246)
+- IETF RFC 8446, *The Transport Layer Security (TLS) Protocol Version 1.3* <br>[https://tools.ietf.org/html/rfc8446](https://tools.ietf.org/html/rfc8446)
+- IETF RFC 6066, *Transport Layer Security (TLS) Extensions: Extension Definitions* <br>[https://tools.ietf.org/html/rfc6066](https://tools.ietf.org/html/rfc6066)
+- IETF RFC 7301, *Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension* <br>[https://tools.ietf.org/html/rfc7301](https://tools.ietf.org/html/rfc7301)
+- IETF RFC 7468, *Textual Encodings of PKIX, PKCS, and CMS Structures* <br>[https://www.rfc-editor.org/rfc/rfc7468](https://www.rfc-editor.org/rfc/rfc7468)
+- IETF RFC 1035, *DOMAIN NAMES - IMPLEMENTATION AND SPECIFICATION* <br>[https://www.rfc-editor.org/rfc/rfc1035](https://www.rfc-editor.org/rfc/rfc1035)
+- IETF RFC 8484, *DNS Queries over HTTPS (DoH)* <br>[https://www.rfc-editor.org/rfc/rfc8484](https://www.rfc-editor.org/rfc/rfc8484)
+- IETF RFC 5905, *Network Time Protocol Version 4: Protocol and Algorithms Specification* <br>[https://www.rfc-editor.org/rfc/rfc5905](https://www.rfc-editor.org/rfc/rfc5905)
+- IETF RFC 6762, *Multicast DNS* <br>[https://www.rfc-editor.org/rfc/rfc6762](https://www.rfc-editor.org/rfc/rfc6762)
+- IETF RFC 6763, *DNS-Based Service Discovery* <br>[https://www.rfc-editor.org/rfc/rfc6763](https://www.rfc-editor.org/rfc/rfc6763)
+- IETF RFC 4122, *A Universally Unique IDentifier (UUID) URN Namespace* <br>[https://www.rfc-editor.org/rfc/rfc4122](https://www.rfc-editor.org/rfc/rfc4122)
+- IEEE 802 <br>[https://standards.ieee.org/featured/ieee-802/](https://standards.ieee.org/featured/ieee-802/)
+- ITU X.690, *Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)* <br>[https://www.itu.int/rec/T-REC-X.690](https://www.itu.int/rec/T-REC-X.690)
+- OASIS MQTT 3.1.1 Standard <br>[http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
+- Bluetooth Core Specification 6.2 <br> [https://www.bluetooth.com/specifications/specs/core-specification-6-2/](https://www.bluetooth.com/specifications/specs/core-specification-6-2/)
+
+## 4 Terms and definitions
+
+For the purposes of this document, the following terms and definitions apply
+
+##### address
+an identifier for interfacing with a specific component, device, or board
+
+##### baud rate
+the rate at which information is transferred, measured in bits per second
+
+##### bus
+a communications system that transfers data. A "Bus" includes hardware, software, and the protocol
+
+##### connected sensing device
+a sensing device that communicates with a remote endpoint
+
+##### direct measurement
+a sample that has been captured from a configured sensor without alteration
+
+##### expander
+a device that provides additional inputs and/or outputs
+
+##### instance
+an object that has been created by a function constructor, class constructor, or function factory
+
+<!--
+##### MCU
+See **microcontroller**.
+-->
+
+##### IO
+an abbreviation for "Input and Output"
+
+##### microcontroller
+a single integrated circuit with one or more CPUs, memory, and programmable IO
+
+##### protocol
+a system of rules that define how data is exchanged between systems
+
+##### register
+locations in a device's memory that can be written to or read from. These memory locations may contain configuration settings or the current state of the device.
+
+##### remote endpoint
+a computing system in communication with the microcontroller
+
+##### sensing device
+a system comprising an embedded controller with at least one attached sensor
+
+##### sensor
+a device that detects and responds to some type of input from the physical environment, attached to a microcontroller used to capture data
+
+##### sensor classification
+sensor type, as determined by the real quantity that is, or quantities that are, subject to measurement, e.g. mass, power, or humidity. Uses names of Sensor Classes defined by this Standard. If a sensor measures real quantities defined as properties in multiple unique Sensor Classes, the name of any applicable Sensor Class may be used.
+
+##### sensor configuration
+user-defined parameters impacting the sampling, processing, representation, and/or transmission of peripheral data
+
+##### synthetic measurement
+a direct measurement that has been modified in some form so as to potentially lose accuracy, precision, or fidelity
+
+## 5 Notational conventions
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
+
+ECMAScript source code examples in this document are for illustrative purposes. Consequently, they are informative, not normative.
+
+## 6 Overview
+
+### ECMAScript
+
+This Standard builds on the ECMAScript Standard as defined in ECMA-262. As of this writing, that is ECMAScript 2025.
+
+This Standard is not an extension or subset of ECMAScript Standard. It is a set of APIs to use with that standard. The relationship between ECMA-419 and ECMA-262 is analogous to the relationship between ECMA-402 (ECMAScript Internationalization API) and ECMA-262.
+
+This Standard is intended to be used in strict mode only. Sloppy mode has known issues that detract from building a robust system. Sloppy mode is maintained primarily for web compatibility and provides no benefit to embedded systems.
+
+### Class patterns
+
+A Class Pattern, as used in this Standard, is a combination of requirements and guidelines for a class. For example, the IO Class Pattern defines behaviors for all IO classes.
+
+The standard defines classes in terms of Class Patterns. In the future, there may be true formal classes as found in the ECMAScript Language.
+
+The requirements of a Class Pattern are behaviors defined by this Standard and must be adhered to for a conformant implementation. A Class Pattern can be seen as similar to a collection of Abstract Operations in the ECMA-262.
+
+Guidelines are primarily for extensibility. Extensibility is essential to this Standard as it must be possible to access unique hardware capabilities. Extensibility is problematic because of the potential for collisions. This Standard provides requirements for how extensibility may be implemented.
+
+Unless stated, there are no requirements about class inheritance. An implementation of a class pattern may inherit from `Object` or any other class, so long as it conforms.
+
+### Independent implementations
+
+This Standard is intended to facilitate multiple independent implementations of the APIs. A given API may warrant an entirely different implementation depending on a variety of factors that include the host hardware, operating system, and ECMAScript engine.
+
+### Self-hosting
+
+The ECMAScript language is defined in terms of a host that provides the runtime environment for the execution of scripts. This Standard does not change that. The APIs defined herein are provided by a host. However, this Standard does anticipate that portions of the runtime environment provided by the host may themselves be implemented in ECMAScript. This Standard refers to a host that includes ECMAScript code in its implementation as self-hosting.
+
+One challenge of self-hosting is fully separating host scripts from hosted scripts to eliminate security, robustness, and compatibility problems. The Compartment model in the Hardened JavaScript proposal is a tool to separate host scripts from hosted scripts. Compartments also allow separation of modules within a host which mitigates supply-chain attacks.
+
+Self-hosted implementations must ensure that no internal properties or methods are visible to client scripts using the implementation. Private fields and private methods as defined by ECMA-262 are one way to shield internal properties and methods from client code.
+
+> **NOTE**: Self-hosting is not required.
+
+<!--
+### Immutability
+
+Immutability of object properties is a feature of ECMAScript. It is not widely used, however. Immutability is valuable for embedded systems and consequently, this Standard makes use of it in several ways.
+
+- Data may be stored in read-only memory, reducing the RAM required for execution
+- Improving security as they are inherently resistant to tampering
+- Simplifying implementation, as in...
+
+-->
+
+### Module specifiers
+
+This Standard defines classes which are accessed through modules. Because many embedded systems lack a file system, using file paths to access modules is impractical and contrived. Instead, modules are accessed using bare module specifiers. While such specifiers are currently forbidden in a web browser, they are permitted in other environments.
+
+A namespace prefix is used to minimize the chance of name collisions with other bare module specifiers. This Standard uses the namespace prefix `embedded:`.
+
+```javascript
+import Digital from "embedded:io/digital";
+```
+
+The "embedded:" namespace prefix is [registered](https://www.iana.org/assignments/uri-schemes/prov/embedded) as a URI scheme with IANA to reduce the possibility of collisions.
+
+The use of module namespaces in this Standard is intended to be compatible with the [Built In Modules Proposal](https://github.com/tc39/proposal-built-in-modules#namespace).
+
+For the avoidance of doubt, the use of bare module specifiers by this Standard does not prevent a host from also supporting other kinds of module specifiers for modules not defined by this specification.
+
+<a id="hardened-javascript"></a>
+
+### Hardened JavaScript
+
+The Hardened JavaScript proposal extends the ECMAScript language to support provably secure execution of scripts in an environment that includes both trusted and untrusted scripts. The two foundations of Hardened JavaScript are immutability and compartments. Hardened JavaScript makes all primordials immutable prior to the execution of any untrusted script code. This ensures built-in objects behave as defined by the language and disables common attack vectors including prototype poisoning. Compartments allow scripts to sandbox other scripts to limit the globals and modules that are available in the sandbox.
+
+The security guarantees provided by Hardened JavaScript reduce vulnerabilities in systems that combine code from multiple sources, some of which may contain security flaws. The mechanisms proposed by Hardened JavaScript allow for an efficient implementation. Further, the immutability requirement for Hardened JavaScript allows primordials to be stored in read-only memory, reducing RAM use and enabling them to be securely shared by multiple virtual machines.
+
+This Standard is designed to be used with Hardened JavaScript when a runtime security solution is required. If and when the Hardened JavaScript proposal is an approved standard, this Standard will reference it normatively.
+
+Hardened JavaScript consists of two major execution phases — pre-lockdown and post-lockdown. Prior to lockdown, primordials are mutable; afterwards, they are immutable. A host is not required to support pre-lockdown on an embedded system. It may instead complete lockdown during the build process, for example.
+
+<a id="multitasking"></a>
+
+### Multitasking
+
+On embedded systems capable of multitasking, this Standard recommends [Web workers](https://html.spec.whatwg.org/multipage/#toc-workers) from the HTML Living Standard for the ECMAScript API. The HTML Living Standard describes workers as "relatively heavy-weight," noting that they "are not intended to be used in large numbers." Consequently, an embedded project may have just a single worker to augment the main task, allowing it to use the full CPU power of a dual-core microcontroller.
+
+Implementations of this Standard must manage resource contention between workers and ensure hardware operations are executed atomically.
+
+A Web worker is not required to provide the same functionality as the main virtual machine: a host may attenuate the functionality available to a worker. One consequence of this attenuation is that the [host provider instance](#host-provider-instance) and corresponding `device` global variable may differ between the main task and workers.
+
+<a id="naming"></a>
+
+### Naming
+
+This Standard uses the lower camel case naming convention (e.g. `exampleProperty`) for property names.
+
+It follows the ECMAScript convention of naming classes with upper camel case (e.g. `ExampleClass`) and methods with lower camel case (e.g. `exampleMethod`).
+
+Callback function names begin with `on` (e.g. `onExampleCallback`).
+
+Words are preferred over abbreviations and acronyms (e.g. `address` instead of `addr`, `clock` instead of `scl`, `receive` instead of `rx`), though common acronyms are acceptable (e.g. `hz` instead of `hertz`).
+
+### IP address
+This Standard represents an IP address value as a string.
+
+An IPv4 address has the form `x.x.x.x`, where `x` is a decimal value from 0 to 255 and the values are separated by periods.
+
+An IPv6 address has the form `y:y:y:y:y:y:y:y`, where `y` is a four-digit hexadecimal value from 0x0000 to 0xFFFF, encoded with lowercase letters and left-padded with `"0"` as necessary. The values are separated by colons.
+
+<a id="mac-address"></a>
+
+### MAC address
+This Standard represents a media access control address (MAC address) value as a string. The value has the form `zz:zz:zz:zz:zz:zz`, where `zz` is a two-digit hexadecimal value from 0x0000 to 0xFF, encoded with lowercase letters and left-padded with `"0"` as necessary. The values are separated by colons.
+
+<a id="byte-buffer"></a>
+
+### Byte Buffer
+
+This Standard uses the term "Byte Buffer" to mean an instance of the following ECMAScript types: `ArrayBuffer` (resizable or not, immutable or not), `SharedArrayBuffer` (growable or not), `Uint8Array`, `Int8Array`, and `DataView`.
+
+<a id="disposable-buffer"></a>
+
+### Disposable Buffer
+
+This Standard uses the term "Disposable Buffer" to mean an instance of a [Byte Buffer](#byte-buffer) with a `close` method which immediately releases the memory used by the backing buffer. After invoking `close`, the buffer shall behave as a detached buffer.
+
+> **NOTE**: The Disposable Buffer behavior is intended to be forward-compatible with the [Explicit Resource Management](https://github.com/tc39/proposal-explicit-resource-management) proposal. The Disposable Buffer's `close` method is an alias for the `[Symbol.dispose]` method specified by that proposal.
+
+<a id="uuid"></a>
+
+### UUID
+
+UUIDs are represented by strings using hexadecimal encoding with lowercase letters, left-padded with `"0"`as necessary. A 128-bit UUID uses the form `"01234567-0000-1000-8000-00805f9b34fb"`. An abbreviated 16-bit UUID uses the form `"180d"`; an abbreviated 32-bit, `"01234567"`.
+
+## 7 Requirements for standard built-in ECMAScript objects
+
+Unless specified otherwise in this document, the objects, functions, and constructors described in this Standard are subject to the generic requirements and restrictions specified for [standard built-in ECMAScript objects](https://tc39.es/ecma262/#sec-ecmascript-standard-built-in-objects) in ECMA-262.
+
+<a id="base-class-pattern"></a>
+
+## 8 Base Class Pattern
+
+The Base Class Pattern defines common behaviors used by other class patterns. The Base Class Pattern is purely abstract and cannot be instantiated directly.
+
+Classes conforming to the Base Class Pattern may be subclassed.
+
+See Annex A for the [formal algorithms](#alg-base-class-pattern) of the Base Class Pattern.
+
+<a id="base-pattern-async"></a>
+
+### Asynchronous methods
+
+By default, methods are synchronous: they consume their inputs, perform their work, and generate their result by the time they return. A class may provide asynchronous methods.
+
+Asynchronous methods take an optional final argument which is a **completion callback function**. A completion callback function is called once, at the completion of the operation to indicate success or failure and deliver the result of the operation.
+
+The first argument to the completion callback is always a result code. A value of `null` indicates success; an `Error` object indicates failure. Additional arguments may be specified by the method.
+
+Whether or not a completion callback is provided, the method is performed asynchronously.
+
+If an instance provides any asynchronous methods, it should provide an asynchronous `close` method.
+
+> **NOTE**: As defined here, an "asynchronous method" is **not** an ECMAScript function declared with the `async` keyword. Here "asynchronous" refers only to the operation being performed in without blocking the current thread of execution.
+
+### constructor
+
+The constructor of the Base Class Pattern takes an options object as its first argument.
+
+The `target` property is the only property the Base Class Pattern defines in the options object.
+
+Typically there are no other arguments as additional configuration options can and should be added to the options object. However, additional arguments are not prohibited.
+
+It is an error to invoke the constructor without the options object. An exception will be thrown.
+
+The implementation of the constructor should validate all supported option properties before allocating any resources. This behavior avoids enabling or changing the state of any hardware should the constructor fail due to invalid parameters.
+
+The implementation must ignore any unrecognized properties on the options object.
+
+If the constructor fails to complete execution successfully, it must release any resources allocated prior to exiting.
+
+The constructor must not modify the options object. It must accept an immutable options object.
+
+Once the instance has been successfully constructed, it must not be eligible for garbage collection until it is explicitly released by calling `close`. This is done so scripts do not need to maintain a reference to the object to prevent it from being collected, similar to `setInterval`/`clearInterval` and the W3C Generic Sensor specification.
+
+### `close` method
+
+The `close` method releases all resources associated with the instance before completing.
+
+Once the close operation, an `Error` exception is thrown if any other instance methods are called. It is not an error to call the `close` method more than once.
+
+Once the close operation completes, the object is eligible for garbage collection.
+
+Once `close` has been called, calling other methods on the instance throws an exception. The sole exception is `close` itself which is safe to call multiple times.
+
+For synchronous `close`:
+
+- the close operation is complete when it returns
+- no callbacks may be invoked after the `close` method is called
+
+For asynchronous `close`:
+
+- the close operation completes some time after it returns
+- the completion callback, if provided, is invoked after `close` completes
+- callbacks may be invoked after `close` is called and before the completion callback is invoked
+- if possible, pending asynchronous operations should be cancelled
+
+### `target` property
+
+The `target` property is opaque to the object's implementation. It may be initialized by the constructor using the `target` property in the options object. Scripts may both read and write the target property, though it is typically only set at construction.
+
+### Callbacks
+
+Instances of the Base Class Pattern typically use function callbacks to deliver asynchronous events.
+
+Callback functions are provided to the instance as properties in the options object.
+
+```javascript
+new Button({
+	onPush() {
+	},
+	onRelease() {
+	}
+});
+```
+
+Callback functions are invoked with `this` set to the instance. This can be overridden using standard ECMAScript features, such as arrow functions:
+
+```javascript
+new Button({
+	onPush: () => {
+	},
+	onRelease: () => {
+	}
+});
+```
+
+The callbacks are stored internally by the implementation. They are not public methods. The callback functions cannot be read and are only set using the constructor's options object.
+
+A callback function may only be invoked when no script is running in its host virtual machine to respect the [single-thread evaluation semantics of ECMAScript](https://tc39.es/ecma262/#sec-happens-before). This means that callbacks may not be invoked by the instance from within its public method calls, including the constructor.
+
+Callbacks must be invoked in the same virtual machine in which they were created.
+
+## 9 IO Class Pattern
+
+The IO Class Pattern builds on the Base Class Pattern to provide a foundation for implementing access to a variety of hardware inputs and outputs.
+
+All IO is non-blocking, consistent with ECMAScript API behavior on the web platform. That said, not all operations are instantaneous. Implementations determine how long is too long for a given operation.
+
+Non-blocking IO is facilitated by two callback functions, `onReadable` and `onWritable`, which eliminate the need for polling in most cases.
+
+See Annex A for the [formal algorithms](#alg-io-class-pattern) of the IO Class Pattern.
+
+### Pin specifier
+A **pin specifier** is an ECMAScript value used by IO classes to refer to hardware connections represented by pins. Typically these pins correspond to a particular connection point on the hardware package, although this is not required.
+
+The value of a pin specifier is host-dependent. It is often a number corresponding to the logical GPIO pin number as per the hardware data sheet (e.g. GPIO `5`), but it may be a string (`"D1"`) or even an object (`{port: 1, pin: 5}`).
+
+### Port specifier
+A **port specifier** is an ECMAScript value used by IO classes to refer to a hardware interface. Port specifier values are defined by the host and are usually either a number or string.
+
+For example, consider a microcontroller may support two serial connections, each with different capabilities that may be configured to be available on a set of pins. The port specifier indicates which serial connection to use.
+
+<a id="io-pattern-constructor"></a>
+
+### constructor
+
+The options object contains the specification of the hardware resources to be used by the instance. For example, the digital class indicates the physical pin to use with a `pin` property that has a pin specifier value.
+
+If the constructor requires a resource that is already in use — whether by a script or the native host — an `Error` exception is thrown.
+
+This Standard allows but does not require, an implementation to open multiple instances for the same hardware resource if the instances cannot interfere with each other's operation. For example, this can work for a digital input but would not for a digital output.
+
+The IO Class Pattern is designed to be used both with IO types that have only a current value (e.g. Digital, analog, PWM) and IO types that use streams of data (e.g. serial, SPI).
+
+The IO Class Pattern reserves the `io` property name in the options object. If present, it must be ignored by IO implementations.
+
+<a id="io-pattern-read"></a>
+
+### `read` method
+
+The `read` method returns data from the IO instance. If no data is available, it returns `undefined`. The type of the data returned depends on the value of the `format` property.
+
+The `read` method may take any number of arguments, including zero. The arguments are defined by the specific IO type.
+
+If the instance does not support reading (because the IO type is inherently unreadable or because it is configured for write-only) an exception is thrown.
+
+When the `format` property is `"buffer"`, the `read` method accepts a data argument that is a `Number` or Byte Buffer. When it is a `Number`, `read` allocates the result as an `ArrayBuffer` with up to as many bytes as the `Number` argument. When it is a Byte Buffer, `read` fills in as many bytes as possible and the result is the number of bytes read as a `Number`.
+
+For synchronous `read`, the result is the return value. For asynchronous `read`, the result is passed to the completion callback as the second argument.
+
+If a resizable Byte Buffer is passed to an asynchronous `read` and the buffer shrinks so that it cannot hold the number of bytes requested at the time the operation is queued, an error is passed to the completion callback. It is implementation dependent if and how the content of the buffer is modified.
+
+<a id="io-pattern-write"></a>
+
+### `write` method
+
+The `write` method sends data to the IO instance.
+
+The following conditions cause an `Error` exception to be thrown: the device cannot accept the data because its buffers are full, the data is incompatible, or a hardware error.
+
+The `write` method may take any number of arguments, including zero. The arguments are defined by the specific IO type. The type of data accepted by `write` depends on the value of the `format` property.
+
+If this instance does not support writing (because the IO type cannot be written or because it is configured for read-only) an `Error` exception is thrown.
+
+When the `format` property is `"buffer"`, the `write` method accepts a data argument that is a Byte Buffer.
+
+Calls to `write` must write all the data provided. If all the data cannot be output, `write` must not output any data and instead must throw an exception.
+
+If a non-shared Byte Buffer is passed to an asynchronous write method, the implementation sends the contents of the buffer from the time the operation is queued. If a shared buffer is passed, the implementation may read from the buffer at any time; the caller is responsible for ensuring that the bytes are not modified until the completion callback is invoked.
+
+<a id="io-pattern-format"></a>
+
+### `format` property
+
+The `format` property is a string that indicates the type of data used by the `read` and `write` methods. It is initialized by the constructor to the default defined for its IO type. The `format` property may be set by the script at any time to change how it reads and writes data.
+
+The following values are defined by the IO Class Pattern for the `format` property. IO types may choose to support one or more and may define others.
+
+| Format string | Description |
+| :---: | :--- |
+| `number` | an ECMAScript number value, typically used for bytes
+| `buffer` | a [Byte Buffer](#byte-buffer). For buffer types with defined `byteOffset` and `byteLength` properties, these restrict the bytes accessed in views. Implementations always allocate `ArrayBuffer` instances for return values.
+| `object` | an ECMAScript object, for data representing a data structure (e.g. JSON)
+| `buffer/disposable` | a [Disposable Buffer](#disposable-buffer), a [Byte Buffer](#byte-buffer) that can be explicitly disposed
+| `string` | an ECMAScript string
+| `int8` | an 8-bit signed integer
+| `int16` | a 16-bit signed integer
+| `int32` | a 32-bit signed integer
+| `int64` | a 64-bit signed integer
+| `uint8` | an 8-bit unsigned integer
+| `uint16` | a 16-bit unsigned integer
+| `uint32` | a 32-bit unsigned integer
+| `uint64` | a 64-bit unsigned integer
+
+The `format` property is implemented as a getter and setter. Attempting to set the `format` property to an unsupported value does not change the value and instead throws an `Error` exception.
+
+<a id="io-pattern-callbacks"></a>
+
+### Callbacks
+
+The IO Class Pattern specifies three callbacks which are set by the options object passed to the constructor. Most IO types operate with or without these callbacks installed, but a particular IO type may require one or more callbacks.
+
+#### onReadable
+
+The `onReadable` callback is invoked when the instance has data available to be read. Data is retrieved using the `read` method.
+
+The `onReadable` callback may receive one or more arguments with information about the data available to read. The arguments are defined by the specific IO type.
+
+The `onReadable` callback is invoked once when data arrives and not again until additional data is available to read.
+
+#### onWritable
+
+The `onWritable` callback is invoked when the instance can accept more data for output.
+
+The `onWritable` callback may receive one or more arguments with information about the amount of data that may be written. The arguments are defined by the specific IO type.
+
+#### onError
+
+The `onError` callback is invoked when a non-recoverable error occurs. The instance is no longer usable. The only method that should be called is `close`.
+
+Details of the error may be passed to the callback using arguments defined by the specific IO type.
+
+## 10 IO classes
+
+This section defines IO Classes conforming to the IO Class Pattern.
+
+The classes support capabilities commonly supported by hardware and runtimes. Capabilities that are not supported here may be added using the extensibility options of the IO Class Pattern and Base Class Pattern.
+
+### Digital
+
+The `Digital` IO class is used for digital inputs and outputs.
+
+```javascript
+import Digital from "embedded:io/digital";
+```
+
+See Annex A for the [formal algorithms](#alg-io-digital) of the `Digital` IO Class.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `pin` | A pin specifier indicating the pin to control. This property is required. |
+| `mode` | A value indicating the mode of the IO. May be `Digital.Input`, `Digital.InputPullUp`, `Digital.InputPullDown`, `Digital.InputPullUpDown`, `Digital.Output`, or `Digital.OutputOpenDrain`. This property is required. |
+| `edge` | A value indicating the conditions for invoking the `onReadable` callback. Values are `Digital.Rising`, `Digital.Falling`, and `Digital.Rising + Digital.Falling`. This value is required if the `onReadable` property is present and ignored otherwise. |
+| `activeLow` | A boolean value indicating if the IO is active low or active high. This property is optional an defaults to `false` for active high. |
+| `initialValue` | A value indicating the initial value of an output. The value is either 0 or 1. This property is optional and is ignored for inputs. |
+
+#### Callbacks
+
+**`onReadable()`**
+
+Invoked when the input value changes depending on the value of the `edge` property.
+
+#### Data format
+The `Digital` class data format is always `"number"` with a value of either 0 or 1.
+
+#### Notes
+A digital IO instance configured as an input does not implement write; one configured as an output does not implement read.
+
+### Digital bank
+The `DigitalBank` class provides simultaneous access to a group of digital inputs or outputs.
+
+```javascript
+import DigitalBank from "embedded:io/digitalbank";
+```
+
+See Annex A for the [formal algorithms](#alg-io-digital-bank) of the `DigitalBank` bank IO Class.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `pins` | A bitmask with pins to include in the bank set to 1. This property is required.
+| `mode` | A value indicating the mode of the IO, May be `DigitalBank.Input`, `DigitalBank.InputPullUp`, `DigitalBank.InputPullDown`, `DigitalBank.InputPullUpDown`, `DigitalBank.Output`, or `DigitalBank.OutputOpenDrain`. All pins in the bank use the same mode. This property is required.
+| `rises` | A bitmask indicating the pins in the bank that should trigger an `onReadable` callback when transitioning from 0 to 1. When an `onReadable` callback is provided, at least one pin must be set in `rises` and `falls`.
+| `falls` | A bitmask indicating the pins in the bank that should trigger an `onReadable` callback when transitioning from 1 to 0. When an `onReadable` callback is provided, at least one pin must be set in `rises` and `falls`.
+| `bank` | For implementations with more than a single digital bank, a number or string value specifying the digital bank for this instance. This property is optional.
+
+#### Callbacks
+
+**`onReadable(triggers)`**
+
+Invoked when the input value changes depending on the value of the `mode`, `rises`, and `falls` properties. The `onReadable` callback receives a single argument, `triggers`, which is a bitmask indicating each pin that triggered the callback with a 1.
+
+#### Data format
+The `DigitalBank` class data format is always `"number"`. The value is a bitmask. On a read operation, any bit positions that are not included in the `pins` bitmask are set to 0.
+
+> **NOTE**: The requirement to zero bit positions not included in the bitmask prevents leaking the state of pins unused by this bank.
+
+#### Notes
+A digital IO bank instance configured as an input does not implement `write`; one configured as an output does not implement `read`.
+
+A bitmask contains at least one, and not more than, thirty-two bits. Digital banks may distribute their pins across multiple banks using the `bank` property of the constructor dictionary.
+
+### Analog input
+The `Analog` IO class represents an analog input source.
+
+```javascript
+import Analog from "embedded:io/analog";
+```
+
+See Annex A for the [formal algorithms](#alg-io-analog-input) of the `Analog` IO Class.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `pin` | A pin specifier indicating the analog input pin. This property is required.
+| `resolution` | The requested number of bits of resolution of the input. This property is optional.
+
+#### Data format
+The `Analog` class data format is always a number. The value returned is an integer from 0 to a maximum value based on the resolution of the analog input.
+
+#### `resolution` property
+The read-only `resolution` property indicates the number of bits of resolution provided in values returned by the instance.
+
+### Pulse-width modulation
+The `PWM` IO class provides access to the pulse-width modulation capability of pins.
+
+```javascript
+import PWM from "embedded:io/pwm";
+```
+
+See Annex A for the [formal algorithms](#alg-io-pulse-width-modulation) of the `PWM` IO Class.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `pin` | A pin specifier indicating the pin to operate as a PWM output. This property is required.
+| `hz` | A number specifying the requested frequency of the PWM output in hertz. This property is optional.
+
+#### Data format
+The `PWM` class data format is always a number. The `write` call accepts integers between 0 and a maximum value based on the resolution of the PWM output.
+
+#### `resolution` property
+The read-only `resolution` property indicates the number of bits of resolution in values passed to the `write` method.
+
+#### `hz` property
+The read-only `hz` property returns the frequency of the PWM.
+
+> **NOTE**: A PWM instance defaults to a duty cycle of 0% until `write` is called with a different value.
+
+### I²C – synchronous IO
+The `I2C` class implements an I²C Initiator to communicate with an I²C Peripheral over I²C bus. The `I2C` class performs synchronous IO.
+
+```javascript
+import I2C from "embedded:io/i2c";
+```
+If synchronous IO is not supported, the constructor throws.
+
+See Annex A for the [formal algorithms](#alg-io-i2c) of the `I2C` IO Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `data` | Pin specifier for the I²C data pin. This property is required.
+| `clock` | Pin specifier for the I²C clock pin. This property is required.
+| `hz` | The speed of communication on the I²C bus. This property is required.
+| `address` | The 7-bit address of the target I²C Peripheral to communicate with. This property is required.
+| `port` | Port specifier for the I²C instance. This property is optional.
+
+> **NOTE**: The property name `timeout` is reserved for future use.
+
+#### Data format
+The `I2C` class data format is always `"buffer"`.
+
+#### Specifying stop bit with `read` and `write` methods
+The I²C protocol is transaction-based. At the end of each read and write operation, a stop bit is sent. If the stop bit is 1, it indicates the end of the transaction; if 0, it indicates that the transaction has additional operations pending.
+
+The `read` and `write` methods set the stop bit to 1 by default. An optional argument to the `read` and `write` methods allows the stop bit to be specified. Pass `false` to set the stop bit to 0, and `true` to set the stop bit to 1.
+
+#### Methods
+When the number of bytes to `read` or `write` is zero the target device address is sent over the I²C bus but no data bytes follow.
+
+The `read` and `write` methods may operate synchronously. Doing so does not violate the requirement that IO is non-blocking because these operations typically complete within a short period of time. Additionally, synchronous operation is required for microcontrollers which do not support asynchronous I²C IO.
+
+**`read(byteLength | buffer[, stop])`**
+
+The first argument follows the [behavior](#io-pattern-read) of the IO Class Pattern `read` method for the `"buffer"` data format. The optional second argument is a `Boolean` specifying the stop bit behavior.
+
+**`write(buffer[, stop])`**
+
+The first argument to the `write` method is a Byte Buffer. The optional second argument is a `Boolean` specifying the stop bit behavior.
+
+**`writeRead(buffer, byteLength | buffer)`**
+
+The `writeRead` method performs a write followed immediately by a read, with a stop bit of 0 between the operations. The first argument is a Byte Buffer. Th the second argument follows the [behavior](#io-pattern-read) of the IO Class Pattern `read` method for the `"buffer"` data format 
+
+### I²C – asynchronous IO
+The `I2C.Async` class implements an I²C Initiator to communicate with an I²C Peripheral over I²C bus using asynchronous IO.
+
+```javascript
+import I2C from "embedded:io/i2c";
+```
+
+The `I2C` class provides an implementation using asynchronous IO through the `I2C.Async` constructor. The `I2C.Async` constructor is only present if asynchronous IO is supported.
+
+Asynchronous operations occur serially in the order issued.
+
+See Annex A for the [formal algorithms](#alg-io-i2c-async) of the `I2C.Async` IO Class.
+
+#### Properties of constructor options object
+Same as synchronous I2C.
+
+#### Data format
+Same as synchronous I2C.
+
+#### Specifying stop bit with `read` and `write` methods
+Same as synchronous I2C.
+
+#### Methods
+**`read(byteLength | buffer)`**<br>
+**`read(byteLength | buffer, stop)`**<br>
+**`read(byteLength | buffer, callback)`**<br>
+**`read(byteLength | buffer, stop, callback)`**<br>
+
+The `byteLength`, `buffer`, and `stop` arguments are the same as synchronous I2C. There is no return value. The `callback` property is a [completion callback function](#base-pattern-async). The second argument is the `byteLength` or `buffer` that would be returned by synchronous `read`.
+
+**`write(buffer)`**<br>
+**`write(buffer, stop)`**<br>
+**`write(buffer, callback)`**<br>
+**`write(buffer, stop, callback)`**<br>
+
+The `buffer` and `stop` arguments are the same as synchronous I2C. The `callback` property is a [completion callback function](#base-pattern-async).
+
+**`writeRead(buffer, byteLength | buffer)`**<br>
+**`writeRead(buffer, byteLength | buffer, callback)`**<br>
+
+The `buffer` and `byteLength` / `buffer` arguments are the same as synchronous I2C. The `callback` property is a [completion callback function](#base-pattern-async).
+
+### System management bus (SMBus) – synchronous IO
+The `SMBus` class extends the `I2C` class with additional methods to communicate with devices that implement the SMBus protocol. The `SMBus` class performs synchronous IO.
+
+```javascript
+import SMBus from "embedded:io/smbus";
+```
+
+If synchronous IO is not supported, the constructor throws.
+
+See Annex A for the [formal algorithms](#alg-io-smbus) of the `SMBus` IO Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `stop` | A boolean value indicating whether to set the stop bit when writing the SMBus register number. This property is optional and defaults to `false`.
+
+#### Methods
+**`readUint8(register)`**
+
+Reads and returns an unsigned 8-bit integer value from the specified register.
+
+**`writeUint8(register, value)`**
+
+Writes the unsigned 8-bit integer `value` to the specified register.
+
+**`readUint16(register[, bigEndian])`**
+
+Reads and returns an unsigned 16-bit integer value from the specified register. By default, the value is read in little-endian byte order. If the optional `bigEndian` argument is `true` the value is read in big-endian byte order.
+
+**`writeUint16(register, value[, bigEndian])`**
+
+Writes the unsigned 16-bit integer value to the specified register. By default, the value is written in little-endian byte order. If the optional `bigEndian` argument is `true` the value is written in big-endian byte order.
+
+**`readBuffer(register, byteLength | buffer)`**
+
+Reads a stream of bytes starting at the specified `register`. The second argument to `readBuffer` follows the [behavior](#io-pattern-read) of the IO Class Pattern `read` method for the `"buffer"` data format.
+
+**`writeBuffer(register, buffer)`**
+
+Write a stream of bytes from the `buffer` argument starting at the specified `register`. The `buffer` argument to `writeBuffer` follows the [behavior](#io-pattern-write) of the IO Class Pattern `write` method for the `"buffer"` data format.
+
+**`readQuick()`**
+
+Send an SMBus Quick command with the Read/Write bit set to 1.
+
+**`writeQuick()`**
+
+Send an SMBus Quick command with the Read/Write bit set to 0.
+
+**`receiveByte()`**
+
+Read an 8-bit unsigned value.
+
+**`sendByte(command)`**
+
+Send the 8-bit unsigned `command` byte.
+
+> **NOTE**: The method names `readUint32`, `writeUint32`, `readUint64`, and `writeUint64` are reserved for 32 and 64-bit SMBus operations in the future.
+
+### System management bus (SMBus) – asynchronous IO
+The `SMBus.Async` class extends the `I2C.Async` class with additional methods to communicate with devices that implement the SMBus protocol using asynchronous IO.
+
+```javascript
+import SMBus from "embedded:io/smbus";
+```
+
+The `SMBus` class provides an implementation using asynchronous IO through the `SMBus.Async` constructor. The `SMBus.Async` constructor is only present if asynchronous IO is supported.
+
+Asynchronous operations occur serially in the order issued.
+
+See Annex A for the [formal algorithms](#alg-io-smbus-async) of the `SMBus.Async` IO Class.
+
+#### Properties of constructor options object
+Same as synchronous SMBus.
+
+#### Methods
+
+**`readUint8(register[, callback])`**<br>
+**`readUint16(register[, bigEndian][, callback])`**<br>
+**`readBuffer(register, byteLength | buffer[, callback])`**<br>
+**`readQuick([callback])`**<br>
+**`receiveByte([callback])`**<br>
+
+All asynchronous SMBus methods read methods accept an optional final completion callback argument that behaves consistently with the `read` behavior of the IO Class Pattern.
+
+**`writeUint8(register, value[, callback])`**<br>
+**`writeUint16(register, value[, bigEndian][, callback])`**<br>
+**`writeBuffer(register, buffer[, callback])`**<br>
+**`writeQuick([callback])`**<br>
+**`sendByte(command[, callback])`**<br>
+
+All asynchronous SMBus methods write methods accept an optional final completion callback argument that behaves consistently with the `write` behavior of the IO Class Pattern.
+
+### Serial
+The `Serial` class implements bi-directional serial (UART) communication.
+
+```javascript
+import Serial from "embedded:io/serial";
+```
+
+See Annex A for the [formal algorithms](#alg-io-serial) of the `Serial` IO Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `receive` | Pin specifier for the receive pin. This property is required by some implementations to use the serial connection to read data.
+| `transmit` | Pin specifier for the transmit pin. This property is required by some implementations to use the serial connection to write data.
+| `baud` | A number specifying the baud rate of the connection. This property is required.
+| `flowControl` | A string specifying the kind of flow control, if any, used on the connection. The valid values are `"hardware"` and `"none"`. This property is optional and defaults to `"none"`.
+| `dataTerminalReady` | Pin specifier for the data terminal ready pin. This property is optional.
+| `requestToSend` | Pin specifier for the request to send pin. This property is optional.
+| `clearToSend` | Pin specifier for the clear to send pin. This property is optional.
+| `dataSetReady` | Pin specifier for the data set ready pin. This property is optional.
+| `port` | Port specifier for the serial connection. This property is optional.
+	
+> **NOTE**: The serial connection is eight data bits, no parity bit, and one stop bit (8N1). The property names `parity`, `stop`, and `data` are reserved to support other communication configurations in the future.
+
+#### Methods
+
+**`read([byteLength | buffer])`**
+
+When using the `"number"` data format, read always returns the next available byte as a `Number` (from 0 to 255).
+
+When using the `"buffer"` data format, `read` follows the [behavior](#io-pattern-read) of the IO Class Pattern `read` method for the `"buffer"` data format with one addition: if there are no arguments and data is available to read, `read` returns one or more bytes (implementation-dependent).
+
+If no data is available, `read` returns `undefined`.
+
+The `read` method must not wait for additional bytes to arrive.
+
+**`write(byteValue | buffer)`**
+
+When using the `"number"` data format, the first argument is a byte value to transmit.
+
+If the output buffer cannot accept all the bytes to be written, an exception is thrown -- partial data must not be written.
+
+**`flush([input, output])`**
+
+Flushes the input and/or output queues of the serial instance. If no arguments are passed, both input and output queues are flushed. If both arguments are provided, the corresponding queues are flushed based on the value of the arguments. An exception is thrown if one argument is passed.
+
+If flushing the output causes the serial instance to be able to accept data for output, the `onWritable` callback will be invoked.
+
+**`set(options)`**
+
+The `set` method controls the value of the data terminal ready and request to send pins of the serial connection together with the break. The sole argument is an options object which contains optional `dataTerminalReady`, `requestToSend`, and `break` properties with boolean values.
+
+If `dataTerminalReady`, `requestToSend`, or `break` is not specified in the dictionary, the corresponding serial behavior is left unchanged.
+
+**`get([options])`**
+
+The `get` method returns the value of the clear to send and data set ready pins. It returns the state of the pins as booleans in an options object using the `clearToSend` and `dataSetReady` properties.
+
+If the optional options object property is provided, `get` sets the `clearToSend` and `dataSetReady` properties on the options object and returns the provided options object as the result of `get`.
+
+#### Callbacks
+
+**`onReadable(bytes)`**
+
+The `onReadable` callback is invoked when new data is available to read. The callback receives a single argument that indicates the number of bytes available.
+
+**`onWritable(bytes)`**
+
+The `onWritable` callback is first invoked when the serial instance is ready for use.
+
+The `onWritable` callback is invoked when space has been freed in the output buffer. The callback receives a single argument that indicates the number of bytes that may be written without overflowing the output buffer.
+
+#### Data format
+The `Serial` class data format is either `"number"` for individual bytes or `"buffer"` for groups of bytes. The default data format is `"buffer"`.
+
+### Serial Peripheral Interface (SPI)
+
+The `SPI` class implements a Serial Peripheral Interface (SPI) controller to communicate with a single SPI peripheral.
+
+```javascript
+import SPI from "embedded:io/spi";
+```
+
+See Annex A for the [formal algorithms](#alg-io-spi) of the `SPI` IO Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `out` | Pin specifier for the Serial Data Out pin. This property is required when using the SPI bus to write data.
+| `in` | Pin specifier for the Serial Data In pin. This property is required when using the SPI bus to read data.
+| `clock` | Pin specifier for the clock pin. This property is required.
+| `select` | Pin specifier for the chip select pin. This property is optional and should not be specified if chip select will be managed by the caller.
+| `active` | The value to write to the `select` pin when the SPI instance is active. Must be 1 or 0. This property is optional and defaults to 0.
+| `hz` | The speed of communication on the SPI bus. This property is required.
+| `mode` | The SPI bus mode, a two-bit mask that specifies the SPI clock polarity (bit 1) and phase (bit 0). This property is optional and defaults to 0b00.
+| `port` | Port specifier for the SPI connection. This property is optional.
+
+If both `out` and `in` are unspecified, a `TypeError` is thrown by the constructor during validation.
+
+The `in` and `out` properties may refer to the same physical pin (e.g. 3-wire SPI).
+
+#### Data format
+The data format for the `SPI` class is always `"buffer"`.
+
+#### Methods
+
+**`read(byteLength | buffer)`**
+
+The first argument follows the [behavior](#io-pattern-read) of the IO Class Pattern `read` method for the `"buffer"` data format.
+
+If the `buffer` argument has a `bitLength` property, it specifies the number of bits to read, overriding the `byteLength` property to allow reading of partial bytes. `buffer.bitLength` must be less than or equal to the number of bits in the buffer (i.e. `buffer.byteLength * 8`). Bits are read into the start of `buffer` (i.e. bit offset zero).
+
+The behavior of the Serial Data Out pin is implementation-dependent during the read operation.
+
+**`write(buffer)`**
+
+Write `buffer` to the SPI bus. Any input data is discarded.
+
+If the `buffer` argument has a `bitLength` property, it specifies the number of bits to write, overriding the `byteLength` property to allow writing of partial bytes. `buffer.bitLength` must be less than or equal to the number of bits in the buffer (i.e. `buffer.byteLength * 8`). Bits are written from the start of `buffer` (i.e. bit offset zero).
+
+**`transfer(buffer)`**
+
+Write `buffer` to the SPI bus while simultaneously reading `buffer.byteLength` 8-bit bytes from the SPI bus. The results of the read are placed into `buffer`, replacing the original contents.
+
+If the `buffer` argument has a `bitLength` property, it specifies the number of bits of the buffer to swap in the transfer, overriding the `byteLength` property to allow transfer of partial bytes. `buffer.bitLength` must be less than or equal to the number of bits in the buffer (i.e. `buffer.byteLength * 8`). Bits are transferred from the start of `buffer` (i.e. bit offset zero).
+
+**`flush([deselect])`**
+
+Flushes any buffers of the SPI controller instance. The flush operation is synchronous and completes before returning.
+
+Some SPI peripherals require that the chip select pin be set inactive at specific times (for instance, to mark the end of a transaction). The `flush` method supports this with the optional `deselect` argument which, when present and `true`, causes the chip select pin to be set to inactive after the flush completes.
+
+### Pulse count
+The `PulseCount` class implements a bi-directional counter typically used with a rotary encoder.
+
+```javascript
+import PulseCount from "embedded:io/pulsecount";
+```
+
+See Annex A for the [formal algorithms](#alg-io-pulse-count) of the `PulseCount` IO Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `signal` | Pin specifier for the signal input pin. This property is required.
+| `control` | Pin specifier for the control input pin. This property is required.
+
+#### Data format
+The `PulseCount` class data format is always a number. The values are always integers.
+
+#### Methods
+
+**`read()`**
+
+The `read` method returns the current count. It takes no arguments.
+
+The count is initialized to zero at the time of instantiation. The initial call to `read` may return a non-zero value if pulses have been counted in the intervening interval.
+
+**`write(count)`**
+
+The `write` method sets the current count.
+
+#### Callbacks
+
+**`onReadable()`**
+
+The `onReadable` callback is invoked when the value of the counter has changed. Multiple changes to the counter may be combined into a single invocation of the callback.
+
+**`onError()`**
+
+The `onError` callback is invoked when an error is detected, for example, underflow or overflow of the counter.
+
+
+### TCP socket
+The `TCP` network socket class implements a general-purpose, bi-directional TCP connection.
+
+```javascript
+import TCP from "embedded:io/socket/tcp";
+```
+
+The TCP socket is not a TCP listener, as in some networking libraries. The TCP listener is a separate class.
+
+See Annex A for the [formal algorithms](#alg-io-tcp-socket) of the `TCP` IO Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `address` | A string with the IP address of the remote endpoint to connect to. This property is required.
+| `port` | A number specifying the remote port to connect to. This property is required.
+| `noDelay` | A boolean indicating whether to disable Nagle's algorithm on the socket. This property is equivalent to the `TCP_NODELAY` option in the BSD sockets API. This property is optional and defaults to false.
+| `keepAlive` | A number specifying the keep-alive interval of the socket in milliseconds. This property is optional and if not present, the keep-alive capability of the socket is not used.
+| `from` | An existing TCP socket instance from which the native socket instance is taken to use with the newly created socket instance. This property is optional and intended for use with a TCP listener. When the `from` property is present, the `address`, and `port` properties are not required and are ignored if specified. The original instance is closed with ownership of the native socket transferred to the new instance.
+
+#### Methods
+
+<a id="tcp-read"></a>
+
+**`read([byteLength | buffer])`**
+
+When using the `"number"` data format, read always returns the next available byte as a `Number` (from 0 to 255).
+
+When using the `"buffer"` data format, `read` follows the [behavior](#io-pattern-read) of the IO Class Pattern `read` method for the `"buffer"` data format with one addition: if there are no arguments and data is available to read, `read` returns one or more bytes (implementation-dependent).
+
+The `read` method must not wait for additional bytes to arrive.
+
+<a id="tcp-write"></a>
+
+**`write(byteValue | buffer[, options])`**
+
+When using the `"number"` data format, the first argument is a byte value to transmit.
+
+The `write` method returns the updated writable count.
+
+The optional second argument is an options object. 
+
+<a id="tcp-write-options"></a>
+
+#### Properties of write options object
+
+| Property | Description |
+| :---: | :--- |
+| `more` | Set to `false` FOR the last fragment of a sequence and `true` if there is at least one more fragment. Defaults to `false`.
+| `byteLength` | Number of bytes to be written across a sequence of write operations with `more` set to `true` and terminating with `more` set to `false`.
+
+The following example transmits a message over TCP using a sequence of writes. The use of `more` and `byteLength` provide the implementation of TCP socket information needed to efficiently packetize and transmit the data.
+
+```javascript
+const payload = new Float32Array(sensorReading1, sensorReading2, sensorReading3);
+const header = Uint8Array.of(0x80, 0x01);
+const length = Uint8Array.of(payload.length >> 8, payload.length);
+tcp.write(header, {more: true, byteLength: header.byteLength + length.byteLength + payload.byteLength});
+tcp.write(length, {more: true});
+tcp.write(payload);
+```
+
+#### Callbacks
+
+**`onReadable(bytes)`**
+
+Invoked when new data is available to be read. The callback receives a single argument that indicates the number of bytes available to read.
+
+**`onWritable(bytes)`**
+
+Invoked when space has been made available to output additional data. The callback receives a single argument that indicates the total number of bytes that may be written to the TCP socket without overflowing the output buffers.
+
+The `onWritable` callback is first invoked when the socket successfully connects to the remote endpoint and it is possible to write data.
+
+**`onError()`**
+
+The `onError` callback is invoked when an error occurs or the TCP socket disconnects. Once `onError` is invoked, the connection is no longer usable. Reporting the error type is an area for future work.
+
+#### Data format
+The `TCP` class data format is either `"number"` for individual bytes or `"buffer"` for groups of bytes. The default data format is `"buffer"`.
+
+#### `remoteAddress` property
+The read-only `remoteAddress` property provides the IP address of the remote end-point as a string. If the remote address is not available, the value is `undefined`.
+
+#### `remotePort` property
+The read-only `remotePort` property provides the port of the remote end-point as a number. If the remote port is not available, the value is `undefined`.
+
+### TCP listener socket
+The TCP `Listener` class listens for and accepts incoming TCP connection requests.
+
+```javascript
+import Listener from "embedded:io/socket/listener";
+```
+
+See Annex A for the [formal algorithms](#alg-io-tcp-listener) of the `Listener` IO Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `port` | A number specifying the port to listen on. This property is optional and defaults to 0.
+| `address` | A string with the IP address of the network interface to bind to. This property is optional.
+
+#### Methods
+
+**`read()`**
+
+The `read` function returns a `TCP` Socket instance. The instance is already connected to the remote endpoint. There are no callback functions installed.
+
+> **NOTE**: To set the callbacks and configure the socket, pass the socket to the `TCP` Socket constructor using the `from` property.
+
+**`write()`**
+
+Unsupported.
+
+#### Callbacks
+
+**`onReadable(requests)`**
+
+Invoked when one or more new connection requests are received. The callback receives a single argument that indicates the total number of pending connection requests.
+
+#### Data format
+The TCP `Listener` class uses `socket/tcp` as its sole data format.
+
+#### `port` property
+The read-only `port` property provides the local port the listener is bound to as a number.
+
+<a id="udp-socket"></a>
+
+### UDP socket
+The `UDP` network socket class implements the sending and receiving of UDP packets.
+
+```javascript
+import UDP from "embedded:io/socket/udp";
+```
+
+See Annex A for the [formal algorithms](#alg-io-udp-socket) of the `UDP` IO Class.
+
+<a id="udp-socket-constructor-options"></a>
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `port` | The local port number to bind the UDP socket to. This property is optional.
+| `address` | A string with the IP address of the network interface to bind to. This property is optional.
+<!--
+| `timeToLive` | A number with the multicast time-to-live value as a number from 1 to 255. This property is required if the `multicast` property is provided and otherwise ignored.
+-->
+
+#### Methods
+
+**`read([buffer])`**
+
+The `read` method reads a complete UDP packet.
+
+If there are no arguments, `read` allocates an `ArrayBuffer` the size of the packet, copies the packet data to the buffer, and returns the buffer. If first argument is a Byte Buffer, the packet data is copied to the buffer and the number of bytes copied is returned. If the buffer is too small to hold the packet, an exception is thrown.
+
+The following properties are attached to the buffer containing the packet data:
+
+- `address`, a string containing the packet sender's IP address
+- `port`, the port number used to send the packet.
+
+**`write(buffer, address, port)`**
+
+The `write` method takes three arguments: the packet data as a Byte Buffer, the remote address string, and the remote port number.
+
+**`add(multicastAddress)`**
+
+The `add` method takes a single argument, a string containing the IP address of the multicast group to join. If the IP address is invalid or the attempt to join the multicast group fails, `add` throws an exception.
+
+**`remove(multicastAddress)`**
+
+The `remove` method takes a single argument, a string containing the IP address of the multicast group to leave. If the IP address is invalid or the attempt to leave the multicast group fails, `remove` throws an exception.
+
+#### Callbacks
+
+**`onReadable(packets)`**
+
+Invoked when one or more packets are received. The callback receives a single argument that indicates the total number of packets available to read.
+
+#### Data format
+The `UDP` class data format is always `"buffer"`.
+
+### TLS Client socket
+The `TLSClient` network socket class implements a logical subclass of the `TCP` class that secures the connection using Transport Layer Security (TLS).
+
+```javascript
+import TLS from "embedded:io/socket/tcp/tls";
+```
+
+A TLS implementation may use certificates from a certificate store. The certificate store is implementation dependent and not specified by this Standard.
+
+All certificate and key data use DER (binary) format, not PEM (Base64 encoded text).
+
+#### Properties of constructor options object
+
+The TLS Client socket extends the TCP socket's options object with a required `tls` property set to an object that contains the TLS options.
+
+The following TLS version strings are defined: `"TLSv1.3"`, `"TLSv1.2"`, `"TLSv1.1"`.
+
+| Property | Description |
+| :---: | :--- |
+| `tls` | An object with the following properties. This property is required. |
+| `tls.host` | Supports Server Name Indication (SNI). A string with the host name of the remote endpoint. This property is required. |
+| `tls.minimumVersion` | A TLS version string indicating the minimum acceptable TLS version for the connection. This property is optional and the default is implementation dependent. |
+| `tls.maximumVersion` | A TLS version string indicating the maximum acceptable TLS version for the connection. This property is optional and the default is implementation dependent. |
+| `tls.applicationLayerProtocol` | Supports Application-Layer Protocol Negotiation Extension (ALPN). A `String` or Byte Buffer to indicate support for a single application layer protocol or an `Array` of one or more `String` and Byte Buffers to indicate support for multiple application layer protocols. This property is optional. |
+| `tls.maximumFragmentLength` | Supports Maximum Fragment Length. A number indicating the maximum fragment size in bytes. This property is optional. If not present, the maximum fragment length is not negotiated. |
+| `tls.ca` | A Byte Buffer or an `Array` of Byte Buffer containing certificates chains for the connection. This property is optional. |
+| `tls.clientKey` | A Byte Buffer or an `Array` of Byte Buffers containing client keys for the connection. This property is optional. |
+| `tls.clientCertificate` | A Byte Buffer or an `Array` of Byte Buffers containing client certificates for the connection. This property is optional. |
+
+#### write(buffer[, options])
+
+The `write` method returns the updated writable count. This may be reduced by more than the size of the buffer written because of TLS protocol overhead.
+
+The `write` method options object is identical to the TCP Socket's [write options object](#tcp-write-options). The TLS implementation may use the `more` and `byteLength` information to build TLS records.
+
+<a id="audio-input"></a>
+
+### Audio Input – synchronous IO
+
+```javascript
+import AudioIn from "embedded:io/audio/in";
+```
+
+See Annex A for the [formal algorithms](#alg-audio-input) of the Audio Input Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `bitsPerSample` | A number indicating the number of bits per audio sample when using uncompressed audio. Allowed values are `8` and `16`. This property is optional and defaults to a host defined value.
+| `channels` | A number indicating the number of audio channels returned. Allowed values are `1` and `2`. This property is optional and defaults to a host defined value.
+| `sampleRate` | A number indicating the sample rate of the audio. This property is optional and defaults to a host defined value.
+| `audioType` | A string indicating the encoding of the captured audio. The allowed value is `"LPCM"`. This property is optional and defaults to a host defined value.
+
+#### Methods
+
+**`read([byteLength | buffer])`**
+
+The `read` method may only be used to read complete audio samples. For example, for `audioType` of `"LPCM"` with `channels` of `2` and `bitsPerSample` of `16` each audio frame is 32 bits, and consequently reads must be multiples of four bytes.
+
+**`start()`**
+
+The `start` method begins capturing audio. The audio input instance is stopped when created. The `start` method does not acquire hardware resources; that is done by the [constructor](#io-pattern-constructor).
+
+**`stop([options])`**
+
+The `stop` method suspends audio capture. Unlike the `close` method, the `stop` method does not release hardware resources.
+
+The optional options argument is an options object with a single defined property, `flush`, a boolean with `true` indicating that any unread audio should be flushed immediately and `false` indicating that the unread audio may still be read after calling `stop`.
+
+#### Callbacks
+
+**`onReadable(byteLength, sampleCount)`**
+
+The `onReadable` callback is invoked when audio samples are available to be read. The `byteLength` argument is the number of bytes available to read. This number is always an integer number of samples. The `sampleCount` argument is the maximum number of samples that may be read.
+
+#### Data format
+
+The data format is always `"buffer"`.
+
+#### `bitsPerSample` property
+
+A number indicating the number of bits per sample when using an uncompressed `audioType`. This property is read-only.
+
+#### `channels` property
+
+A number indicating the number of channels. This property is read-only.
+
+#### `sampleRate` property
+
+A number indicating the sample rate. This property is read-only.
+
+#### `audioType` property
+
+A string indicating the audio encoding. This property is read-only.
+
+<a id="audio-input-async"></a>
+
+### Audio Input – asynchronous IO
+
+```javascript
+import AudioIn from "embedded:io/audio/in";
+```
+
+The `AudioIn` class provides an implementation using asynchronous IO through the `AudioIn.Async` constructor. The `AudioIn.Async` constructor is only present if asynchronous IO is supported.
+
+Asynchronous operations occur serially in the order issued.
+
+See Annex A for the [formal algorithms](#alg-audio-input-async) of the Audio Input Class Asynchronous.
+
+#### Properties of constructor options object
+
+Same as synchronous Audio Input.
+
+#### Data format
+
+Same as synchronous Audio Input.
+
+#### Callbacks
+
+The `onReadable` callback is not invoked.
+
+#### Methods
+
+**read(byteLength | buffer, callback)**
+
+The `byteLength` and `buffer` arguments are the same as synchronous Audio Input. There is no return value. The `callback` property is a [completion callback function](#base-pattern-async) with a second argument that is the byteLength or buffer that would be returned by synchronous `read`.
+
+<a id="audio-output"></a>
+
+### Audio Output – synchronous IO
+
+```javascript
+import AudioOut from "embedded:io/audio/out";
+```
+
+See Annex A for the [formal algorithms](#alg-audio-output) of the Audio Output Class.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `bitsPerSample` | A number indicating the number of bits per audio sample when outputting uncompressed audio. Allowed values are `8` and `16`. This property is optional and defaults to a host defined value.
+| `channels` | A number indicating the number of audio channels provided. Allowed values are `1` and `2`. This property is optional and defaults to a host defined value.
+| `sampleRate` | A number indicating the sample rate of the audio. This property is optional and defaults to a host defined value.
+| `audioType` | A string indicating the encoding of the audio. The allowed value is `"LPCM"`. This property is optional and defaults to a host defined value.
+
+#### Methods
+
+**`write(buffer)`**
+
+The `write` method may only be used to output complete audio samples. For example, for `audioType` of `"LPCM"` with `channels` of `2` and `bitsPerSample` of `16` each audio frame is 32 bits, and consequently writes must be multiples of four bytes.
+
+**`start()`**
+
+The `start` method begins outputting audio. The audio output instance is stopped when created. The `start` method does not acquire hardware resources; that is done by the [constructor](#io-pattern-constructor).
+
+**`stop([options])`**
+
+The `stop` method suspends audio output. Unlike the `close` method, the `stop` method does not release hardware resources.
+
+The optional options argument is an options object with a single defined property, `flush`, a boolean with `true` indicating that any unplayed audio should be flushed and `false` indicating that the unplayed audio will be output after calling `start`.
+
+#### Callbacks
+
+**`onWritable(byteLength, sampleCount)`**
+
+The `onWritable` callback is invoked when the space to write audio samples has increased. The `byteLength` argument is the maximum number of bytes that may be written. This number is always an integer number of samples. The `sampleCount` argument is the maximum number of samples that may be written.
+
+#### Data format
+
+The data format is always `"buffer"`.
+
+#### `bitsPerSample` property
+
+A number indicating the number of bits per sample when using an uncompressed `audioType`. This property is read-only.
+
+#### `channels` property
+
+A number indicating the number of channels. This property is read-only.
+
+#### `sampleRate` property
+
+A number indicating the sample rate. This property is read-only.
+
+#### `audioType` property
+
+A string indicating the audio encoding. This property is read-only.
+
+#### `volume` property
+
+A number indicating the volume level to be applied to the audio output. Full volume is `1.0` and fully muted is `0.0`. Setting a value outside of this range throws a `RangeError`. The default value is `1.0`. This property may be read and written.
+
+<a id="audio-output-async"></a>
+
+### Audio Output – asynchronous IO
+
+```javascript
+import AudioOut from "embedded:io/audio/out";
+```
+
+The `AudioOut` class provides an implementation using asynchronous IO through the `AudioOut.Async` constructor. The `AudioOut.Async` constructor is only present if asynchronous IO is supported.
+
+Asynchronous operations occur serially in the order issued.
+
+See Annex A for the [formal algorithms](#alg-audio-output-async) of the Audio Output Class Asynchronous.
+
+#### Properties of constructor options object
+
+Same as synchronous Audio Output.
+
+#### Data format
+
+Same as synchronous Audio Output.
+
+#### Methods
+
+**write(buffer, callback)**
+
+The `buffer` argument is the same as synchronous Audio Output. The `callback` property is a [completion callback function](#base-pattern-async).
+
+<a id="image-input"></a>
+
+### Image Input – synchronous IO
+
+The Image Input provides access to image input sources including cameras. The Image Input conforms to the [Peripheral Class Pattern](#peripheral-class-pattern).
+
+
+```javascript
+import ImageIn from "embedded:io/image/in";
+```
+
+See Annex A for the [formal algorithms](#alg-image-input) of the Image Input Class Pattern.
+
+#### Properties of constructor options object
+| Property | Description |
+| :---: | :--- |
+| `imageType` | A value indicating the encoding of the image. If the value is a number, the image is uncompressed in a [pixel format](#pixel-formats) defined by the Display Class Pattern. If the value is a string, the allowed value is `"jpeg`". This property is optional and defaults to a host defined value.
+| `width` | A number indicating the requested pixel width of the captured image. This property is optional and defaults to a host defined value.
+| `height` | A number indicating the requested pixel height of the captured image. This property is optional and defaults to a host defined value.
+
+#### Methods
+
+**`read([byteLength | buffer])`**
+
+The behavior of the `read` method depends on the data format.
+
+When the data format is `"buffer/disposable"`, the `read` method returns one frame in a [disposable buffer](#disposable-buffer) or `undefined`, if a frame is not available. The caller should dispose the returned buffer as soon as practical to minimize the chance of dropping frames because the implementation may support only a small number of outstanding disposable buffers. The disposable buffer returned may be immutable.
+
+When the data format is `"buffer"`, the `read` method conforms to the IO Class Pattern.
+
+**`start()`**
+
+The `start` method begins capturing images. The image input instance is stopped when created. The `start` method does not acquire hardware resources; that is done by the [constructor](#io-pattern-constructor).
+
+**`stop([options])`**
+
+The `stop` method suspends image capture. Unlike the `close` method, the `stop` method does not release hardware resources.
+
+The optional options argument is an options object with a single defined property, `flush`, a boolean with `true` indicating that unread frames should be flushed and `false` indicating that unread frames may be read after calling `stop`.
+
+**`configure(options)`**
+
+The `configure` method configures one or more options of the Image Input. The following options are available: `brightness`, `contrast`, `saturation`, `sharpness`, `denoise`, and `whiteBalance`. Each has a range of `0` to `100`. The behavior of the options may vary depending on the hardware. Options that are not supported are ignored. Implementations may include additional options as appropriate for their hardware.
+
+#### Callbacks
+
+**`onReadable(byteLength)`**
+
+The `onReadable` callback is invoked when a new frame is available to be read. The `byteLength` argument indicates the size of the frame in bytes.
+
+#### Data format
+
+The data format is either `"buffer/disposable"` or `"buffer"`.
+
+#### `imageType` property
+
+A string or number indicating the image encoding. See the `imageType` property of the constructor options object for details. This property is read-only.
+
+#### `width` property
+
+A number indicating the image's pixel width. This property is read-only.
+
+#### `height` property
+
+A number indicating the image's pixel height. This property is read-only.
+
+<a id="image-input-async"></a>
+
+#### `configuration` property
+
+The `configuration` property is an object with the current settings of the options supported by the `configure` method. The following options may be available: `brightness`, `contrast`, `saturation`, `sharpness`, `denoise`, and `whiteBalance`. Each has a range of `0` to `100`.
+
+### Image Input – asynchronous IO
+
+```javascript
+import ImageIn from "embedded:io/image/in";
+```
+
+The `ImageIn` class provides an implementation using asynchronous IO through the `ImageIn.Async` constructor. The `ImageIn.Async` constructor is only present if asynchronous IO is supported.
+
+Asynchronous operations occur serially in the order issued.
+
+See Annex A for the [formal algorithms](#alg-image-input-async) of the Image Input Class Asynchronous.
+
+#### Properties of constructor options object
+
+Same as synchronous Image Input.
+
+#### Callbacks
+
+The `onReadable` callback is not invoked.
+
+#### Data format
+
+Same as synchronous Image Input.
+
+#### Methods
+
+**read([byteLength | buffer,] callback)**
+
+The behavior of the `read` method depends on the data format.
+
+When the data format is `"buffer/disposable"`, the `read` method takes only a [completion callback function](#base-pattern-async) argument that is invoked with the buffer containing the image data. As with the `read` method in the synchronous Image Input, the buffer may be immutable and should be disposed as soon as practical.
+
+When the data format is `"buffer"`, the `read` method conforms to the IO Class Pattern.
+
+## 11 IO Provider Class Pattern
+
+The IO Provider Class Pattern builds on the Base Class Pattern to provide a foundation to access a collection of IO Classes.
+
+An IO Provider contains one or more IO Classes. The IO Provider may be connected to the host in any way, including:
+
+- A direct hardware connection such as I²C or SPI
+- A local wireless connection such as BLE using the Automation IO Service profile
+- A TCP/IP connection to an internet cloud service
+
+It is anticipated, but not required, that implementations of the IO Provider Class Pattern will perform IO using instances conforming to the IO Class Pattern. To facilitate that, the constructor uses IO constructor properties to specify their IO connections.
+
+An IO Provider instance contains IO Classes which conform to the IO Class Pattern. The following code is an example of using an IO Provider to access a Digital pin on a GPIO expander connected via I²C.
+
+```javascript
+import I2C from "embedded:io/i2c";
+
+const expander = new Expander({
+	io: I2C,
+	data: 5,
+	clock: 4,
+	hz: 1_000_000,
+	address: 0x20,
+});
+
+const led = new expander.Digital({
+	pin: 13,
+	mode: expander.Digital.Output,
+});
+led.write(1);
+```
+Here the `data` and `clock` pins passed to the `Expander` constructor refer to pins of the host whereas the `pin` passed to the `expander.Digital` constructor refers to a pin of the GPIO expander.
+
+See Annex A for the [formal algorithms](#alg-io-provider-class-pattern) of the IO Provider Class Pattern.
+
+### constructor
+
+Following the Base Class Pattern, the constructor has a single options object argument. The options object defines the hardware connections of the sensor. These use the same properties as the IO types corresponding to the hardware connection. As in the Peripheral Class Pattern, the IO properties in the Provider Class Pattern are grouped to avoid collisions.
+
+The options object is not limited to IO connection information and must contain all information needed by the implementation to establish the connection.
+
+### `close` method
+In addition to releasing all resources as required by the Base Class Pattern, the `close` method causes the `onError` callback to be invoked on all open instances. Note that `onError` may not be invoked from within `close` (see Callbacks section).
+
+A class may specify that `close` accepts an optional callback function to invoke after the close operation completes. The callback must the last argument to `close`. The first argument to the callback is a `Number` with 0 indicating success and other values indicating failure. Pending callbacks from other operations are invoked before the callback passed to `close`.
+
+### Callbacks
+
+**`onReady()`**
+
+The `onReady` callback is invoked once the IO Provider instance is ready for use.
+
+The IO provider may not know what IO resources are available until it has successfully established a connection to the remote resource. For this reason, a provider may not have any IO constructors on its instance until the `onReady` is invoked.
+
+The IO constructors of an IO Provider, if present on the instance, may be used prior to `onReady` being invoked.
+
+**`onError()`**
+
+The `onError` callback is invoked on a non-recoverable error to indicate that the provider instance can no longer be used.
+
+When a provider fails, its IO instances also become unusable, and consequently `onError` must also be invoked on each instance.
+
+<a id="peripheral-class-pattern"></a>
+
+## 12 Peripheral Class Pattern
+
+The Peripheral Class Pattern builds on the Base Class Pattern to provide a foundation for implementing access to different kinds of peripheral devices. The Peripheral Class Pattern is purely abstract and cannot be instantiated directly.
+
+See Annex A for the [formal algorithms](#alg-peripheral-class-pattern) of the Peripheral Class Pattern.
+
+### constructor
+
+Following the Base Class Pattern, the constructor has a single options object argument. The options object defines the hardware connections of the peripheral. These use the same properties as the IO types corresponding to the hardware connection. For example, an I²C peripheral:
+
+```javascript
+import I2CPeripheral from "embedded:example/i2cperipheral";
+import I2C from "embedded:io/i2c";
+
+let t = new I2CPeripheral({
+	io: I2C,
+	data: 4,
+	clock: 5,
+	address: 0x30
+});
+```
+
+
+The `io` property specifies the constructor for the IO Class.
+
+If the peripheral has multiple hardware connections, the options object separates them to avoid collisions. For example, here the peripheral has an I²C connection for primary communication and a digital connection for an interrupt:
+
+```javascript
+import I2CPeripheralWithInterrupt from "embedded:example/i2cperipheralwithinterrupt";
+import I2C from "embedded:io/i2c";
+import Digital from "embedded:io/digital";
+
+let t = new I2CPeripheralWithInterrupt({
+	communication: {
+		io: I2C,
+		data: 4,
+		clock: 5,
+		address: 0x30
+	},
+	interrupt: {
+		io: Digital,
+		pin: 5
+	}
+});
+```
+
+The constructor must reset the peripheral hardware to a consistent initial state so the peripheral's behavior is not dependent on a previous instantiation. This reset may include calling the instance's `configure` method.
+
+### `close` method
+
+The `close` method, as required by the Base Class Pattern, releases all IO connections in use by the instance.
+
+### `configure` method
+
+The `configure` method modifies how the peripheral operates. It has a single argument, an options object.
+
+The `configure` method follows the same rules regarding the options argument as the constructor and therefore may not modify its content.
+
+Because peripherals have many features, the `configure` method may implement support for many properties. A given call to the `configure` method should only modify the features specified in the options object.
+
+The Peripheral Class Pattern does not require a script call the `configure` method to use the peripheral, however specific implementations may require `configure` to be called.
+
+The `configure` method may be called more than once to allow scripts to reconfigure the peripheral.
+
+### Accessors for configuration
+
+Classes that follow the Peripheral Class Pattern may choose to provide accessors, e.g. setters and getters, for configuration properties. A setter should behave in the same way as the `configure` method invoked with a single property. For example, a setter for a property named `resolution` could be implemented as follows:
+
+```javascript
+class ExamplePeripheral {
+	...
+	set resolution(value) {
+		this.configure({resolution: value});
+	}
+}
+```
+A getter for the same property could be implemented as follows:
+
+```javascript
+class ExamplePeripheral {
+	...
+	get resolution() {
+		this.configuration.resolution;
+	}
+}
+```
+
+<!-- NOTE: this assumes the configuration property is implemented from the sensor provenance section -->
+
+
+## 13 Sensor Class Pattern
+
+The Sensor Class Pattern builds on the Peripheral Class Pattern to provide a foundation for implementing access to a variety of sensors.
+
+It is anticipated, but not required, that instances conforming to the Sensor Class Pattern will perform IO using instances conforming to the IO Class Pattern. The Sensor Class Pattern is therefore non-blocking, like IO. Additionally, the constructor uses IO constructor properties to specify their IO connections.
+
+The Sensor Class Pattern provides low-level sensor access, similar to a sensor driver provided by a sensor manufacturer, to support access to all the unique capabilities of the sensor. As with IO, where a given type of device (e.g. a temperature sensor) has common capabilities across manufacturers, the individual sensor types define a common way to access that functionality.
+
+Higher-level sensor APIs may be built using instances of the Sensor Class Pattern. The W3C Generic Sensor specification, for example, may be implemented using sensors conforming to The Sensor Class Pattern.
+
+The Sensor Class Pattern may be used together with the Sensor Data Provenance Rules to improve the usability of the data collected.
+
+See Annex A for the [formal algorithms](#alg-sensor-class-pattern) of the Sensor Class Pattern.
+
+### constructor
+
+Following the Peripheral Class Pattern, the constructor has a single options object argument. The options object defines the hardware connections of the sensor.
+
+For example, here the temperature sensor has an interrupt on a Digital pin:
+
+```javascript
+import I2C from "embedded:io/i2c";
+import Digital from "embedded:io/digital";
+
+let t = new Temperature({
+	sensor: {
+		io: I2C,
+		data: 4,
+		clock: 5,
+		address: 0x30
+	},
+	interrupt: {
+		io: Digital,
+		pin: 5
+	}
+});
+```
+
+The constructor must reset the sensor hardware to a consistent initial state so the sensor's behavior is not dependent on a previous instantiation.
+
+### `configure` method
+
+The `configure` method is inherited from the Peripheral Class Pattern. For sensors, it modifies how the sensor operates. This may include the hardware's sampling interval, what data is sampled, and the range of the data sampled.
+
+<!--
+**To do**: @@ note on structuring the options object for compound sensors
+-->
+
+### `sample` method
+
+The `sample` method returns readings from the sensor. The Sensor Class Pattern defines no arguments for the `sample` method, though individual sensor types may.
+
+The `sample` method returns an object containing one or more properties. The returned object is mutable. The implementation must return a different object on each invocation to allow callers to accumulate multiple sensor readings.
+
+> **NOTE**: A sensor implementation of `sample` may accept an input argument of the object to use for the sensor data as an optimization to reduce memory manager work. If supported, this must be specified for the Sensor Class' `sample` method.
+
+If the sample data includes timestamps (e.g. when the sample was collected), those timestamps in the returned sample object should conform to the `time` or `ticks` properties of the Sample Object specified by the Provenance Sensor Class Pattern.
+
+### Callbacks
+
+The Sensor Class Pattern specifies one callback that is set by the options object passed to the constructor. Individual sensor classes may provide additional callbacks, for instance, to indicate when a sample is available or a sensed condition has been met.
+
+**`onError()`**
+
+The `onError` callback is invoked on a non-recoverable error to indicate that the sensor instance can no longer be used. The only method that should be called is `close`.
+
+## 14 Sensor classes
+
+This section defines Sensor Classes conforming to the Sensor Class Pattern.
+
+The classes support common sensor capabilities. Capabilities that are not supported here may be added using the extensibility options of the Sensor Class Pattern and Base Class Pattern.
+
+### Compound sensors
+
+A single physical sensor may provide more than one kind of sensor reading. For example, a single sensor package may include both a temperature sensor and a humidity sensor. When a single physical sensor contains two or more logical sensors, the Sample object returned by the `sample` method must contain a sub-object for each logical sensor. For example, a physical sensor that includes both temperature and humidity sensors would return a Sample object with the following properties:
+
+```javascript
+{
+	hygrometer: {
+		humidity: 0.5
+	},
+	thermometer: {
+		temperature: 23
+	}
+}
+```
+
+The name of the property that contains the sub-object is defined by the sensor class. Here `thermometer` is defined by the Temperature sensor class and `hygrometer` is defined by the Humidity sensor class. Each sub-object contains a Sample object as defined by its sensor class.
+
+### Accelerometer
+
+The `Accelerometer` class implements access to a three-dimensional accelerometer. The property name `accelerometer` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-accelerometer) of the `Accelerometer` sensor class.
+
+#### Properties of a sample object
+These properties are compatible with the attributes of the same name in the [W3C Accelerometer draft](https://w3c.github.io/accelerometer/).
+
+| Property | Description |
+| :---: | :--- |
+| `x` | A number that represents the sampled acceleration along the x axis in meters per second squared. This property is required.
+| `y` | A number that represents the sampled acceleration along the y axis in meters per second squared. This property is required.
+| `z` | A number that represents the sampled acceleration along the z axis in meters per second squared. This property is required.
+
+### Ambient light
+
+The `AmbientLight` class implements access to an ambient light sensor. The property name `lightmeter` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-ambient-light) of the `AmbientLight` sensor class.
+
+#### Properties of sample object
+These properties are compatible with the attributes of the same name in the [W3C Ambient Light Sensor draft](https://www.w3.org/TR/ambient-light/).
+
+| Property | Description |
+| :---: | :--- |
+| `illuminance` | A number that represents the sampled ambient light level in Lux. This property is required.
+
+### Atmospheric pressure
+
+The `AtmosphericPressure` class implements access to an atmospheric pressure sensor or barometer. The property name `barometer` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-atmospheric-pressure) of the `AtmosphericPressure` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `pressure` | A number that represents the sampled atmospheric pressure in Pascal. This property is required.
+
+### Carbon Dioxide
+
+The `CarbonDioxide` class implements access to a sensor that detects the amount of carbon dioxide in air. The property name `carbonDioxideDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-carbonDioxide) of the `CarbonDioxide` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `CO2` | A number that represents the sampled carbon dioxide in parts per million. This property is required.
+
+### Carbon Monoxide
+
+The `CarbonMonoxide` class implements access to a sensor that detects the amount of carbon monoxide in air. The property name `carbonMonoxideDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-carbonMonoxide) of the `CarbonMonoxide` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `CO` | A number that represents the sampled carbon monoxide in parts per million. This property is required.
+
+### Dust
+
+The `Dust` class implements access to a sensor that detects the amount of dust suspended in air. The property name `dustDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-dust) of the `Dust` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `dust` | A number that represents the sampled dust levels in micrograms per cubic meter. This property is required.
+
+### Gyroscope
+
+The `Gyroscope` class implements access to a three-dimensional gyroscope. The property name `gyroscope` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-gyroscope) of the `Gyroscope` sensor class.
+
+#### Properties of a sample object
+These properties are compatible with the attributes of the same name in the [W3C Gyroscope draft](https://www.w3.org/TR/gyroscope/).
+
+| Property | Description |
+| :---: | :--- |
+| `x` | A number that represents the sampled angular velocity around the x axis in radian per second. This property is required.
+| `y` | A number that represents the sampled angular velocity around the y axis in radian per second. This property is required.
+| `z` | A number that represents the sampled angular velocity around the z axis in radian per second. This property is required.
+
+The sign of the sampled angular velocity depends on the rotation direction, with a positive number indicating a clockwise rotation and a negative number indicating a counterclockwise rotation.
+
+### Humidity
+
+The `Humidity` class implements access to a humidity sensor. The property name `hygrometer` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-humidity) of the `Humidity` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `humidity` | A number that represents the sampled relative humidity as a percentage. This property is required.
+
+### Hydrogen
+
+The `Hydrogen` class implements access to a sensor that detects the amount of hydrogen in air. The property name `hydrogenDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-hydrogen) of the `Hydrogen` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `H` | A number that represents the sampled hydrogen in parts per million. This property is required.
+
+### Hydrogen Sulfide
+
+The `HydrogenSulfide` class implements access to a sensor that detects the amount of hydrogen sulfide in air. The property name `hydrogenSulfideDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-hydrogenSulfide) of the `HydrogenSulfide` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `H2S` | A number that represents the sampled hydrogen sulfide in parts per million. This property is required.
+
+### Magnetometer
+
+The `Magnetometer` class implements access to a three-dimensional magnetometer. The property name `magnetometer` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-magnetometer) of the `Magnetometer` sensor class.
+
+#### Properties of a sample object
+These properties are compatible with the attributes of the same name in the [W3C Magnetometer draft](https://www.w3.org/TR/magnetometer/).
+
+| Property | Description |
+| :---: | :--- |
+| `x` | A number that represents the sampled magnetic field around the x axis in microtesla. This property is required.
+| `y` | A number that represents the sampled magnetic field around the y axis in microtesla. This property is required.
+| `z` | A number that represents the sampled magnetic field around the z axis in microtesla. This property is required.
+
+### Methane
+
+The `Methane` class implements access to a sensor that detects the amount of methane in air. The property name `methaneDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-methane) of the `Methane` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `CH4`| A number that represents the sampled methane in parts per million. This property is required.
+
+### Nitric Oxide
+
+The `NitricOxide` class implements access to a sensor that detects the amount of nitric oxide in air. The property name `nitricOxideDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-nitricOxide) of the `NitricOxide` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `NO` | A number that represents the sampled nitric oxide in parts per million. This property is required.
+
+### Nitric Dioxide
+
+The `NitricDioxide` class implements access to a sensor that detects the amount of nitric dioxide in air. The property name `nitricDioxideDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-nitricDioxide) of the `NitricDioxide` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `NO2` | A number that represents the sampled nitric dioxide in parts per million. This property is required.
+
+### Oxygen
+
+The `Oxygen` class implements access to a sensor that detects the amount of oxygen in air. The property name `oxygenDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-oxygen) of the `Oxygen` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `O` | A number that represents the sampled oxygen in parts per million. This property is required.
+
+### Particulate Matter
+
+The `ParticulateMatter` class implements access to a sensor that detects the amount of particulate matter suspended in air. The property name `particulateMatterDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-particulateMatter) of the `ParticulateMatter` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `particulateMatter` | A number that represents the sampled particulate matter levels in micrograms per cubic meter. This property is required.
+
+### Proximity
+
+The `Proximity` class implements access to a proximity sensor or range finder. The property name `proximity` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-proximity) of the `Proximity` sensor class.
+
+#### Properties of a sample object
+These properties are compatible with the attributes of the same name in the [W3C Proximity Sensor draft](https://w3c.github.io/proximity/).
+
+| Property | Description |
+| :---: | :--- |
+| `near` | A boolean that indicates if a proximate object is detected. This property is required.
+| `distance` | A number that represents the distance to the nearest sensed object in centimeters or `null` if no object is detected. This property is optional: some proximity sensors can only provide the `near` property.
+| `max` | A number that represents the maximum sensing range of the sensor in centimeters.
+
+### Soil Moisture
+
+The `SoilMoisture` class implements access to a soil moisture detector. The property name `soilMoistureDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-soilmoisture) of the `SoilMoisture` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `moisture` | A number between 0 and 1 (inclusive) that represents the sampled relative soil moisture level, with 0 being the most dry and 1 the most wet. This property is required.
+
+### Switch
+
+The `Switch` class implements access to a switch sensor. The property name `switch` is used when part of a compound sensor.
+
+<!--
+See Annex A for the [formal algorithms](#alg-sensor-switch) of the `Switch` sensor class.
+-->
+
+#### Properties of sample object
+
+| Property | Description |
+| :---: | :--- |
+| `position` | A number that represents the current state of the switch. This property is required.
+
+### Temperature
+
+The `Temperature` class implements access to a temperature sensor. The property name `thermometer` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-temperature) of the `Temperature` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `temperature` | A number that represents the sampled temperature in degrees Celsius. This property is required.
+
+### Touch
+
+The `Touch` class implements access to a touch panel controller. The property name `touch` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-touch) of the `Touch` sensor class.
+
+#### Sample object
+
+The `Touch` class `sample` method returns an array of `touch` objects, as specified below. If there is no touch in progress, `sample` returns `undefined`.
+
+##### Properties of `touch` object
+
+| Property | Description |
+| :---: | :--- |
+| `x` | Number indicating the X coordinate of the touch point
+| `y` | Number indicating the Y coordinate of the touch point
+| `id` | Number indicating which touch point this entry corresponds to
+
+### Volatile Organic Compounds
+
+The `VolatileOrganicCompounds` class implements access to a sensor that detects the amount of volatile organic compounds suspended in air. The property name `vocDetector` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-VolatileOrganicCompounds) of the `VolatileOrganicCompounds` sensor class.
+
+#### Properties of a sample object
+
+| Property | Description |
+| :---: | :--- |
+| `tvoc` | A number that represents the sampled total volatile organic compounds in parts per billion. This property is required.
+
+## 15 Display Class Pattern
+
+The Display Class Pattern builds on the Peripheral Class Pattern to provide a foundation for implementing access to displays represented by a two-dimensional array of pixels.
+
+The Display Class Pattern is designed to support displays independent of hardware architecture. For example, it may be used efficiently with both frame buffers stored in local host memory and frame buffers connected with the [MIPI Display Serial Interface](https://mipi.org/specifications/dsi).
+
+See Annex A for the [formal algorithms](#alg-display-class-pattern) of the Display Class Pattern.
+
+### constructor
+
+Following the Peripheral Class Pattern, the constructor has a single options object argument. The options object defines the hardware connections of the display. These use the same properties as the IO types corresponding to the hardware connection.
+
+A Display Class is not required to have properties to configure its hardware connections. For example, a memory-mapped display may have no external connections. Or, a Display Class may be preconfigured for the hardware of a specific host.
+
+### `configure` method
+
+The following table enumerates the properties defined for the options object argument:
+
+| Property | Description |
+| :---: | :--- |
+| `format` | A number indicating the format of pixel data passed to the instance (for example, to the `send` method). This property is optional. If the format provided is not supported by the Display Class, a `RangeError` is thrown.
+| `rotation` | The clockwise rotation of the display as a number. This property is optional. If the value provided is not 0, 90, 180, or 270, or is unsupported by the Display Class, a `RangeError` is thrown.
+| `brightness` | The relative brightness of the display from 0 (off) to 1.0 (full brightness). This property is optional.
+| `flip` | A string indicating whether the pixels should be flipped horizontally and/or vertically. Allowed values are `""`, `"h"`, `"v"`, and `"hv"`. The empty string indicates that neither horizontal nor vertical flip is applied. This property is optional.
+
+<!--
+| `colorTable` | A `Uint8Array` containing a packed array of RGB color values (8-bits per channel) to define the color table for indexed displays. This property is optional.
+-->
+
+The Display Class Pattern does not define default values for these properties to allow the host to provide default values that are appropriate for its hardware. Implementations may provide the current configuration through the `configuration` property defined by the Provenance Sensor Class Pattern.
+
+### `begin` method
+
+The `begin` method starts the process of updating the display's pixels. If no arguments are passed, the entire frame buffer is updated starting at the top-left corner (coordinate `{0, 0}`), proceeding left-to-right, top-to-bottom, ending at the bottom-right corner (coordinate `{display.width, display.height}`).
+
+If an options object is passed as the sole argument, the object may contain `x`, `y`, `width`, and `height` properties that define a rectangular area to update. The rectangle must fit within the bounds of the display (e.g. `{0, 0, display.width, display.height}`) or a `RangeError` is thrown.
+
+A display may not support all possible update areas. For example, a display may only support updates aligned to even horizontal pixels. A `RangeError` is thrown if an unsupported update area is passed to `begin`. Prior to calling begin, the `adaptInvalid` method may be used to adjust the update area to the capabilities of the display.
+
+The options object has an optional `continue` property to support discontiguous updates on displays that use page flipping to swap between multiple frame buffers. When `continue` is `false`, the default value, the call to the `begin` method starts to update a new frame buffer. Calling `begin` with `continue` set to `true` continues updating the same frame buffer rather than starting a new one.
+
+An `Error` exception is thrown if the `begin` method is called more than once without an intervening call to the `end` method, unless `continue` is set to true in the successive calls. For example, this is a valid call sequence to update three horizontal slices of the display.
+
+```javascript
+display.begin({x: 0, y: 0, width: 240, height: 10});
+display.send(pixels);
+display.begin({x: 0, y: 20, width: 240, height: 10, continue: true});
+display.send(pixels);
+display.begin({x: 0, y: 40, width: 240, height: 10, continue: true});
+display.send(pixels);
+display.end();
+```
+
+### `send` method
+
+The `send` method delivers one or more horizontal scan lines of pixel data to the display. The sole argument to `send` is a Byte Buffer of pixels. The pixels are stored in a packed array with no padding between scan lines. The format of the pixels matches the `format` property of the options object of the `configure` method.
+
+### `end` method
+
+The `end` method finishes the process of updating the display's pixels, by making all pixels visible on the display. Any buffered pixels provided to the `send` method must be flushed. If the display uses page flipping, the page must be flipped to the most recently updated frame buffer.
+
+### `adaptInvalid` method
+
+The `adaptInvalid` method accepts a single options object argument that includes `x`, `y`, `width`, and `height` properties that describe an area of the display to be updated. It adjusts these properties as necessary so that the result is valid for the display and encloses the original update area.
+
+Consider a display which limits the update area horizontally to even pixel positions. The following code calls a display's `adaptInvalid` method with odd numbers for both left and right edges of the update area:
+
+```javascript
+const area = {x: 3, y: 20, width: 10, height: 20};
+display.adaptInvalid(area);
+display.begin(area);
+display.send(pixels);
+display.end();
+```
+
+An implementation of `adaptInvalid` to apply the rules above, if implemented in ECMAScript, would be:
+
+```javascript
+function adaptInvalid(options) {
+	if (options.x & 1) {
+		options.x -= 1;
+		options.width += 1;
+	}
+	if (options.width & 1) {
+		options.width += 1;
+	}
+}
+```
+
+Some displays require that the update area only include full scan lines. The following function shows the implementation for such a display, assuming a scanline width of 128 pixels;
+
+```javascript
+function adaptInvalid(options) {
+	options.x = 0;
+	options.width = 128;
+}
+```
+
+For displays that only support full screen updates, `adaptInvalid` updates the rectangle to be the full display dimensions. The following function shows the implementation for a QVGA (320 x 240) display:
+
+```javascript
+function adaptInvalid(options) {
+	options.x = 0;
+	options.y = 0;
+	options.width = 320;
+	options.height = 240;
+}
+```
+
+### Instance properties
+
+**`width`**
+
+The width of the display in pixels as a number. This property is read-only. This value may change based on the configuration, for example, when changing the rotation causes the orientation to change from portrait to landscape.
+
+**`height`**
+
+The height of the display in pixels as a number. This property is read-only. This value may change based on the configuration, for example, when changing the rotation causes the orientation to change from portrait to landscape.
+
+<a id="pixel-formats"></a>
+
+### Pixel `format` values
+
+| Value | Description |
+| :---: | :--- |
+| 3 | 1-bit monochrome |
+| 4 | 4-bit grayscale (0 black, 15 white) |
+| 5 | 8-bit grayscale (0 black, 255 white) |
+| 6 | 8-bit RGB 3:3:2 |
+| 7 | 16-bit RGB 5:6:5 little-endian |
+| 8 | 16-bit RGB 5:6:5 big-endian |
+| 9 | 24-bit RGB 8:8:8 |
+| 10 | 32-bit RGBA 8:8:8:8 |
+| 12 | 12-bit xRGB 4:4:4:4 (x is unused) |
+| 20 | YUV422 Y0 U Y1 V 8:8:8:8 |
+
+<!-- 11 reserved for 4-bit Color Look-up Table -->
+
+## 16 Real-Time Clock Class Pattern
+
+A Real-Time Clock (RTC) provides a time-of-day clock. An RTC is commonly used to initialize time on a microcontroller. An RTC is usually a separate hardware component from the microcontroller. It usually maintains the time using a battery so the time survives power being removed from the device.
+
+<!-- @@module specifier -->
+
+The RTC Class Pattern conforms to the Peripheral Class Pattern.
+
+### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `clock` | A class constructor options object that describes the hardware connection for the RTC. This property is required. |
+| `interrupt` | A Digital class constructor options object that describes the hardware connection to the RTC's interrupt. This property is optional. |
+| `onAlarm()` | A function to invoke when an alarm is triggered by the RTC. This property is optional. |
+
+### `configure` method
+
+The following property is defined for the options object.
+
+| Property | Description |
+| :---: | :--- |
+| `alarm` | The time in milliseconds to set the RTC's alarm. This value is an ECMAScript time value as a `Number`. |
+
+### `time` property
+
+The current time of the RTC. Set this property to change the current time of the RTC. This value is an ECMAScript time value contained in a `Number`.
+
+The resolution of the RTC component may impact the values. For example, an RTC with one-second resolution may return time values with a milliseconds of zero.
+
+If the time is unavailable (for example, because it has not been set or is otherwise invalid on the RTC), the returned value is `undefined`.
+
+### `configuration` property
+
+The `configuration` property returns an object containing the current configuration of the RTC. It contains the `alarm` property, if supported.
+
+The `configuration` property is [introduced](https://419.ecma-international.org/#-17-provenance-sensor-class-pattern-configuration-property) in the Provenance Sensor Class Pattern.
+
+<a id="network-interface"/>
+
+## 17 Network Interface Class Pattern
+
+The Network Interface Class Pattern builds on the Base Class Pattern to provide access to the network interfaces of a device to monitor the connection state and perform operations.
+
+The physical network interfaces may be physically built into the microcontroller or a separate peripheral. The logical network interfaces are managed by the host.
+
+Creating an instance of a Network Interface class binds to the host's network interface; it does not initialize the network interface. Closing an instance of a Network Interface class unbinds from the host's network interface; it does not uninitialize the network interface.
+
+There may be multiple simultaneous instances of a Network Interface class, all bound to the same logical network interface.
+
+See Annex A for the [formal algorithms](#alg-network-interface-class-pattern) of the Network Interface Class Pattern.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `onChanged(name)` | A function to invoke when the network interface's state changes. The name argument is the name of the property that changed. The `onChanged` property is optional. |
+| `port` | A port specifier that indicates the logical network interface to bind to. This property may be optional or required depending on the implementation of the network interface. |
+
+#### `connect` method
+Initiates the process of connecting to a network. If a connection attempt is already in progress, `connect` throws an exception.
+
+The sole argument is an options object. Each Network Interface class defines properties for the options object.
+
+#### `disconnect` method
+Disconnects from the currently connected network. If in the process of connecting, the connection attempt is abandoned. If already disconnected, does nothing. No arguments are specified.
+
+#### `connection` property
+The read-only `connection` property indicates the current connection state of the network interface as a number. The following values are defined:
+
+| Value | Description |
+| :---: | :--- |
+| 0 | unavailable |
+| 100 | initializing |
+| 200 | disconnected |
+| 300 | connecting |
+| 400 | connected |
+| 500 | IP address assigned |
+
+Larger values indicate a later stage in the connection process. This allows values to be compared with greater and less than operators. Additional states may be added by specific types of network interfaces.
+
+#### `MAC` property
+The read-only `MAC` property is the MAC address assigned to the network interface as a string. If the MAC address is unavailable, the value is `undefined`.
+
+#### `address` property
+The read-only `address` property is the IP address assigned to the network interface as a string. If the address has not yet been assigned, the value is `undefined`.
+
+### Ethernet Network Interface
+The Ethernet Network Interface is a logical subclass of the [Network Interface Class Pattern](#network-interface) for Ethernet network interfaces.
+
+```javascript
+import Ethernet from "embedded:network/interface/ethernet";
+```
+
+See Annex A for the [formal algorithms](#alg-ethernet-network-interface) of the Ethernet Network Interface.
+
+#### `connection` property
+For an Ethernet network interface, `connection` 200 ("disconnected") indicates that the physical Ethernet link has been lost and `connection` 400 ("connected") indicates that the physical Ethernet link has been established. Ethernet network interfaces add the following value for `connection`.
+
+| Value | Description |
+| :---: | :--- |
+| 150 | Ethernet IO initialized |
+
+### Wi-Fi Network Interface
+The Wi-Fi Network Interface is a logical subclass of the [Network Interface Class Pattern](#network-interface) for Wi-Fi network interfaces.
+
+```javascript
+import WiFi from "embedded:network/interface/wifi";
+```
+
+See Annex A for the [formal algorithms](#alg-wifi-network-interface) of the Wi-Fi Network Interface.
+
+#### `connect` method
+Initiates the process of connecting to a Wi-Fi base station. The connection is defined by the properties of the options object. If a connection attempt is already in progress, `connect` throws an exception.
+
+| Property | Description |
+| :---: | :--- |
+| `SSID` | Name of the base station as a String. This property is optional. |
+| `BSSID` | BSSID of the base station as a MAC address formatted string. This property is optional. |
+| `password` | The base station's password as a string. This property is optional. |
+| `secure` | Boolean that indicates if connections to open access points are allowed. This property is optional and defaults to `false`. |
+| `channel` | Wi-Fi channel of the base station as a number. This property is optional. |
+
+Either the `SSID` or `BSSID` property is required. If both are provided, `BSSID` is used.
+
+#### `scan` method
+Initiates a scan for Wi-Fi base stations. The scan is time-limited to no more than 10 seconds. A continuous scan may be performed by repeated scans. If a scan is already active when `scan` is called, an exception is thrown. The sole argument is an options object.
+
+Properties of the `scan` options object:
+
+| Property | Description |
+| :---: | :--- |
+| `onFound(options)` | A callback function to invoke with information about an access point discovered by the scan. This property is required. |
+| `onComplete()` | A callback function invoked when the scan is complete. This property is optional. |
+| `channel` | Wi-Fi channel number to scan as a number. This property is optional. |
+| `frequency` | Wi-Fi frequency to scan: `2.4` or `5`. This property is optional and the default is implementation dependent. |
+| `secure` | Limit scan results to secure access points, omitting open access points, as a boolean. This property is optional and defaults to `false`. |
+
+Properties of the `onFound` options object for each access point found by the scan:
+
+| Property | Description |
+| :---: | :--- |
+| `SSID` | Service Set Identifier of the access point as a string. |
+| `BSSID` | Basic Service Set Identifier of the access point as a MAC address formatted string. |
+| `RSSI` | Radio Signal Strength Indicator of the access point as a number. |
+| `channel` | Channel number of the access point as a number. |
+| `security` | Security mode of the access point as a string. |
+
+The scan cannot be cancelled. If the instance is closed while scanning, the host may complete the scan but must not invoke the callbacks.
+
+#### `SSID` property
+The Service Set Identifier of the connected access point as a string or `undefined` if not connected. Read-only.
+
+#### `BSSID` property
+The Basic Service Set Identifier of the connected access point as a MAC address formatted string or `undefined` if not connected. Read-only.
+
+#### `RSSI` property
+The Radio Signal Strength Indicator of the connected access point as a number or `undefined` if not connected. Read-only.
+
+#### `channel` property
+The channel number of the connected access point as a number or `undefined` if not connected. Read-only.
+
+<a id="dns-resolver"></a>
+
+## 18 Domain Name Resolver Class Pattern
+
+The Domain Name Resolver Class Pattern resolves DNS names to IP addresses. It conforms to the Base Class Pattern. The Domain Name Resolver Class Pattern is not instantiated directly. Logical subclasses of the Domain Name Resolver are instantiated, such as DNS over UDP and DNS over HTTPS.
+
+### `resolve` method
+The `resolve` method begins the process of resolving a DNS name to an address. Several resolve operations may be queued and be pending at the same time. The resolve requests complete in an implementation dependent order, which may not be the order requested.
+
+The first argument is a required options object. The second argument is a required [completion callback function](#base-pattern-async) that is invoked when resolution completes. If successful, the resolved address is provided in the second argument and the requested hostname in the third.
+
+#### Properties of resolve options object
+
+| Property | Description |
+| :---: | :--- |
+| `host` | A string containing the hostname to resolve. This property is required. |
+
+The `host` property may be either a Domain Name or an IP address. If it is an IP address, the completion callback is invoked with the resolved address and request hostname arguments set to that IP address.
+
+### DNS over UDP
+DNS over UDP is a logical subclass of the Domain Name Resolver Class Pattern that resolves DNS names over UDP.
+
+```javascript
+import Resolver from "embedded:network/dns/resolver/udp";
+```
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `socket` | A UDP class constructor options object for a UDP socket. This property is required. |
+| `servers` | Array of one or more IP address strings to use as DNS servers. This property is required. |
+
+### DNS over HTTPS (DoH)
+DNS over HTTPS is a logical subclass of the Domain Name Resolver Class Pattern that resolves DNS names using an HTTPS connection (DoH).
+
+```javascript
+import Resolver from "embedded:network/dns/resolver/doh";
+```
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `http` | An HTTP Client class constructor options object. This property is required. |
+| `servers` | An array of one or more objects containing `host` and `address` properties to use as DoH servers. This property is required. |
+
+<a id="ntp-client"></a>
+
+## 19 NTP Client
+The NTP Client retrieves the current time from a network time source using the Network Time Protocol (NTP). It conforms to the [Base Class Pattern](base-class-pattern).
+
+Implementations may use the Simple Network Time Protocol (SNTP).
+
+```javascript
+import NTP from "embedded:network/ntp/client";
+```
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `socket` | [UDP class constructor options object](#udp-socket-constructor-options). This property is required. |
+| `servers` | An array of one or more strings indicating the NTP hosts to use to synchronize time. This property is required. |
+| `dns` | [A Domain Name Resolver class constructor options object](#dns-resolver) to use to resolve the `servers`. This property is required. |
+
+### `getTime` method
+The `getTime` method initiates a time synchronization operation. Only one time synchronization operation may be active at a time. `getTime` throws throws on requests made before the current request completes. The sole argument is a required [completion callback function](#base-pattern-async) that is invoked when synchronization completes. If successful, the ECMAScript time value is provided in the second argument as a `Number`.
+
+## 20 HTTP Client Class Pattern
+
+The HTTP Client Class Pattern makes one or more Hypertext Transfer Protocol (HTTP/1.1) requests to a single host. It conforms to the Base Class Pattern.
+
+```javascript
+import HTTPClient from "embedded:network/http/client";
+```
+
+### Data format
+The `HTTPClient` class data format is always `"buffer"`.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `socket` | An object containing a `TCP` class constructor options object. This property is required. |
+| `port` | The remote port number to connect to as a number. This property is optional and defaults to 80. |
+| `host` | The remote hostname to connect to as a string. This property is required. |
+| `dns` | A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required. |
+| `onError` | A function to invoke when the remote connection closes. This property is optional. |
+
+### `close` method
+
+In addition to the behaviors defined in the Base Class Pattern, all outstanding requests are cancelled.
+
+<a id="http-client-request"></a>
+
+### `request` method
+
+Queues an HTTP request described by the required options object, the sole argument.
+
+The options object supports the following properties:
+
+| Property | Description |
+| :---: | :--- |
+| `method` | The HTTP method to use to access the resource as a string. This property is optional and defaults to `"GET"`. |
+| `path` | The HTTP resource to access as a string. This property is optional and defaults to `"/"`. |
+| `headers` | A `Map` instance containing request headers. The map keys are the header names and their values are the header values. This property is optional. |
+| `headersMask` | An `Array` of header names to limit the response headers provided to `onHeaders`. Headers not included may be excluded. Header names must be lowercase. This property is optional; if not specified all headers are provided to `onHeaders`. |
+| `onHeaders(status, headers, statusText)` | A function to invoke to provide the HTTP status result code, the HTTP status message as a string, and the response headers as a `Map`. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional. |
+| `onReadable(count)` | A function to invoke when bytes are available to read from the HTTP response body. The `count` argument is a number indicating the number of bytes available to read. This property is optional. |
+| `onWritable(count)` | A function to invoke when the HTTP request is ready to receive bytes for the request body. The `count` argument is a number indicating the maximum number of bytes that may be written. The `onWritable` callback is only invoked if a request has a request body. To signal that a request has a request body, set either the `content-length` header to a non-zero value or the `transfer-encoding` header to `"chunked"`. This property is optional. |
+| `onDone()` | A function to invoke when the HTTP request has been completed successfully. This property is optional. |
+
+The return value of the `request` method is an HTTP Client Request instance. This instance is the receiver when the callback functions of the options object are invoked. The request instance has `read` and `write` methods.
+
+### HTTP Client Request instance
+
+The HTTP Client Request instance conforms to the IO Class Pattern. It is instantiated by the HTTP Client and so has no constructor. No `close` method is available because the protocol does not support cancelling a request in progress.
+
+#### `read` method
+
+Reads payload body from the HTTP request's response. If this HTTP Request instance is not currently receiving the response body, returns `undefined`.
+
+#### `write` method
+
+Writes to the payload body of the HTTP request's request. If this HTTP Request instance is not currently sending the request body, `write` throws an exception.
+
+For HTTP requests using chunked transfer-encoding, calling `write` with no arguments signals the end of the request body.
+
+The `write` method returns the number of bytes that may be written. This may be reduced by more than the size of the payload due to overhead in the protocol.
+
+## 21 HTTP Server Class Pattern
+
+The HTTP Server Class Pattern responds to Hypertext Transfer Protocol (HTTP/1.1) requests. It conforms to the Base Class Pattern.
+
+```javascript
+import HTTPServer from "embedded:network/http/server";
+```
+
+### Data format
+The `HTTPServer` class data format is always `"buffer"`.
+
+### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `io` | An object containing a `TCP Listener` class constructor options object. This property is required. |
+| `port` | The port number to listen on to as a number. This property is optional and defaults to 80. |
+| `onConnect(connection)` | A function to invoke when a new connection is initiated. It is passed an HTTP Server Connection instance as the sole argument. This property is required. |
+
+### `close` method
+
+In addition to the behaviors defined in the Base Class Pattern, all active connections are closed.
+
+### HTTP Server Connection instance
+
+The HTTP Server Connection instance conforms to the IO Class Pattern. It is instantiated by the HTTP Server and so has no constructor.
+
+#### `close` method
+
+Connections are automatically closed when the request is complete. Calling the `close` method before that terminates a connection prematurely (for example, for a connection timeout).
+
+#### `detach` method
+
+The detach method returns the TCP socket instance used by this connection. There are no arguments. On return, the HTTP Server Connection instance maintains no reference to the instance and is effectively closed. The detach capability is useful for protocols that use the HTTP Upgrade mechanism.
+
+#### `accept` method
+
+The `accept` method accepts the incoming connection so that processing of the HTTP request may begin. The sole argument is an options object which contains callback functions to invoke as the HTTP request is processed.
+
+##### Properties of accept options object
+
+| Property | Description |
+| :---: | :--- |
+| `onRequest(method, path, headers)` | A callback function to invoke after the HTTP request headers have been received. The first argument is the HTTP request method as a string. The second argument is the HTTP request path as a string. The third argument is a map containing the headers. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional. |
+| `onReadable(count)` | A callback function to invoke when data is available to read from the request body. This property is optional. |
+| `onResponse(response)` | A callback function to invoke when the request body has been fully received. The sole argument is an options object with a `status` property set to 200 and a `headers` property set to an empty map. The callback may update these values. The option object is passed to the `respond` method to begin transmitting the HTTP response. This property is optional. |
+| `onWritable(count)` | A callback function to invoke when there is room in the output buffers to transmit part of the response body. This property is optional. |
+| `onDone()` | A callback function to invoke when the request successfully completes. This property is optional. |
+| `onError(error)` | A callback function to invoke if an error occurs before the response is complete, such as the connection being terminated. This property is optional. |
+
+#### `respond` method
+
+The `respond` method is called to begin transmitting the HTTP response. The `respond` method may only be called once for a given instance and must be called after the request body has been fully received. The sole argument to the `respond` method is an options object.
+
+##### Properties of respond options object
+
+| Property | Description |
+| :---: | :--- |
+| `status` | A number indicating the status code for the HTTP response. This property is required. |
+| `headers` | A map containing the HTTP response headers. The map keys are the header names and their values are the header values. This property is required. |
+
+#### `read` method
+
+Reads the payload body from the HTTP request body. If this HTTP Server Connection instance is not currently receiving the request body, returns `undefined`.
+
+#### `write` method
+
+Writes to the payload body of the HTTP response body. If this HTTP Server Connection instance is not currently sending the response body, `write` throws an exception.
+
+For HTTP Server Connection instances using chunked transfer-encoding, calling `write` with no arguments signals the end of the response body.
+
+The `write` method returns the number of bytes that may be written. This may be reduced by more than the size of the payload due to overhead in the protocol.
+
+#### `route` property
+
+The route of an HTTP Server Connection instance is an object that is used to override the callbacks set in the call to `accept`. This may be used to dispatch incoming requests to different handlers based on the request method, path, and request headers.
+
+If the route is set from within the `onRequest` callback, the `onRequest` callback of the `route` is called immediately.
+
+<!-- N.B. this synchronous callback does not follow-up ECMA-419 guidance on callbacks -->
+
+The instance copies the callback functions. Changes to the properties of the route after setting the route are ignored.
+
+## 22 HTTP Server Connection routes
+
+### Static Data route
+
+The Static route sends a buffer or string as an HTTP Response body.
+
+```javascript
+import StaticRoute from "embedded:network/http/server/route/static";
+```
+
+```javascript
+connection.route = {
+	...StaticRoute,
+	data: "hello, world"
+};
+```
+
+#### Properties of route
+
+| Property | Description |
+| :---: | :--- |
+| `data` | A Byte Buffer or string to be transmitted as the HTTP Response body. If the value is a string, it is transmitted as UTF-8 data. This property is required. |
+| `contentType` | The MIME type of response body to be set as the HTTP Content-Type header. This property is optional and defaults to "text/html". |
+
+### WebSocket Handshake route
+
+The WebSocket Handshake route implements the server side of the WebSocket handshake to upgrade an HTTP connection to the WebSocket protocol.
+
+```javascript
+import WebSocketHandshake from "embedded:network/http/server/route/ws/handshake";
+```
+
+The `onDone` callback of the route is invoked when the handshake completes successfully; `onError`, if the handshake fails. After the handshake succeeds, the TCP socket may be detached and used with a WebSocket implementation.
+
+```javascript
+connection.route = {
+	...WebSocketHandshake,
+	onDone() {
+		const ws = new WebSocketClient({
+			socket: this.detach(),
+			onReadable(count, options) {
+			}
+		});
+	}
+	onError() {
+		console.log("failed");
+	}
+};
+```
+
+#### Properties of route
+
+| Property | Description |
+| :---: | :--- |
+| `protocol` | Array of strings. This property is optional. |
+
+<!--
+### Server-Sent Events Server route
+
+-->
+
+<a id="websocket-client"></a>
+
+## 24 WebSocket Client Class Pattern
+
+The WebSocket Client Class Pattern establishes a connection to an endpoint hosting a WebSocket server and exchanges messages using the WebSocket protocol. The WebSocket Client Class Pattern conforms to the IO Class Pattern.
+
+```javascript
+import WebSocketClient from "embedded:network/ws/client";
+```
+
+The WebSocket Client Class Pattern replies to `ping` and `close` messages by replying with a `pong` or `close` message with the same payload received, as required by the protocol.
+
+### Data format
+The `WebSocketClient` class data format is either `"number"` for individual bytes or `"buffer"` for groups of bytes. The default data format is `"buffer"`.
+
+
+### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `socket` | An object containing a TCP Class constructor options object. This property is optional. |
+| `host` | The remote hostname to connect to as a string. This property is optional. |
+| `attach` | An instance of a TCP Class. This property is optional. |
+| `port` | The remote port number to connect to as a number. This property is optional and defaults to 80. |
+| `path` | The WebSocket endpoint to access as a string. This property is optional and defaults to `"/"`. |
+| `protocol` | The WebSocket sub-protocol as a string. To provide multiple subprotocols, separate them with commas and no white space like an HTTP header with multiple values. This property is optional. |
+| `headers` | A `Map` of HTTP headers to add to the request. The map keys are the header names and their values are the header values. This property is optional. |
+| `dns` | A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required. |
+| `onReadable(count, options)` | A function to invoke when part of a WebSocket binary or text message is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. It has a `binary` property set to `true` for binary messages and `false` for text messages. This property is optional. |
+| `onWritable(count)` | A function to invoke when more data may be written to the connection. The sole argument indicates the number of bytes that maybe written. This property is optional. |
+| `onError(error)` | A function to invoke when the remote connection terminates unexpectedly. This property is optional. |
+| `onControl(opcode, control)` | A function to invoke when a control message is received. The first argument is the control message opcode. The second argument is an `ArrayBuffer` containing the complete control message payload. This property is optional. |
+| `onClose` | A function to invoke when the connection closes cleanly. This property is optional. |
+
+Either both `socket` and `host` are required or `attach` is required. The `attach` property takes precedence.
+
+### `close` method
+
+The `close` method does not initiate a clean close, as defined by the WebSocket protocol, of the connection (use `write` with a `close` opcode instead).
+
+### `read` method
+
+A single call to `read` returns bytes from the current message. Once the current message has been completely read, the `onReadable` callback is invoked when the next message is available to read.
+
+### `write` method
+
+The `write` method sends both message data and control messages. The first argument contains the message payload in a Byte Buffer. The second argument is an options object that has the following properties to specify the message to send.
+
+| Property | Description |
+| :---: | :--- |
+| `binary` | A boolean value set to `true` for a binary payload and `false` for a text payload. This property is optional and defaults to `true`. |
+| `more` | A boolean value set to `false` for the last fragment of a message and `true` for all others. This property is optional and defaults to `false`. |
+| `opcode` | This property is a number specifying the `opcode` of a control message (the `data` argument is the control message's payload). This property is optional and must not be set for text and binary messages. Because control messages cannot be fragmented, the `more` property is ignored when `opcode` is present. |
+
+The `write` method may be used to send all or part of a single binary or text message based on the properties of the options object.
+
+The options object is optional. If not provided, the default values are used.
+
+The return value is the number of bytes that may be written. This may be reduced by more than the size of the payload due to overhead in the protocol.
+
+### Static properties of the constructor
+
+The following properties are present on the constructor. The property names and values correspond to WebSocket opcodes. The values are numbers and the properties are read-only.
+
+| Property | Value |
+| :---: | ---: |
+| `text` | 1 |
+| `binary` | 2 |
+| `close` | 8 |
+| `ping` | 9 |
+| `pong` | 10 |
+
+## 25 MQTT Client Class Pattern
+
+The MQTT Client Class Pattern establishes a connection to a remote endpoint hosting an MQTT server (broker) and exchanges messages using the MQTT protocol ([MQTT Version 3.1.1, OASIS Standard, 29 October 2014 6455](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.doc)). It allows messages of unlimited size to be sent and received, and supports all control messages. The MQTT Client Class Pattern conforms to the IO Class Pattern.
+
+```javascript
+import MQTTClient from "embedded:network/mqtt/client";
+```
+
+The MQTT Client Class Pattern must implement the following:
+
+- Transmit keep alive message if configured with a non-zero keep-alive interval
+- Reply to `PINGREQ` messages with `PINGREQ`
+
+The MQTT Client Class Pattern should implement the following. Sending a `PUBLISH` or `SUBSCRIBE` message with an unimplemented quality of service level must throw an exception.
+
+- Reply to `PUBLISH` with `PUBACK` for quality of service 1
+- Reply to `PUBLISH` with `PUBREC` for quality of service 2
+- Reply to `PUBREL` with `PUBCOMP` for quality of service 2
+- Reply to `PUBREC` with `PUBREL` for quality of service 2
+
+The MQTT Client Class Pattern may not implement the following. They may be provided by layers built on the MQTT Client Class Pattern.
+
+- caching messages and, consequently, message retransmit messages after disconnect
+- reconnect
+- maintaining a list of active subscriptions
+
+> **NOTE**: This specification supports MQTT Version 3. It is designed to be extensible to support MQTT Version 5.
+
+### Data format
+The `MQTTClient` class data format is always `"buffer"`.
+
+### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `socket` | An object containing a TCP Class constructor options object. This property is required. |
+| `port` | The remote port number to connect to as a number. This property is optional and defaults to 1883. |
+| `host` | The remote hostname to connect to as a string. This property is required. |
+| `dns` | A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required. |
+| `onReadable(count, options)` | A function to invoke when part of an MQTT message is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. For the first fragment of a message, the options object contains `topic` property with a string indicating the message topic, a `QoS` property with a number indicating the quality of service, and a `byteLength` property with a number indicating the total number of bytes in the message. The `onReadable` property is optional. |
+| `onWritable(count)` | A function to invoke when more data may be written to the connection. The sole argument is a number indicating how many bytes may be written. This property is optional. |
+| `onError(error)` | A function to invoke when the remote connection terminates. This property is optional. |
+| `onControl(opcode, message)` | A function to invoke when a control message is received. The first argument is the control message opcode. The second argument is an object containing an `operation` property indicating the control message (`CONNACK`, `PUBACK`, `PUBREC `, `PUBREL`, `PUBCOMP`, `SUBACK`, `UNSUBACK`, `PINGREQ `, etc.) and an `id` property if included in the message. The `SUBACK` message payload is provided on the `payload` property as an array of byte values. The `onControl` property is optional. |
+| `id` | The MQTT client identifier as a string. This property is optional and defaults to an empty string. |
+| `user` | The MQTT user for establishing a connection as a string. This property is optional and defaults to an empty string. |
+| `password` | The MQTT password for establishing a connection as a string or Byte Buffer. This property is optional and defaults to an empty string. |
+| `keepAlive` | The MQTT connection keep-alive time in milliseconds as a number. This property is optional and defaults to 0. (This value is in milliseconds as required for durations in this specification. The MQTT protocol uses seconds for the keep-alive value.)|
+| `clean` | The MQTT clean session flag as a boolean. This property is optional and defaults to true. |
+| `will` | An object with the following properties. This property is optional. |
+| `will.topic` | The topic for the MQTT will for this connection as a string. This property is optional. |
+| `will.message` | The message for the MQTT will for this connection as a String or Byte Buffer. This property is optional. |
+| `will.QoS` | The requested quality of service for the will message for this connection as number with values 0, 1, or 2. This property is optional and defaults to 0. |
+| `will.retain` | A Boolean indicating whether the will message should be retained by the server. This property is optional and defaults to `false`. |
+
+### `close` method
+
+The `close` method does not send an MQTT `close` message (use `write` with a `DISCONNECT` opcode to initiate a clean disconnect).
+
+### `read` method
+
+A single call to `read` returns bytes from the current message. Once the current message has been completely read, the `onReadable` callback is invoked when the next message is available to read.
+
+### `write` method
+
+The `write` method sends both message data and control messages. The first argument contains the message payload in a Byte Buffer. The second argument is an options object that has the following properties to specify the message to send.
+
+The options object has the following properties to specify the message to publish or control message to send.
+
+| Property | Description |
+| :---: | :--- |
+| `operation` | This property is a number specifying the `opcode` of a control message (the `data` argument is the control message's payload). This property is optional and defaults to `PUBLISH`. |
+| `id` | A number specifying the `id` for the message. If an `id` is not provided the MQTT client generates one. As a rule, either the caller should provide the `id` for all messages or none to avoid the possibility of values colliding. This property is optional. |
+| `topic` | A string specifying an MQTT topic for a `PUBLISH` message. This property is required for `PUBLISH` messages. |
+| `QoS` | A number specifying the quality of service of `PUBLISH` message. Allowed values are 0, 1, and 2. This property is for `PUBLISH` messages only. It is optional and defaults to 0. |
+| `retain` | A boolean indicating if a `PUBLISH` message should be retained by the server. This property is for `PUBLISH` messages only. It is optional and default to `false`. |
+| `duplicate` | A boolean indicating if a `PUBLISH` message is being retransmitted by the client. This property is for `PUBLISH` messages only. It is optional and default to `false`. |
+| `byteLength` | A number indicating the total size of a `PUBLISH` message to allow a single `PUBLISH` message payload to be split across two or more calls to `write`. This property is optional and defaults to `data.byteLength` |
+| `items` | An array of objects indicating the topics to subscribe or unsubscribe from. Each object must contain a `topic` property with a string indicating the topic and, for `SUBSCRIBE` messages, may contain an optional `QoS` property with the requested quality of service as a value of 0, 1, or 2. This property is required for `SUBSCRIBE` and `UNSUBSCRIBE` messages and must contain at least one element. |
+
+The options object is required, except when writing fragments of a `PUBLISH` message after the first fragment.
+
+It is an error to call `write` before the `CONNACK` control message has been received.
+
+The return value is the number of bytes that may be written. This may be reduced by more than the size of the payload due to overhead in the protocol.
+
+### Static properties of the constructor
+
+The following properties are present on the constructor. The property names and values correspond to MQTT Control Packet types in Section 2.1.1 of the MQTT 3.1.1 Standard. The values are numbers and the properties are read-only.
+
+| Property | Value |
+| :---: | ---: |
+| `CONNECT` | 1 |
+| `CONNACK` | 2 |
+| `PUBLISH` | 3|
+| `PUBACK` | 4 |
+| `PUBREC` | 5 |
+| `PUBREL` | 6 |
+| `PUBCOMP` | 7 |
+| `SUBSCRIBE` | 8 |
+| `SUBACK` | 9 |
+| `UNSUBSCRIBE` | 10 |
+| `UNSUBACK` | 11 |
+| `PINGREQ` | 12 |
+| `PINGRESP` | 13 |
+| `DISCONNECT` | 14 |
+
+<a id="bluetoothle-central"></a>
+
+## 26 Bluetooth LE Central
+
+### GAPClient Class Pattern
+
+The `GAPClient` conforms to the IO Class Pattern.
+
+```javascript
+import {GAPClient, GATTClient} from "embedded:io/bluetoothle/central";
+```
+
+The following example scans for peripherals that implement the Heart Rate Monitor service and connects to the first one found.
+
+```javascript
+import {GAPClient, GATTClient} from "embedded:io/bluetoothle/central"
+
+const scan = new GAPClient({
+	services: [
+		"180d"
+	],
+	onReadable(count) {
+		const advertisement = this.read();
+		this.close();
+
+		new GATTClient({address: advertisement.address});
+	}
+});
+```
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `services` | An array of BLE UUID service values. Advertisements that do not contain at least one of the specified services are ignored. If there is no `services` property, all advertisements are provided. This property is optional. |
+
+#### Callbacks
+
+**`onError(error)`**
+
+The `onError` callback is invoked on a non-recoverable error to indicate that the `GAPClient` instance can no longer be used.
+
+**`onReadable(count)`**
+
+The `onReadable` callback is invoked when one or more advertising packets are available to be read. The `count` argument is a number indicating the number of packets available.
+
+#### Data format
+The `GAPClient` class data format is always `"buffer"`.
+
+#### `close()` method
+
+Conforms to the IO Class pattern's `close` method.
+
+#### `read()` method
+
+Returns a single advertising packet as a `GAPClientAdvertisement` instance or `undefined` when there are no advertising packets available to read. 
+
+### GAPClientAdvertisement
+
+The `GAPClientAdvertisement` has no constructor; instances are provided by the `read()` method of a `GAPClient`.
+
+#### `get(adType)` method
+
+Returns an `ArrayBuffer` instance containing the data of the BLE ADType specified by the `adType` argument, a number. If the requested ADType is not present in the advertisement, `get()` returns `undefined`.
+
+#### Properties of GAPClientAdvertisement instance
+
+| Property | Description |
+| :---: | :--- |
+| `address` | The address of the peripheral as a string. The `address` property may be passed as the `address` to the `GATTClient` constructor's options object to initiate a connection to the peripheral. The format of the value is host-dependent. |
+| `rssi` | The RSSI of the peripheral as a number, if available. |
+| `name` | The complete name (ADType 9) or short name (ADType 8) of the peripheral, if available, as a string. |
+| `services` | An array of UUID strings for all advertised services (incomplete and complete; 16, 32, and 128 bit - ADTypes 2 through 7 inclusive). `undefined` if there are no advertised services |
+| `manufacturerData` | An object with a `manufacturer` property with a number indicating the manufacturer and a `data` property with an `ArrayBuffer` containing the manufacturer data (ADType 255).|
+
+### GATTClient Class Pattern
+
+The `GATTClient` conforms to the IO Class Pattern.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `address` | A string indicating the Bluetooth LE peripheral to connect to. The value typically is obtained from a `GAPClientAdvertisement`; the format of the value is host-dependent. This property is required. |
+| `mtu` | A number indicating desired Maximum Transmission Unit (MTU) for this connection in bytes. The MTU is negotiated as part of establishing the connection. The result is reflected in the value of the instance's `maximumWrite` property. This property is optional. |
+| `security` | An options object containing the requested security properties of the connection. This property is optional. Its presence indicates a request for an encrypted connection; if omitted, the connection may not be secure. |
+| `security.authenticate` | A boolean value indicating if an authentication is requested. A connection must be authenticated to provide protection against "man in the middle" attacks. This property is optional and defaults to `false`. |
+| `security.bond` | A boolean value indicating if the central wants to bond with the peripheral. This property is optional and defaults to `false`. |
+| `security.immediate` | A boolean value indicating whether the central should initiate security negotiations immediately or wait until an operation is performed that requires a secure connection. This property is optional and defaults to `false`. |
+| `security.ioCapabilities` | A value that indicates the device input and output capabilities. The allowed values are `"none"`: the device has no capabilities, `"display"`: the device has a way to show a passkey, `"numbers"`: the device has a way to enter a passkey, `"display+numbers"`: the device has both, `"display+confirm"`: the device has a way to show and confirm a passkey. This property is optional and defaults to `"none"`. |
+
+#### Callbacks
+
+**`onReady()`**
+
+The `onReady` callback is invoked once the GATTClient instance is ready for use. The MTU negotiation has been completed when this callback is invoked. Note that the `onReady` callback is invoked before the connection's security, if any, has been negotiated.
+
+**`onPasskey(action[, data])`**
+
+The `onPasskey` callback is invoked as part of the security negotiation when an interaction is required to authenticate the connection. The `action` argument is a string indicating the interaction and the optional `data` argument provides information required for the interaction. Some values of `action` require the script to call the peripheral's `replyToPasskey` method, as noted in the following table.
+
+| Action | Description |
+| :---: | :--- |
+| `"input"` | Have the user enter the passkey with the keyboard. Provide the passkey entered to `replyToPasskey` as a number. The `data` argument is unused. |
+| `"display"` | Show the user the passkey provided in the `data` argument. There is no need to call `replyToPasskey`. |
+| `"compareNumber"` | Show the user the passkey provided in the `data` argument, and ask them to confirm that it is correct using the Yes and No keys. Provide the result as a boolean to `replyToPasskey`. |
+| `"outOfBand"` | This is an out-of-band negotiation request using a shared secret between the central and peripheral. The `data` argument is an `ArrayBuffer` instance with data from the peripheral. Call `replyToPasskey` with a byte buffer of 16 bytes. |
+
+**`onSecured(state)`**
+
+The `onSecured` callback is invoked when the secure connection negotiation has completed successfully. The `state` argument is an options object with the properties described in the following table.
+
+| Action | Description |
+| :---: | :--- |
+| `authenticated` | A boolean value indicating whether the connection has been authenticated. |
+| `bonded` | A boolean value indicating whether the central bonded with the peripheral. |
+| `encrypted` | A boolean value indicating whether the connection is encrypted. |
+| `keySize` | A number value indicating the number of bits in the key used to encrypt the connection. |
+
+**`onError(error)`**
+
+The `onError` callback is invoked on a non-recoverable error to indicate that the GATTClient instance can no longer be used.
+
+**`onReadable(count)`**
+
+The `onReadable` callback is invoked when one or more BLE characteristic notifications are available. The `count` argument is a number indicating the number of notifications available to read. The returned value is an `ArrayBuffer` instance with a `handle` property that may be used to determine which BLE characteristic the value corresponds to.
+
+```javascript
+onReadable(count) {
+		while (count--) { 
+			const value = this.read();
+			if (value.handle === heartRateCharacteristic.handle) {
+				...
+			}
+		}
+}
+```
+
+#### Data format
+The `GATTClient` class data format is always `"buffer"`.
+
+#### `close([callback])` method
+
+In addition to the behaviors defined in the Base Class Pattern, all pending operations are cancelled. The [completion callback function](#base-pattern-async) is invoked after all requested operations are either completed or cancelled, their callbacks invoked, and the connection to the peripheral disconnected.
+
+#### `getPrimaryServices([services,] callback)` method
+
+The `getPrimaryServices` method discovers services on the peripheral that match the BLE UUID values in the services array argument. If the services array argument is omitted, all primary services are discovered. When discovery is complete, the [completion callback function](#base-pattern-async) is invoked with an array of `GATTClientService` instances. The array contains instances for matching services discovered on the peripheral; if no matching services are discovered, the array is empty. The order of the service instances in the array passed to the callback may not correspond to the order of the BLE UUID values in the `services` array argument.
+
+#### `getCharacteristics(service, [characteristics,] callback)` method
+
+The `getCharacteristics` method discovers characteristics within the `service` instance that match the BLE UUID values in the characteristics array argument. If the characteristics array argument is omitted, all characteristics are discovered. When discovery is complete, the [completion callback function](#base-pattern-async) is invoked with an array of `GATTClientCharacteristic` instances. The array contains instances for matching characteristics discovered within the service; if no matching characteristics are discovered, the array is empty. The order of the characteristics instances in the array passed to the callback may not correspond to the order of the BLE UUID values in the `characteristics` array argument.
+
+#### `getDescriptors(characteristic, [descriptors,] callback)` method
+
+The `getDescriptors` method discovers descriptors within the `characteristic` instance that match the BLE UUID values in the descriptors array argument. If the descriptors array argument is omitted, all descriptors are discovered. When discovery is complete, the [completion callback function](#base-pattern-async) is invoked with an array of `GATTClientDescriptor` instances. The array contains instances for matching descriptors discovered within the service; if no matching descriptors are discovered, the array is empty. The order of the descriptors instances in the array passed to the callback may not correspond to the order of the BLE UUID values in the `descriptors` array argument.
+
+#### `read(characteristic | descriptor, [options,] callback)` method
+#### `read()` method
+
+The `read` method reads characteristics, characteristic notifications, and descriptors.
+
+To read the current value of a characteristic or descriptor, call the `read` method with a first argument of the corresponding characteristic or descriptor instance. The optional second argument, `options`, is unused by this Standard. The [completion callback function](#base-pattern-async) is passed an `ArrayBuffer` instance with the value returned by the peripheral.
+
+To read a received characteristic notification, call the `read` method with no arguments. The notified value is returned as an `ArrayBuffer` instance with a `handle` property that identifies the characteristic the value corresponds to. If no characteristic notification is available, the `read` method returns `undefined`. Notifications are returned by the `read` method in the order received from the peripheral.
+
+#### `write(characteristic | descriptor, value[, options][, callback])` method
+
+The `write` method writes characteristics and descriptors.
+
+To write a value to a characteristic or descriptor, call the `write` method with a first argument of the corresponding characteristic or descriptor instance and the `value` argument as a Byte Buffer. The [completion callback function](#base-pattern-async) receives only the result code argument.
+
+The `write` method uses the "write with response" GATT transaction by default. To use the "write without response" GATT transaction, pass the optional `options` argument as a JavaScript object with a `response` property set to `false`.
+
+An exception is thrown if the Byte Buffer `value` passed to `write` is larger than the value of the instance's `maximumWrite` property.
+
+#### `subscribe(characteristic[, callback])` method
+
+The `subscribe` method enables notifications and indications for a characteristic. Specify the characteristic by passing the characteristic instance. The [completion callback function](#base-pattern-async) receives only the result code argument.
+
+The `subscribe` method controls both notifications or indications, based on the capabilities reported by the `properties` of the characteristic. If a characteristic supports both notifications and indications, notifications are used.
+
+#### `unsubscribe(characteristic[, callback])` method
+
+The `unsubscribe` method disables notifications and indications for a characteristic. Specify the characteristic by passing the characteristic instance. The [completion callback function](#base-pattern-async) receives only the result code argument.
+
+The `unsubscribe` method controls both notifications and indications, based on the capabilities reported by the `properties` of the characteristic. If a characteristic supports both notifications and indications, notifications are used.
+
+#### `replyToPasskey(action[, data])` method
+
+The `replyToPasskey` method delivers a response to an action received by the `onPasskey` callback. The `action` argument must match the `action` argument provided to the `onPasskey` callback. The `data` argument depends on the value of the `action` argument.
+
+| `action` | `data` |
+| :---: | :--- |
+| `"input"` | The passkey entered to `replyToPasskey` as a number. |
+| `"compareNumber"` | A boolean value indicating whether the user confirmed a match of the passkey shown. |
+| `"outOfBand"` | A byte buffer of 16 bytes. |
+
+> **NOTE**: The `replyToPasskey` method should only be called for values of the `action` argument in the preceding table.
+
+#### `store(service | characteristic | descriptor)` method
+
+The `store` method creates an `ArrayBuffer` instance from a service, characteristic, or descriptor instance. This buffer is used with the `restore` method to reinstantiate the service, characteristic, or descriptor after reconnecting to a peripheral to eliminate re-discovery.
+
+The content of the returned buffer is host-dependent and consequently may not be shared across hosts.
+
+This method is optional. Scripts can check for the presence of the `store` method to determine if it is available.
+
+#### `restore(buffer)` method
+
+The `restore` method instantiates a service, characteristic, or descriptor from a buffer created by the `store` method.
+
+This method is optional. Scripts can check for the presence of the `restore` method to determine if it is available.
+
+
+#### Properties of GATTClient instance
+
+| Property | Description |
+| :---: | :--- |
+| `maximumWrite` | A number indicating the maximum number of bytes the `write` method can accept. |
+
+### GATTClientService
+
+The `GATTClientService` has no constructor; instances are provided by `GATTClient` methods.
+
+#### Properties of GATTClientService instance
+
+| Property | Description |
+| :---: | :--- |
+| `uuid` | A string containing the Bluetooth LE UUID of the service. |
+
+### GATTClientCharacteristic
+
+The `GATTClientCharacteristic` has no constructor; instances are provided by `GATTClient` methods.
+
+#### Properties of GATTClientCharacteristic instance
+
+| Property | Description |
+| :---: | :--- |
+| `uuid` | A string containing the Bluetooth LE UUID of the characteristic. |
+| `handle` | A string that should contain the handle of the characteristic. It may contain another value, such as a UUID that is unique among all characteristics of the GATTClient. |
+| `properties` | A number containing a bitfield of Bluetooth LE client properties. |
+
+### GATTClientDescriptor
+
+The `GATTClientDescriptor` has no constructor; instances are provided by `GATTClient` methods.
+
+#### Properties of GATTClientDescriptor instance
+
+| Property | Description |
+| :---: | :--- |
+| `uuid` | A string containing the Bluetooth LE UUID of the descriptor |
+
+<a id="bluetoothle-peripheral"></a>
+
+## 27 Bluetooth LE Peripheral
+
+<a id="bluetoothle-gattserver"></a>
+
+### GATTServer
+
+The `GATTServer` class allows scripts to implement Bluetooth LE peripherals that include advertising, services, and connection management. The `GATTServer` class conforms to the [Base Class Pattern](#base-class-pattern).
+
+```javascript
+import {GATTServer} from "embedded:io/bluetoothle/peripheral";
+```
+
+A peripheral may accept connections from Bluetooth LE centrals. Connections are represented by [`GATTServerConnection`](#bluetoothle-gattserverconnection) instances. The connection instance is provided as an argument to `GATTServer` callbacks such as `onConnect` and `onSubscribe`. The connection instance allows peripherals to provide optimal behaviors when connected to multiple centrals, for example by allowing each central to specify its preferred notification rules for a characteristic.
+
+Services provided by a `GATTServer` are defined by [GATT Service Records](#bluetoothle-gattservicerecord), which in turn consist of [GATT Service Characteristic Records](#bluetoothle-gattservicecharacteristicrecord) and [GATT Service Descriptor Records](#bluetoothle-gattservicedescriptorrecord). These records bind Bluetooth LE service UUIDs and operations, such as read and subscribe, to ECMAScript functions and data. A `GATTServer` that does not provide GATT services is a connectionless broadcaster peripheral.
+
+The following example demonstrates the `GATTServer` used for a minimal heart rate monitor peripheral that implements read and subscribe operations.
+
+```javascript
+import { GATTServer } from "embedded:io/bluetoothle/peripheral"
+
+new GATTServer({
+	services: [{
+		uuid: "180d", // Heart Rate Service
+		characteristics: [
+			{
+				uuid: "2a37",	 // Heart Rate Measurement
+				properties: GATTServer.properties.read | GATTServer.properties.indicate,
+				onRead() {
+					return Uint8Array.of(0, 65); // 65 BPM
+				},
+				onSubscribe(connection) {
+					connection.heartRateTimer = setInterval(() => {
+						connection.notify(this,
+							Uint8Array.of(0, 55 + Math.random() * 10),
+							error => console.log(`notify complete ${error}`));
+					}, 1000);
+				},
+				onUnsubscribe(connection) {
+					clearInterval(connection.heartRateTimer);
+				}
+			}
+		]
+	}],
+	onDisconnect(connection) {
+		clearInterval(connection.heartRateTimer);
+	},
+	onReady() {
+		this.startAdvertising({
+			flags: GATTServer.advertise.generalDiscoverable | GATTServer.advertise.bleOnly,
+			name: "419 HRM",
+			services: ["180d"]	// Heart Rate Service
+		});
+	}
+});
+```
+
+<a id="bluetoothle-gattservicerecord"></a>
+
+#### GATT Service Record
+
+| Property | Description |
+| :---: | :--- |
+| `uuid` | A string containing the Bluetooth LE UUID of the service. This property is required. |
+| `characteristics` | An array of [GATT Service Characteristic Records](#bluetoothle-gattservicecharacteristicrecord). This property is optional. |
+
+<a id="bluetoothle-gattservicecharacteristicrecord"></a>
+ 
+#### GATT Service Characteristic Record
+
+| Property | Description |
+| :---: | :--- |
+| `uuid` | A string containing the Bluetooth LE UUID of the characteristic. This property is required. |
+| `properties` | A number containing the [GATT Server property flags](#bluetoothle-gattserver-properties) for the characteristic. The properties determine which callbacks may be invoked. This property is optional and defaults to `0`. |
+| `descriptors` | An array of [GATT Service Descriptor Records](#bluetoothle-gattservicedescriptorrecord). This property is optional. |
+| `value` | A byte buffer containing the value to return when this characteristic is read. If the `value` property is present, the `onRead` and `onWrite` callbacks must not be provided. This property is optional. |
+| `onRead(connection)` | A function to invoke when the characteristic is read. It receives the connection for the characteristic being read and returns a byte buffer with the value. This property is optional. |
+| `onWrite(value, connection)` | A function to invoke when the characteristic is written. It receives an `ArrayBuffer` with the value being written and the characteristic's connection. This property is optional. |
+| `onSubscribe(connection)` | A function to invoke when a subscription is established for the characteristic. It receives the characteristic's connection. This property is optional. |
+| `onUnsubscribe(connection)` | A function to invoke when a subscription is terminated for the characteristic. It receives the characteristic's connection. This property is optional. |
+
+All callback functions of the GATT Service Characteristic Record are invoked with `this` set to the `GATTServerCharacteristic` of the characteristic.
+
+**NOTE**: The `onRead` and `onWrite` callbacks may be invoked synchronously by the host's Bluetooth LE stack. Consequently, they should execute as quickly as possible to avoid blocking Bluetooth LE communication.
+
+**NOTE**: The `onSubscribe` and `onUnsubscribe` callbacks are invoked for both indications and notifications.
+
+<a id="bluetoothle-gattservicedescriptorrecord"></a>
+
+#### GATT Service Descriptor Record
+
+| Property | Description |
+| :---: | :--- |
+| `uuid` | A string containing the Bluetooth LE UUID of the descriptor. This property is required. |
+| `value` | A byte buffer containing the value to return when this descriptor is read. If the `value` property is present, the `onRead` and `onWrite` callbacks must not be provided. This property is optional. |
+| `onRead(connection)` | A function to invoke when the descriptor is read. It receives the connection being read. It returns a byte buffer with the read value. This property is optional. |
+| `onWrite(value, connection)` | A function to invoke when the descriptor is written. It receives the value written as an `ArrayBuffer`  and the characteristic's connection. This property is optional. |
+
+**NOTE**: The `onRead` and `onWrite` callbacks may be invoked synchronously by the host's Bluetooth LE stack. Consequently, they should execute as quickly as possible to avoid blocking Bluetooth LE communication.
+
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `mtu` | A number indicating desired Maximum Transmission Unit (MTU) in bytes. The MTU is negotiated as part of establishing a connection. The result is reflected in the value of the instance's `maximumWrite` property. This property is optional. |
+| `services` | An array of [GATT Service Records](#bluetoothle-gattservicerecord). This property is optional. |
+| `security` | An options object containing the requested security properties of the connection. This property is optional. Its presence indicates a request for an encrypted connection; if omitted, the connection may not be secure. |
+| `security.authenticate` | A boolean value indicating if an authentication is requested. A connection must be authenticated to provide protection against "man in the middle" attacks. This property is optional and defaults to `false`. |
+| `security.bond` | A boolean value indicating if the peripheral wants to bond with the central. This property is optional and defaults to `false`. |
+| `security.immediate` | A boolean value indicating whether the peripheral should initiate security negotiations immediately or wait until an operation is performed that requires a secure connection. This property is optional and defaults to `false`. |
+| `security.ioCapabilities` | A value that indicates the device input and output capabilities. The allowed values are `"none"`: the device has no capabilities, `"display"`: the device has a way to show a passkey, `"numbers"`: the device has a way to enter a passkey, `"display+numbers"`: the device has both, `"display+confirm"`: the device has a way to show and confirm a passkey. This property is optional and defaults to `"none"`. |
+
+#### Callbacks
+
+**`onReady()`**
+
+The `onReady` callback is invoked when the peripheral and the underlying Bluetooth LE stack are fully initialized. Peripherals that advertise typically call the GATT Server's `startAdvertising()` from this callback.
+
+**`onConnect(connection)`**
+
+The `onConnect` callback is invoked when a new connection is established to the peripheral. It is passed the 
+[`GATTServerConnection`](#bluetoothle-gattserverconnection) for the connection.
+
+**`onDisconnect(connection)`**
+
+The `onDisconnect` callback is invoked when a connection to the peripheral is terminated. It is passed the 
+[`GATTServerConnection`](#bluetoothle-gattserverconnection) for the connection.
+
+**`onPasskey(connection, action[, data])`**
+
+The `onPasskey` callback is invoked as part of the security negotiation when an interaction is required to authenticate the connection. The `connection` argument is the [`GATTServerConnection`](#bluetoothle-gattserverconnection) for the connection. The `action` argument is a string indicating the interaction and the optional `data` argument provides information required for the interaction. Some values of `action` require the script to call the peripheral's `replyToPasskey` method, as noted in the following table.
+
+| Action | Description |
+| :---: | :--- |
+| `"input"` | Have the user enter the passkey with the keyboard. Provide the passkey entered to `replyToPasskey` as a number. The `data` argument is unused. |
+| `"display"` | Show the user the passkey provided in the `data` argument. There is no need to call `replyToPasskey`. |
+| `"compareNumber"` | Show the user the passkey provided in the `data` argument, and ask them to confirm that it is correct using the Yes and No keys. Provide the result as a boolean to `replyToPasskey`. |
+| `"outOfBand"` | This is an out-of-band negotiation request using a shared secret between the central and peripheral. The `data` argument is an `ArrayBuffer` instance with data from the peripheral. Call `replyToPasskey` with a byte buffer of 16 bytes. |
+
+**`onSecured(connection, state)`**
+
+The `onSecured` callback is invoked when the secure connection negotiation has completed successfully. The `state` argument is an options object with the properties described in the following table.
+
+| Action | Description |
+| :---: | :--- |
+| `authenticated` | A boolean value indicating whether the connection has been authenticated. |
+| `bonded` | A boolean value indicating whether the central bonded with the peripheral. |
+| `encrypted` | A boolean value indicating whether the connection is encrypted. |
+| `keySize` | A number value indicating the number of bits in the key used to encrypt the connection. |
+
+**`onWarning(message)`**
+
+The `onWarning` callback is invoked when the host Bluetooth LE stack ignores a feature specified by a [GATT Service Record](#bluetoothle-gattservicerecord), [GATT Service Characteristic Record](#bluetoothle-gattservicecharacteristicrecord), or [GATT Service Descriptor Record](#bluetoothle-gattservicedescriptorrecord). This warning is informative and only intended for development. Details about the ignored request are provided by the `message` string. For example, Bluetooth LE implementations that support only static values for descriptors invoke `onWarning` for descriptors that specify an `onRead` or `onWrite` callback.
+
+#### `close()` method
+
+The `close` method releases the Bluetooth LE server. All services are unregistered, all connections are terminated, and advertising stops.
+
+#### `addService(service)` method
+
+The `addService` method adds the specified [GATT Service Record](#bluetoothle-gattservicerecord) to the `GATTServer`.
+
+#### `deleteService(service)` method
+
+The `deleteService` method removes the specified [GATT Service Record](#bluetoothle-gattservicerecord) from the `GATTServer`.
+
+#### `startAdvertising(broadcast[, scanResponse])` method
+
+The `startAdvertising` method begins advertising by the `GATTServer`. The `broadcast` and optional `scanResponse` arguments specify GATT Server advertising records. The `broadcast` advertisement is continuously broadcast and the `scanResponse` is sent in reply to scan requests.
+
+The properties of GATT Server advertising records are defined by the following table. All properties are optional. 
+
+| Property | ADType | Description |
+| :---: | :---: | :--- |
+| `name` | 9 | A string with the local name of the peripheral. |
+| `services` | 3, 5, 7 | An array of 16, 32, and 128-bit service UUIDs. These service UUIDs are put into 16, 32, and 128-bit incomplete service lists as appropriate. |
+| `manufacturerData` | 255 | An object with a `manufacturer` property with a number indicating the manufacturer and a `data` property with a byte buffer containing the manufacturer data. |
+| `flags` | 1 | A number with [BLE advertising flags](#bluetoothle-gattserver-advertise). |
+| (ADType) | (ADType) | A byte buffer. The property key must be a number between 1 and 255 inclusive.  |
+
+When a Bluetooth LE peripheral is connected to the maximum number of centrals that it supports, the host may suspend advertising and then resume when the number of connected centrals drops below the maximum.
+
+#### `stopAdvertising()` method
+
+The `stopAdvertising` method ends advertising by the `GATTServer`.
+
+### Static properties of the constructor
+
+<a id="bluetoothle-gattserver-properties"></a>
+
+#### `properties`
+
+The `properties` property is an object with flags for use in the `properties` property of the [GATT Service Characteristic Record](#bluetoothle-gattservicecharacteristicrecord).
+
+| Flag |
+| :--- |
+| `broadcast` |
+| `indicate` |
+| `notify` |
+| `read` |
+| `readAuthenticated` |
+| `readEncrypted` |
+| `reliableWrite` |
+| `subscribe` |
+| `subscribeAuthenticated` |
+| `subscribeEncrypted` |
+| `write` |
+| `writeAuthenticated` |
+| `writeEncrypted` |
+| `writeWithoutResponse` |
+
+<!--
+| `authenticatedSignedWrites` |
+-->
+
+> **NOTE**: Use logical OR to combine these flags, not arithmetic ADD.
+
+<a id="bluetoothle-gattserver-advertise"></a>
+
+#### `advertise`
+
+| Flag | Value |
+| :---: | --: |
+| `limitedDiscoverable` | 1 |
+| `generalDiscoverable` | 2 |
+| `bleOnly` | 4 |
+| `dualModeController` | 8 |
+| `dualModeHost` | 16 |
+
+<a id="bluetoothle-gattserverconnection"></a>
+
+### GATTServerConnection
+
+The `GATTServerConnection` class conforms to the [Base Class Pattern](#base-class-pattern).
+
+#### `close()` method
+
+The `close` method terminates the connection.
+
+#### `notify(characteristic, value[, callback])` method
+
+The `notify` notifies the central that the value of specified `GATTServerCharacteristic` has changed to the `value` argument. The `value` argument is a byte buffer. This method should only be called for characteristics with an active subscription. The callback, if provided, is invoked with only an `error` argument.
+
+#### `replyToPasskey(action[, data])` method
+
+The `replyToPasskey` method delivers a response to an action received by the `onPasskey` callback. The `action` argument must match the `action` argument provided to the `onPasskey` callback. The `data` argument depends on the value of the `action` argument.
+
+| `action` | `data` |
+| :---: | :--- |
+| `"input"` | The passkey entered to `replyToPasskey` as a number. |
+| `"compareNumber"` | A boolean value indicating whether the user confirmed a match of the passkey shown. |
+| `"outOfBand"` | A byte buffer of 16 bytes. |
+
+> **NOTE**: The `replyToPasskey` method should only be called for values of the `action` argument in the preceding table.
+
+#### Properties of GATTServerConnection instance
+
+| Property | Description |
+| :---: | :--- |
+| `maximumWrite` | A number indicating the maximum number of bytes the `write` method can accept. |
+
+<a id="bluetoothle-gattservercharacteristic"></a>
+
+### GATTServerCharacteristic
+
+The `GATTServerCharacteristic` class represents characteristics defined by [GATT Service Characteristic Records](#bluetoothle-gattservicecharacteristicrecord). The `GATTServer` invokes callbacks on GATT Service Characteristic Records with `this` set to the `GATTServerCharacteristic`. The [`GATTServerConnection`](#bluetoothle-gattserverconnection) accepts a `GATTServerCharacteristic` in its `notify` method to identify the characteristic that has a new value.
+
+#### Properties of GATTServerCharacteristic instance
+
+| Property | Description |
+| :---: | :--- |
+| `uuid` | A string containing the Bluetooth LE UUID of the characteristic. |
+
+<a id="persistentstorage"></a>
+
+## 28 Persistent Storage
+
+The Persistent Storage Class Patterns store, retrieve, and delete data from several different kinds of storage. Persistent Storage is accessed using `open` methods; their constructors always throw an exception.
+
+Most Persistent Storage Class Patterns have a `mode` property in their constructor options argument. This table lists the defined values for `mode`:
+
+| Property | Description |
+| :---: | :--- |
+| `"a"` | Append
+| `"r"` | Read-only
+| `"r+"` | Read-write
+| `"w"` | Write-only, create new file if doesn't exist
+| `"w+"` | Read-write, create new file if doesn't exist
+
+<a id="storage-files"></a>
+
+### Files
+
+The Files module provides operations for files, directories, and links.
+
+```javascript
+import files from "embedded:storage/files";
+```
+
+The Files module's default export is a [Directory instance](#storage-directory-class) for the file system root. Whether the file system root provided to scripts is the host's file system root is host-dependent.
+
+> **NOTE 1**: The Files module is designed to follow POSIX API semantics to allow direct implementation on POSIX and the many other environments that use POSIX as a model for their file APIs.
+
+> **NOTE 2**: For implementations of the Files module on POSIX, new files should be created with `0666` permissions, new directories should be created with `0777` permissions, and that directories should be opened with `O_RDONLY` flags.
+
+<a id="storage-file-subpath"></a>
+
+#### Subpath string
+
+The Files module Directory class methods often have a `path` argument, which must be a subpath string specifying a child of the current instance. Subpath strings use `/` as the path separator, regardless of the host. Multiple sequential path separators without an intervening name (e.g. `a//b.txt`) must be rejected. A subpath string that begins with a path separator (e.g. `/a.txt`) must be rejected. The Files module does not allow the special path specifiers `.` and `..`. An empty subpath string `""` specifies the current instance.
+
+<a id="storage-file-class"></a>
+
+#### File Class Pattern
+
+See Annex A for the [formal algorithms](#alg-file-class-pattern) of the File Class Pattern.
+
+##### `close` method
+
+Conforms to the IO Class pattern's `close` method.
+
+##### `read` method
+
+Conforms to the IO Class pattern's `read` method.
+
+The required second argument to the `read` method is a number indicating the offset within the file to begin reading.
+
+If the file is write-only, the `read` method throws an `Error` instance.
+
+##### `write` method
+
+Conforms to the IO Class pattern's `write` method.
+
+The required second argument to the `write` method is a number indicating the offset within the file to begin writing.
+
+If the file is read-only, the `write` method throws an `Error` instance.
+
+##### `status` method
+
+The `status` method returns a status instance with information about the file. It has no arguments. The following table enumerates the properties defined for the returned status instance:
+
+| Property | Description |
+| :---: | :--- |
+| `size` | A number indicating the length of the file in bytes.
+| `mode` | A number indicating the file's mode (implementation dependent).
+| `isFile()` | A method that returns `true`.
+| `isDirectory()` | A method that returns `false`.
+| `isSymbolicLink()` | A method that returns `false`.
+
+##### `setSize` method
+
+The `setSize` method changes the length of the file to the number of bytes specified by the first argument. This method may shrink or grow the file.
+
+If the file is read-only, the `setSize` method throws an `Error` instance.
+
+##### `flush` method
+
+The `flush` method ensures that any data cached in memory for this file instance is persisted to storage before returning. It has no arguments.
+
+<a id="storage-directory-class"></a>
+
+#### Directory Class Pattern
+
+All path arguments to Directory instance methods are resolved relative to the directory instance unless specified otherwise.
+
+See Annex A for the [formal algorithms](#alg-directory-class-pattern) of the Directory Class Pattern.
+
+##### `close` method
+
+Conforms to the IO Class pattern's `close` method.
+
+##### `openDirectory` method
+
+The `openDirectory` function instantiates a Directory instance from a directory subpath. It has a single argument, an options object. The following table enumerates the properties defined for the `openFile` options object:
+
+| Property | Description |
+| :---: | :--- |
+| `path` | A [subpath string](#storage-file-subpath) indicating the directory to open. This property is required. 
+
+The `openDirectory` function returns a Directory instance.
+
+If the file path resolves to a file, `openDirectory` throws an `Error` instance.
+
+In the following example, the resolved path of the `network` Directory instance is `settings/network/wifi`:
+
+```javascript
+const settings = device.files.openDirectory({path: "settings"});
+const network = settings.openDirectory({path: "network/wifi"});
+```
+
+##### `openFile` method
+
+The `openFile` function instantiates a File instance from a file path. It has a single argument, an options object. The following table enumerates the properties defined for the `openFile` options object:
+
+| Property | Description |
+| :---: | :--- |
+| `path` | A [subpath string](#storage-file-subpath) indicating the name of the path of the file to open. This property is required. 
+| `mode` | A string indicating the mode used access to the file. Values are `"r"`, `"r+"`, `"w"` , and `"w+"`. This property is optional and defaults to `"r"`.
+
+The `openFile` function returns a [File instance](#storage-file-class).
+
+If the file path resolves to a directory, `openFile` throws an `Error` instance.
+
+In the following example, the resolved path of the `help` file instance is `documentation/network/wifi/help.txt`:
+
+```javascript
+const documentation = device.files.openDirectory({path: "documentation/network"});
+const help = documentation.openFile({path: "wifi/help.txt"});
+```
+
+##### `delete` method
+
+The `delete` method removes the file or directory specified by the first argument, a [subpath string](#storage-file-subpath).
+
+The `delete` method returns `true` if the file or directory is deleted and `false` if there is no file or directory at the path specified.
+
+If the path is a directory, it must be empty or the `delete` method throws an `Error` instance.
+
+##### `move` method
+
+The `move` method moves and/or renames a file or directory. The first argument is a [subpath string](#storage-file-subpath) indicating the path of the file or directory to move. The second argument is a [subpath string](#storage-file-subpath) indicating the path to move the file or directory to. Both are relative to the directory instance, unless the optional third argument is provided which is another instance of Directory. In this case, the path of the second argument is resolved relative to the third argument.
+
+This example passes two arguments to move "network_update.json" from the root to the "settings" directory and rename it "network.json":
+
+```javascript
+device.files.move("network_update.json", "settings/network.json");
+
+```
+The following examples performs the same operation as the preceding example passing three arguments:
+
+```javascript
+const settings = device.files.openDirectory("settings");
+device.files.move("network_update.json", "network.json", settings);
+```
+
+The three argument form is most useful when a host uses Directory instances to limit access by scripts to portions of the file system.
+
+##### `status` method
+
+The `status` method returns a status instance with information about the file, directory, or link specified by the first argument, a [subpath string](#storage-file-subpath). The following table enumerates the properties defined for the returned status instance:
+
+| Property | Description |
+| :---: | :--- |
+| `size` | A number indicating the length of the file in bytes.
+| `mode` | A number indicating the file's mode (implementation dependent).
+| `isFile()` | A method that returns `true` if the path resolves to a file and `false` otherwise.
+| `isDirectory()` | A method that returns `true` if the path resolves to a directory and `false` otherwise.
+| `isSymbolicLink()` | A method that returns `true` if the path resolves to a link and `false` otherwise.
+
+If no file, directory, or link exists at the specified path, an instance is returned with no `size` property and a `mode` such that `isFile()`, `isDirectory()`, and `isSymbolicLink()` all return `false`.
+
+##### `createDirectory` method
+
+The `createDirectory` method creates a directory at the path specified by the first argument, a [subpath string](#storage-file-subpath).
+
+The `createDirectory` method returns `true` if the directory is successfully created and `false` if a directory already exists at the path specified.
+
+##### `createLink` method
+
+The `createLink` method creates a link at the path specified by the first argument to the path specified by the second argument. Both arguments are [subpath strings](#storage-file-subpath).
+
+##### `readLink` method
+
+The `readLink` method resolves a link at the path specified by the first argument [subpath string](#storage-file-subpath) and returns the resolved path as a string. The resolved path should be within the root of the directory instance.
+
+##### `scan` method
+
+The `scan` method provides an iterator that enumerates the contents of a directory. The `scan` method has a single argument, a [subpath string](#storage-file-subpath) indicating the path to scan. If the path resolves to a file or there is not a directory at the path, an `Error` instance is thrown. If the `scan` method is invoked with no arguments, it returns an iterator for the root of the directory instance.
+
+The following example uses the iterator returned by the `scan` method to create an array of all hidden files and directories in the "settings" directory.
+
+```javascript
+const hidden = device.files.scan("settings").filter(name => name.startsWith(".")).toArray();
+```
+
+See Annex A for the [formal algorithms](#alg-directory-iterator-class) of the Directory Iterator class.
+
+##### `[Symbol.iterator]` method
+
+The `[Symbol.iterator]` is an alias for the Directory Class Pattern's `scan` method. It allows a directory instance to be used as an iterable that conforms to the [ECMAScript Iterable interface](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iterable-interface).
+
+The following example uses the Iterable interface to output the names of the files at the root.
+
+```javascript
+for (const path of device.files) {
+	if (device.files.status(path).isFile())
+		console.log(path);
+}
+```
+
+<a id="storage-keyvalue"></a>
+
+### Key-Value
+
+The Key-Value module provides read, write, and delete operations for key-value pairs within domains. The Key-Value module is intended to be used only with relatively small values. Consequently, the `read` and `write` always operate on the entire value; there is no support for reading or writing partial values.
+
+```javascript
+import keyValue from "embedded:storage/key-value";
+```
+
+The default export is an object with an `open` function. 
+
+See Annex A for the [formal algorithms](#alg-key-value-object) of the Key-Value Module object.
+
+#### `open` function
+
+The `open` function instantiates a Key-Value Domain instance from a key-value domain name. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:
+
+| Property | Description |
+| :---: | :--- |
+| `path` | A string indicating the name of the name of the key-value domain to open. This property is required. 
+| `mode` | A string indicating the mode used to access the domain. Values are `"r"` and `"r+"`. This property is optional and defaults to `"r+"`.
+| `format` | A string indicating the initial data format to use for read and write operations. This property is optional and defaults to `"buffer"`.
+
+The `open` function returns a Key-Value Domain instance.
+
+#### Key-Value Domain Class Pattern
+
+The following example shows how the Key-Value Domain is used:
+
+```javascript
+let settings = keyValue.open({path: "settings", format: "string"});
+settings.write("one", "ONE");
+
+settings.format = "uint8";
+settings.write("two", 2);
+
+settings.format = "buffer";
+settings.write("threes", Uint16Array.from(3, 3, 3).buffer);
+
+console.log(new Uint16Array(settings.read("three")));
+
+settings.format = "uint8";
+console.log(settings.read("two"));
+
+settings.format = "string";
+console.log(settings.read("one"));
+
+settings.close();
+```
+
+See Annex A for the [formal algorithms](#key-value-domain-class-pattern) of the Key-Value Domain Class Pattern.
+
+##### `close` method
+
+Conforms to the IO Class pattern's `close` method.
+
+##### `delete` method
+
+The `delete` method takes a single argument, a string indicating the key to remove. If the key does not exist, the `delete` method returns without throwing an exception.
+
+If the domain is in read-only mode (`"r"`), the `delete` method throws an `Error` instance.
+
+##### `read` method
+
+The `read` method has two arguments. The first argument, required, is a string indicating the key to return the value for. The second argument, optional, is only used when the data format is `"buffer"`. It is an optional Byte Buffer that is used as [specified](#io-pattern-read) by the `read` method of the IO Class Pattern.
+
+The current data format must match the data format used to write the value – the `read` method does not perform any conversions. If there is a data format mismatch, a `TypeError` is thrown. If the key does not exist, the `read` method returns without throwing an exception.
+
+##### `write` method
+
+The `write` method has two arguments, both required. The first argument is a string indicating the key to write the value of. The second argument is the value to store for the key. The `write` method stores the value using the current data format. If the value cannot be coerced to the current data format, a `TypeError` is thrown.
+
+If a value is already stored for the `key`, the value is replaced.
+
+If the domain is in read-only mode (`"r"`), the `write` method throws an `Error` instance.
+
+##### `[Symbol.iterator]` method
+
+The Key-Value Domain instance conforms to the [ECMAScript Iterable interface](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iterable-interface) through its `[Symbol.Iterator]` method. The iterator returns the keys within the domain as strings.
+
+```javascript
+for (const key in device. keyValue)
+	console.log(key);
+```
+
+See Annex A for the [formal algorithms](#alg-key-value-domain-iterator-class) of the Key-Value Domain Iterator class.
+
+##### `format` property
+
+Conforms to the IO Class pattern's `format` property. The only data format value an implementation is required to support is the default, `"buffer"`. The following data formats may also be supported: `"string"`, `"uint8"`, `"int8"`, `"uint16"`, `"int16"`, `"uint32"`, `"int32"`, `"uint64"`, and `"int64"`.
+
+<a id="storage-flash"></a>
+
+### Flash
+
+The Flash module provides read, write, and erase operations for the content of flash partitions.
+
+```javascript
+import flash from "embedded:storage/flash";
+```
+
+The default export is an object with an `open` function. The default export object also conforms to the [ECMAScript Iterable interface](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iterable-interface) through a `[Symbol.Iterator]` function. The following example shows the use of `open` and iteration:
+
+```javascript
+let partition;
+for (const path of device.flash) {
+	if (path.startsWith("ota")) {
+		partition = device.flash.open({path});
+		break;
+	}
+}
+```
+
+See Annex A for the [formal algorithms](#alg-flash-module-object) of the Flash Module object.
+
+#### `open` function
+
+The `open` function instantiates a Flash Partition instance from a flash partition path name. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:
+
+| Property | Description |
+| :---: | :--- |
+| `path` | A string indicating the name of the flash partition path name to open. This property is required. 
+| `mode` | A string indicating the mode used to access the partition. Values are `"r"` and `"r+"`. This property is optional and defaults to `"r+"`.
+| `format` | A string indicating the data format to use for read and write operations. The only supported value is `"buffer"`. This property is optional and defaults to `"buffer"`.
+
+The `open` function returns a Flash Partition instance.
+
+#### `[Symbol.Iterator]` function
+
+The `[Symbol.Iterator]` function returns an object that conforms to the [ECMAScript Iterator interface](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iteration). The returned iterator enumerates the path names of the device's flash partitions, providing the path names as strings.
+
+See Annex A for the [formal algorithms](#alg-flash-partition-iterator-class) of the Flash Partition iterator class.
+
+#### Flash Partition Class Pattern
+
+See Annex A for the [formal algorithms](#alg-flash-partition-class-pattern) of the Flash Partition Class Pattern.
+
+##### `close` method
+
+Conforms to the IO Class pattern's `close` method.
+
+##### `status` method
+
+The `status` method returns an object with information about the partition. There are no arguments to the `status` method.
+
+| Property | Description |
+| :---: | :--- |
+| `size` | The number of bytes in the partition as a number.
+| `blockLength` | The number of bytes in a block (sometimes called a sector) as a number.
+| `blocks` | The number of blocks in the partition as a number.
+| `eraseValue` | The value that the `eraseBlock` method erases to, either the number `0` or `0xFF`.
+| `writeAlign` | The required alignment for the position and length of calls to the `write` method.
+
+> **NOTE**: `blocks` multiplied by `blockLength` is equal to `size`.
+
+##### `eraseBlock` method
+
+The `eraseBlock` method erases one or more blocks in the partition. The first argument is the block number to begin erasing. The optional second argument is the block number to end erasing. If the second argument is omitted, one block is erased.
+
+The `eraseBlock` method set the bits in an erased to either all `0` or `1` depending on the flash technology. For example, the bits are set to `1` for NOR flash and `0` for NAND flash. The `status()` method's `eraseValue` property provides the erased value.
+
+##### `read` method
+
+Conforms to the IO Class pattern's `read` method.
+
+The required second argument to the `read` method is a number indicating the offset within the flash partition to begin reading.
+
+##### `write` method
+
+Conforms to the IO Class pattern's `write` method.
+
+The required second argument to the `write` method is a number indicating the offset within the flash partition to begin writing.
+
+If the partition is in read-only mode (`"r"`), the `write` method throws an `Error` instance.
+
+After erasing, each byte may be reliably written once. The behavior of subsequent writes without an intervening erase depends on the flash technology. 
+
+##### `format` property
+
+Conforms to the IO Class pattern's `format` property. The value must be `"buffer"`.
+
+<a id="storage-update"></a>
+
+### Update
+
+The Update module applies updates to flash partitions, typically firmware for an over-the-air update.
+
+```javascript
+import update from "embedded:update";
+```
+
+The default export is an object with an `open` function.
+
+See Annex A for the [formal algorithms](#alg-update-module-object) of the Update Module object.
+
+#### `open` function
+
+The `open` function instantiates an Update instance from a Flash partition. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:
+
+| Property | Description |
+| :---: | :--- |
+| `partition` | An Flash Partition instance for the partition be updated. The instance must not be closed until after the update is complete. This property is required. 
+| `mode` | A string indicating the mode used to write the update. Values are `"a"` for append and `"w"` for random access. This property is optional and defaults to `"a"`.
+| `byteLength` | A number indicating the size of the update in bytes that will written to the partition. This value must be less than or equal to the byte length of the partition. This property is optional and should not be specified if the number of bytes is unknown.
+
+The `open` function returns an Update instance.
+
+#### Update instance
+
+See Annex A for the [formal algorithms](#alg-update-class-pattern) of the Update Class Pattern.
+
+##### `close` method
+Conforms to the IO Class pattern's `close` method.
+
+##### `complete` method
+Calling the `complete` method indicates that the update has been completely applied and should be activated. If the `complete` method is not called, the update will not be used.
+
+The `complete` method does not restart the device to begin using the updated partition.
+
+If the `complete` method determines that the update is invalid – not completely written, corrupted, out of date, etc. – it throws an exception and does not activate the update.
+
+The `complete` method is not required to release any resources, therefore the `close` method should be called after calling the `complete` method.
+
+##### `write` method
+Conforms to the IO Class pattern's `write` method.
+
+When the mode is `"w"` (random access), the `write` method request requires a second argument, a number indicating the byte offset at which to write the data.
+
+When the mode is `"a"` (append), an error is thrown if there is more than one argument.
+
+If the `write` method detects the data to be written is invalid, it throws an exception.
+
+The `write` method throws an exception if called after the `complete` method.
+
+##### `format` property
+Conforms to the IO Class pattern's `format` property. The value must be `"buffer"`.
+
+<a id="dns-sd"></a>
+
+## 29 DNS-SD Class Pattern
+
+The DNS-SD Class Pattern provides local network name claiming, service discovery, and service advertising compatible with RFC 6762, Multicast DNS, and RFC 6763, DNS-Based Service Discovery. The DNS-SD Class Pattern conforms to the [Base Class Pattern](#base-class-pattern).
+
+### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `socket` | A [UDP class constructor options object](#udp-socket-constructor-options). This property is required. |
+
+### Methods
+
+#### `close()` method
+
+The `close()` method releases all resources. It may immediately release all local names claimed by this instance.
+
+#### `claim(options)` method
+
+The `claim` method attempts to claim and maintain a local network name as defined by RFC 6762. The `options` argument configures the claim.
+
+| Property | Description |
+| :---: | :--- |
+| `host` | The local name to claim as a string. This local name does not include the `.local` suffix. This property is required. |
+| `onReady` | A callback function to invoke when the name has been successfully claimed. The callback is invoked with no arguments. This property is optional. |
+| `onError` | A callback function to invoke if the requested host name cannot be claimed or the claim is lost. The callback is invoked with no arguments. This property is optional. |
+
+The `claim` method returns an object with the following properties.
+
+| Property | Description |
+| :---: | :--- |
+| `close()` | Call this method to release the claim to the requested host name. This function should broadcast to the local network that the name has been released. |
+
+The claim remains active until the claim is closed, its owning DNS-SD instance is closed, or the claim to the name is lost.
+
+#### `discover(options)` method
+
+The `discover` method initiates discovery of DNS-SD services.
+
+| Property | Description |
+| :---: | :--- |
+| `serviceType` | The type of DNS-SD service to discover (e.g. `"_airplay._tcp"`). This property is required. |
+| `onFound` | A callback to invoke when an instance of the requested service type is first discovered. The callback is passed a DNS-SD Service Object. This property is optional. |
+| `onUpdate` | A callback to invoke when an instance of the requested service type is updated – typically a change to its `txt` record. The callback is passed a DNS-SD Service Object. This property is optional. |
+| `onLost` | A callback to invoke when an instance of the requested service type is no longer available. The callback is passed a DNS-SD Service Object. This property is optional. |
+
+The `discover` method returns an object with the following properties.
+
+| Property | Description |
+| :---: | :--- |
+| `close()` | Call this method to end discovery of the specified `serviceType`. |
+
+Discovery remains active until the returned instance or its owning DNS-SD instance are closed.
+
+The DNS-SD Service Object has the following properties.
+
+| Property | Description |
+| :---: | :--- |
+| `name` | The Service Instance Name as a string. |
+| `host` | The service instance's local name as a string. |
+| `address` | The IP address of the host as a string. |
+| `port` | The port number of the service as a number. |
+| `txt` | The service instance's DNS `txt` record as an ECMAScript `Map` instance with the property name as the map's keys and the value as the map's values. |
+
+#### `advertise(options)` method
+
+The `advertise` method initiates advertising of a DNS-SD service. The options object defines the service to be advertised.
+
+| Property | Description |
+| :---: | :--- |
+| `serviceType` | The DNS-SD service type (e.g. `"_http._tcp"`) as a string. This property is required. |
+| `host` | The service's host name as a string. This property is required. |
+| `name` | The Service Instance Name as a string. This property is optional and defaults to the value of the `host` property. |
+| `port` | The port number of the service as a number. This property is required. |
+| `txt` | The DNS-SD instance's DNS `txt` record as an ECMAScript `Map` instance with the property name as the map's keys and the value as the map's values. Values may be a string or a byte buffer. This property is optional. |
+
+The `advertise` method returns an object with the following properties.
+
+| Property | Description |
+| :---: | :--- |
+| `close()` | Call this method to end advertising of the service. |
+| `updateTXT()` | Call this method to update the DNS `txt` record advertised for this service. Pass the new DNS `txt` record as an ECMAScript `Map` instance with the property name as the map's keys and the value as the map's values. Values may be a string or a byte buffer. |
+
+<a id="host-provider-instance"></a>
+
+## 30 Host provider instance
+
+The Host Provider instance aggregates data and code available to scripts from the host. The host provider instance is available as a module import:
+
+```javascript
+import device from "embedded:provider/builtin";
+```
+
+The Host Provider instance is instantiated before hosted scripts are executed. Only a single instance of the host provider may be created, and the host provider cannot be closed or garbage collected.
+
+The following sections define properties of the Host Provider instance. The Host Provider instance has no required properties.
+
+### Global variable
+Hosts are not required to make the host provider instance available in a global variable. A host that does should use the global variable named `device`.
+
+### Pin name property
+
+The `pin` property is an object that maps pin names to pin specifiers. More than one pin name may map to the same pin specifier.
+
+```javascript
+import Digital from "embedded:io/digital";
+
+let led = new Digital({
+	pin: device.pin.led,
+	mode: Digital.Output
+})
+```
+
+### IO bus properties
+
+An IO Bus is two or more pins used to implement a communication protocol such as Serial, SPI, or I²C. There may be one or more instances of an IO Bus and one may be designated as the default bus of that type.
+
+The Host Provider instance may contain properties corresponding to each bus type. The following bus types are defined for those host provider instance.
+
+| Bus Type | Property Name |
+| :---: | :--- |
+| I²C | `i2c` |
+| Serial | `serial` |
+| SPI | `spi` |
+
+Each bus type may contain one or more buses. Each bus may have one or more names. It is recommended to provide a property named `default` when there is a default bus.
+
+```javascript
+// example host implementation
+const A = {
+	in: 12,
+	out: 13,
+	clock: 14,
+	select: 15,
+	hz: 10_000_000
+};
+
+const B = {
+	in: 0,
+	out: 1,
+	clock: 2,
+	select: 3,
+	hz: 20_000_000
+};
+
+device.spi = {
+	A,
+	B,
+	default: B
+}
+```
+
+```javascript
+// example hosted script use
+
+import SPI from "embedded:io/spi";
+
+let spi = new SPI(device.spi.default);
+```
+
+### IO classes
+
+The host provider instance may provide access to its IO constructors through its `io` property. This is analogous to the IO constructors available from an IO Provider.
+
+```javascript
+// example host provider implementation
+
+import Digital from "embedded:io/digital";
+import I2C from "embedded:io/i2c";
+import SPI from "embedded:io/spi";
+
+export default {
+	pin: {
+		button: 0,
+		led: 2
+	},
+	io: {
+		Digital,
+		I2C,
+		SPI
+	}
+};
+```
+
+```javascript
+// example hosted script use
+
+import device from "embedded:provider/builtin";
+
+let spi = new device.io.SPI(device.spi.default);
+```
+
+<!-- @@ should be explicit for all IO class pattern -->
+
+### IO Providers
+The host provider instance should include its IO Provider constructors in its `provider` property.
+
+### Sensors
+The host provider instance should include its Sensor constructors in its `sensor` property.
+
+### Displays
+The host provider instance should include its Display constructors through its `display` property.
+
+### Real-time clocks
+The host provider instance should include a default Real-time clock constructor options object on its `rtc` property.
+
+### Domain Name resolver
+The host provider instance should include a default Domain Name Resolver class constructor options object on its `network.dns.resolver` property.
+
+### NTP client
+The host provider instance should include a default NTP Client class constructor options object on its `network.ntp.client` property.
+
+### HTTP client
+The host provider instance should include a default HTTP Client class constructor options object on its `network.http.client` property.
+
+### HTTPS client
+The host provider instance should include a default secure HTTP Client class constructor options object on its `network.https.client` property.
+
+### HTTP server
+The host provider instance should include a default HTTP Client class constructor options object on its `network.http.server` property.
+
+### MQTT client
+The host provider instance should include a default MQTT Client class constructor options object on its `network.mqtt.client` property. <!-- "server" would be network.mqtt.broker -->
+
+### MQTTS client
+The host provider instance should include a default secure MQTT Client class constructor options object on its `network.mqtts.client` property. <!-- "server" would be network.mqtts.broker -->
+
+### WS (WebSocket) client
+The host provider instance should include a default WebSocket Client class constructor options object on its `network.ws.client` property.
+
+### WSS (WebSocket Secure) client
+The host provider instance should include a default secure WebSocket Client class constructor options object on its `network.wss.client` property.
+
+### TLS client
+The host provider instance should include a default TLS Client class constructor options object on its `network.tls.client` property.
+
+### Network Interfaces
+The host provider instance should include a Network Interface class constructor options object for each of its network interfaces on its `network.interface` property.
+
+```javascript
+const Ethernet0 = device.network.interface.Ethernet0;
+const eth0 = new Ethernet0.io(Ethernet0);
+```
+
+### Persistent Storage
+
+The host provider instance should include its root [Directory instance](#storage-directory-class) through its `file` property.
+
+```javascript
+const settings = device.files.openDirectory({path: "settings"});
+```
+
+The host provider instance should include its [Flash](#storage-flash) default export through its `flash` property.
+
+```javascript
+const settings = device.flash.open({path: "ota-bootloader"});
+```
+
+The host provider instance should include its [Key-Value](#storage-keyvalue) default export through its `keyValue` property.
+
+```javascript
+const settings = device.keyValue.open({path: "settings", format: "string"});
+```
+
+The host provider instance should include its [Update](#storage-update) default export through its `update` property.
+
+```javascript
+const partition = device.flash.open({path: "ota-bootloader"});
+const update = device.update.open({partition});
+```
+
+## 31 Provenance Sensor Class Pattern
+
+Sensor data provenance is metadata associated with sensor samples. It encapsulates the specific, instance source of data, the data transmission mechanism(s), and data transformations occurring at any point between the sensor and the end-user or end-use application. Provenance applies both to direct and synthetic measurements.
+
+This section specifies the Provenance Sensor Class Pattern, which builds on the Sensor Class Pattern by specifying an API for making sensor metadata available to scripts.
+
+The Provenance Sensor Class Pattern adds one optional property to the constructor options object, two required instance properties, and three properties to the object returned by the `sample` method.
+
+The additions the Provenance Sensor Class Pattern makes to the Sensor Class Pattern are a lightweight means of enabling provenance-aware scripts using Sensor Classes. Provenance-aware scripts may support more robust analytics and/or high-assurance tasks.
+
+A separate Technical Report, ECMA TR/110, Recommendations and Best Practices for Scripts on Connected Sensing Devices, describes the best practices for using the Provenance Sensor Class Pattern to support scripts running on connected sensing devices, for propagating static and dynamic device and state metadata, and for accurately propagating sensor samples.
+
+### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `onConfiguration()` | Callback to invoke when a new sensor configuration has been applied. The configuration details are obtained from the `configuration` property of the instance. This property is optional.
+
+The `onConfiguration` callback is invoked whenever configuration parameters are changed from the originally-constructed instance. <!-- Original text was: " if non-default parameters are configured on the sensor." I believe this captured the scenario in which a sensor is constructed and then reconfigured to reflect changing sampling or other parameters. For example, a sensor may be set to capture data at 10Hz and then changed to 100Hz later. We want to capture this change. -->
+
+<!--I believe we can eliminate the definition for default parameters based on this new language. Previous, we had **default parameters** as "Typical, non-configured values and/or settings as defined in the datasheet(s) associated with the peripheral sensor and/or the device."-->
+
+### `configuration` property
+
+The required read-only `configuration` property indicates the current configuration of the sensor. Non-default values must be reported. All configured parameters may optionally be included.
+
+The data format of this property is implementation-dependent. For instance, the data may be a binary value or may be human-readable. The data do not have to be interoperable to the connected sensing device if they can be parsed by the relevant endpoint.
+
+Configuration information recommended for the `configuration` property includes, but is not limited to:
+
+| Property | Description |
+| :---: | :--- |
+| `calibration` | Calibration factors / parameters that impact samples presented as raw.
+| `mode` | Sampling operating mode.
+| `scaling` | Scaling factors that impact samples presented as raw.
+| `units` | Configured sample unit.
+
+<!-- Table to be continued? -->
+
+### `identification` property
+
+The required read-only `identification` property provides static identification information about the physical sensor and/or sensor driver.
+
+The data format of this property is implementation-dependent. For instance, the data may be a binary value or may be human-readable. The data do not have to be interoperable to the connected sensing device if they can be parsed by the relevant endpoint.
+
+Identification information recommended for the `identification` property includes, but is not limited to:
+
+| Property | Description |
+| :---: | :--- |
+| `model` | Identification of the manufacturer and part number of the sensor. Required.
+| `classification` | Identification of the sensor classification of the sensor instance. Required for instances of defined classes.
+| `uniqueID` | Hard-coded unique identifiers associated with the sensor part. This includes serial numbers, time and date of manufacture, etc. Optional.
+
+#### Properties of `sample` Object
+
+The Provenance Sensor Class Pattern extends the sample object described in the Sensor Class Pattern to include the following properties.
+
+| Property | Description |
+| :---: | :--- |
+| `time` | Number originating from an absolute clock describing the instant that the sample returned was captured. If reported, `time` must be represented as a time value as defined in ECMA-262 in "Time Values and Time Range" ([https://tc39.es/ecma262/#sec-time-values-and-time-range](https://tc39.es/ecma262/#sec-time-values-and-time-range)). The time should originate from the most accurate clock associable to the start of a sampling event, or be derived from the same.
+| `ticks` | Number originating from a non-absolute clock describing the instant that the sample returned was captured. If reported, `ticks` must be reported as an integer representing the number of time units occurring from an arbitrary, connected sensing device-consistent start time as reported by the sensor instance.
+| `faults` | Object representing a record of any sensor-level faults that occurred during this sensor sample or since the previously reported sample. Optional. <!-- faults may be better as an onFault callback -->
+
+In the event disparate sensing modalities may be measured from a single sensor as discretely-sampled events (e.g. requesting from an IMU first acceleration and only later angular rate), those modalities are assumed to be treated as independent sensors for the purposes of recording `time`, `ticks`, and `faults`.
+
+See Annex A for the [formal algorithms](#alg-sensor-prov-class-pattern) of the Provenance Sensor Class Pattern.
+

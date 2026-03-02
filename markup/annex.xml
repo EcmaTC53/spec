@@ -1,0 +1,3889 @@
+
+  <emu-annex id="alg-formal-algorithms">
+    <h1>Formal algorithms</h1>
+    <p>This annex defines formal algorithms for behaviors defined by this specification. These algorithms are useful primarily for implementing the specification and validating implementations.</p>
+      <emu-annex id="alg-internal-fields">
+        <h1>Internal fields</h1>
+        <p>Internal fields are implementation-dependent and must not be accessible outside the implementation. For instance they can be C structure fields, ECMAScript private fields, or a combination of both.</p>
+        <p>Every object conforming to a Class Pattern is expected to have one or several internal fields. This document uses the following operators on internal fields.</p>
+        <emu-annex id="alg-internal-fields-checkinternalfields" type="abstract operation">
+          <h1>
+            CheckInternalFields (
+              _object_: a value
+            )
+          </h1>
+          <dl class="header"></dl>
+          <emu-alg>
+            1. For each internal field of the class being defined, do
+              1. Let _name_ be the name of the internal field.
+              1. Throw if _object_ has no internal field named _name_.
+          </emu-alg>
+          <p>CheckInternalFields throws if an internal field is absent. That can be implicit when internal fields are ECMAScript private fields, or can be explicit when internal fields are C structure fields. The purpose of CheckInternalFields is to ensure that _object_ is an instance of the class being defined.</p>
+        </emu-annex>
+        <emu-annex id="alg-internal-fields-clearinternalfields" type="abstract operation">
+          <h1>
+            ClearInternalFields (
+              _object_: a value
+            )
+          </h1>
+          <dl class="header"></dl>
+          <emu-alg>
+            1. For each internal field of the class being defined, do
+              1. Let _name_ be the name of the internal field.
+              1. Clear the internal field named _name_ of _object_.
+          </emu-alg>
+          <p>ClearInternalFields zeroes all internal fields. That can be storing *null* in ECMAScript private fields, or can be storing NULL in C structure fields. The purpose of ClearInternalFields is to ensure that _object_ is in a consistent state when constructed and closed.</p>
+        </emu-annex>
+        <emu-annex id="alg-internal-fields-getinternalfield" type="abstract operation">
+          <h1>
+            GetInternalField (
+              _object_: a value,
+              _name_: a value
+            )
+          </h1>
+          <dl class="header"></dl>
+          <emu-alg>
+            1. Return the value stored in the internal field named _name_ of _object_.
+          </emu-alg>
+          <p>GetInternalField is trivial for ECMAScript private fields, but can involve value conversion for C structure field like converting C *NULL* into ECMAScript *null*.</p>
+        </emu-annex>
+        <emu-annex id="alg-internal-fields-setinternalfield" type="abstract operation">
+          <h1>
+            SetInternalField (
+              _object_: a value,
+              _name_: a value,
+              _value_: a value
+            )
+          </h1>
+          <dl class="header"></dl>
+          <emu-alg>
+            1. Store _value_ in the internal field named _name_ of _object_.
+          </emu-alg>
+          <p>SetInternalField is trivial for ECMAScript private fields, but can involve value conversion for C structure field like converting ECMAScript *null* into C *NULL*.</p>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-internal-methods">
+        <h1>Internal methods</h1>
+        <p>Internal methods are implementation-dependent and must not be accessible outside the implementation. This document uses ECMAScript private method syntax to indicate internal methods, prefixing the names of internal methods with *#*.</p>
+      </emu-annex>
+      <emu-annex id="alg-ranges">
+        <h1>Ranges</h1>
+        <emu-annex id="alg-ranges-booleans">
+          <h1>Booleans</h1>
+          <p>For boolean ranges, the value is converted into an ECMAScript boolean.</p>
+        </emu-annex>
+        <emu-annex id="alg-ranges-numbers">
+          <h1>Numbers</h1>
+          <p>For number ranges, the value is converted into an ECMAScript number, then the value is checked to be in range. The special value *NaN* is never in range.</p>
+          <p>For integer ranges, the value is converted into an ECMAScript number, then the value is checked to be an integer, then the value is checked to be in range.</p>
+          <emu-table><table><tbody>
+            <tr><th>Range</th><th>From</th><th>To</th></tr>
+            <tr><td>number</td><td>*-Infinity*</td><td>*Infinity*</td></tr>
+            <tr><td>negative number</td><td>*-Infinity*</td><td>*-Number.MIN_VALUE*</td></tr>
+            <tr><td>positive number</td><td>*Number.MIN_VALUE*</td><td>*Infinity*</td></tr>
+            <tr><td>integer</td><td>*Number.MIN_SAFE_INTEGER*</td><td>*Number.MAX_SAFE_INTEGER*</td></tr>
+            <tr><td>negative integer</td><td>*Number.MIN_SAFE_INTEGER*</td><td>*-1*</td></tr>
+            <tr><td>positive integer</td><td>*1*</td><td>*Number.MAX_SAFE_INTEGER*</td></tr>
+            <tr><td>8-bit integer</td><td>*-128*</td><td>*127*</td></tr>
+            <tr><td>8-bit unsigned integer</td><td>*0*</td><td>*255*</td></tr>
+            <tr><td>16-bit integer</td><td>*-32768*</td><td>*32767*</td></tr>
+            <tr><td>16-bit unsigned integer</td><td>*0*</td><td>*65535*</td></tr>
+            <tr><td>32-bit integer</td><td>*-2147483648*</td><td>*2147483647*</td></tr>
+            <tr><td>32-bit unsigned integer</td><td>*0*</td><td>*4294967295*</td></tr>
+          </tbody></table></emu-table>
+          <p>Further restrictions are specified with from x to y, meaning the value must be >= x and <= y.</p>
+        </emu-annex>
+        <emu-annex id="alg-ranges-objects">
+          <h1>Objects</h1>
+          <p>For object ranges like *ArrayBuffer*, the value is checked to be an instance of one of specified class.</p>
+          <p>Further restrictions can be specified, for instance on the *byteLength* of the *ArrayBuffer* instance.</p>
+          <p>If the object can be *null*, it is explicitly specified like *Function* or *null*.</p>
+        </emu-annex>
+        <emu-annex id="alg-ranges-byte-buffers">
+          <h1>Byte buffers</h1>
+          <p>For byte buffer ranges, the value is checked to be an instance of *ArrayBuffer*, *SharedArrayBuffer*, *Uint8Array*, *Int8Array* or *DataView*.</p>
+          <p>Further restrictions can be specified, for instance on the *byteLength*.</p>
+          <p>To access the data contained in a byte buffer, algorithms uses a host specific operator:</p>
+          <emu-annex id="alg-ranges-byte-buffers-getbytepointer" type="abstract operation">
+            <h1>
+              GetBytePointer (
+                _buffer_: a value
+              )
+            </h1>
+            <dl class="header"></dl>
+            <p>The operator throws if _buffer_ is not an instance of *ArrayBuffer*, *SharedArrayBuffer*, *Uint8Array*, *Int8Array*, or *DataView*, or if _buffer_ is detached. For a *TypedArray* and *DataView* instances, the pointer takes the view's byte offset into account.</p>
+          </emu-annex>
+        </emu-annex>
+        <emu-annex id="alg-ranges-strings">
+          <h1>Strings</h1>
+          <p>For string ranges like *"buffer"*, the value is converted into an ECMAScript string, then checked to be strictly equal to one of the specified values.</p>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-asynchronous-operations">
+        <h1>Asynchronous operations</h1>
+        <p>Asynchronous operations are never synchronous: the callback is never invoked directly by the method that starts the asynchronous operation, but indirectly at the end of the asynchronous operation.</p>
+        <p>To emphasize such a rule, the algorithms uses steps like:</p>
+        <emu-alg>
+          1. Queue a task that performs:
+            1. Call(_callback_, *this*).
+        </emu-alg>
+        <p>The mechanism can be similar to what is necessary to implement *setTimeout*.</p>
+          <pre><code class="javascript">
+print(1);
+setTimeout(0, () => print(3));
+print(2);
+// 1 2 3
+          </code></pre>
+      </emu-annex>
+    <emu-annex id="alg-base-class-pattern">
+      <h1>Base Class Pattern</h1>
+      <emu-annex id="alg-base-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. ClearInternalFields(*this*).
+          1. Throw if _options_ is not an object.
+          1. Let _params_ be an empty object.
+          1. For each supported option, do
+            1. Let _name_ be the name of the supported option.
+            1. If HasProperty(_options_, _name_), then
+              1. Let _value_ be GetProperty(_options_, _name_).
+              1. Throw if _value_ is not in the valid range of the supported option.
+            1. Else,
+              1. Throw if the supported option has no default value.
+              1. Let _value_ be the default value of the supported option.
+            1. DefineProperty(_params_, _name_, _value_).
+          1. For each supported callback option, do
+            1. Let _name_ be the name of the supported callback option.
+            1. Let _callback_ be GetProperty(_params_, _name_).
+            1. If _callback_ is not *null*, then
+              1. SetInternalField(*this*, _name_, _callback_).
+          1. Let _value_ be GetProperty(_params_, *"target"*).
+          1. If _value_ is not *undefined*, then
+            1. DefineProperty(*this*, *"target"*, _value_).
+          1. Mark *this* as ineligible for garbage collection.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Supported options, with their names, default values and valid ranges, are defined by a separate table for each class conforming to the Base Class Pattern.</li>
+            <li>The _params_ object is unobservable. Its purpose in the algorithm is to ensure that properties of the _options_ object are only accessed once and that the _options_ object can be frozen. Local variables can be used instead, for instance:
+              <pre><code class="javascript">
+  let pin = 2;
+  if (options !== undefined) {
+      if ("pin" in options)) {
+          pin = options.pin;
+          if ((pin < 0) || (3 < pin))
+              throw new RangeError(`invalid pin ${pin}`);
+      }
+  }
+              </code></pre></li>
+            <li>Most classes conforming to the Base Class Pattern are expected to support one or several callbacks. Callbacks are supported options: their default value is *null*, their valid range is *null* or an ECMAScript function. Callbacks are stored in internal fields and are always called with *this* set to the constructed object.</li>
+            <li>There is only one option that is always supported: its name is *"target"*, its default value is *undefined* and its range is any ECMAScript value.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-base-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Mark *this* as eligible for garbage collection.
+          1. Cancel any pending callbacks for *this*.
+          1. ClearInternalFields(*this*).
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-base-class-pattern-asynchronous">
+      <h1>Base Class Pattern – asynchronous</h1>
+      <emu-annex id="alg-base-class-pattern-asynchronous-prototype-close">
+        <h1>close ( _callback_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Throw if _callback_ is not *undefined* and not IsCallable(_callback_).
+          1. Optionally, cancel asynchronous operations.
+          1. When all asynchronous operations succeeded or failed:
+            1. Mark *this* as eligible for garbage collection.
+            1. ClearInternalFields(*this*).
+            1. If _callback_ is not *undefined*, then
+              1. Queue a task that performs:
+                1. Call(_callback_, *this*, *null*).
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-io-class-pattern">
+      <h1>IO Class Pattern</h1>
+      <emu-annex id="alg-io-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute steps 1 to 7 of the Base Class Pattern *constructor*.
+          1. Let _value_ be GetProperty(_params_, *"format"*).
+          1. SetInternalField(*this*, *"format"*, _value_).
+          1. Try:
+            1. Let _resources_ be the hardware resources specified by _params_.
+            1. Throw if _resources_ are unavailable.
+            1. Allocate and configure _resources_.
+            1. Throw if allocation or configuration failed.
+            1. SetInternalField(this, *"resources"*, _resources_).
+          1. Catch _exception_:
+            1. Call(GetProperty(*this*, *"close"*), *this*).
+            1. Throw _exception_.
+          1. Execute step 8 of the Base Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute step 1 of the Base Class Pattern *close* method.
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Return if _resources_ is *null*.
+          1. Execute steps 2 and 3 of the Base Class Pattern *close* method.
+          1. Free _resources_.
+          1. Execute step 4 of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-class-pattern-prototype-read">
+        <h1>read ( [ _option_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. If _resources_ is not readable, then
+            1. Return *undefined*.
+          1. Let _format_ be GetInternalField(*this*, *"format"*).
+          1. If _format_ is *"buffer"*, then
+            1. Let _available_ be the number of readable bytes.
+            1. If _option_ is absent, then
+              1. Throw if _available_ is *undefined*.
+              1. Let _n_ be _available_.
+              1. Let _data_ be Construct(*"ArrayBuffer"*, _n_).
+              1. Let _pointer_ be GetBytePointer(_data_).
+              1. Read _n_ bytes from _resources_ into _pointer_.
+              1. Return _data_.
+            1. Else if _option_ is a number, then
+              1. Throw if _option_ is no positive integer.
+              1. Let _n_ be _option_.
+              1. If _available_ is not *undefined* and _n_ &gt; _available_, then
+                1. Let _n_ be _available_.
+              1. Let _data_ be Construct(*"ArrayBuffer"*, _n_).
+              1. Let _pointer_ be GetBytePointer(_data_).
+              1. Read _n_ bytes from _resources_ into _pointer_.
+              1. Return _data_.
+            1. Else,
+              1. Let _pointer_ be GetBytePointer(_option_).
+              1. Let _n_ be GetProperty(_option_, *"byteLength"*).
+              1. If _available_ is not *undefined* and _n_ &gt; _available_, then
+                1. Let _n_ be _available_.
+              1. Read _n_ bytes from _resources_ into _pointer_.
+              1. Return _n_.
+          1. Throw if _option_ is present.
+          1. Read _data_ from _resources_.
+          1. Format _data_ according to _format_.
+          1. Return _data_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-class-pattern-prototype-write">
+        <h1>write ( _data_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null* or not writable.
+          1. Throw if _data_ is absent.
+          1. Let _format_ be GetInternalField(*this*, *"format"*).
+          1. If _format_ is *"buffer"*, then
+            1. Let _pointer_ be GetBytePointer(_data_).
+            1. Let _n_ be GetProperty(_data_, *"byteLength"*).
+            1. Throw if _n_ bytes would overflow _resources_.
+            1. Write _n_ bytes from _pointer_ into _resources_.
+            1. Return.
+          1. Throw if _data_ is not formatted according to _format_.
+          1. Write _data_ into _resources_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-class-pattern-prototype-set-format">
+        <h1>set format ( _value_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Throw if _value_ is not in the valid range of *"format"*.
+          1. SetInternalField(*this*, *"format"*, _value_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-class-pattern-prototype-get-format">
+        <h1>get format ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Return GetInternalField(*this*, *"format"*).
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Hardware resources can require one or several internal fields which should be all cleared and checked. The *"resources"* internal field is only a convention in this document.</li>
+            <li>Several IO classes read/write bytes into/from buffers so the *read* and *write* methods detail the relevant steps, for instance to optimize the *read* method memory usage by passing a buffer.</li>
+            <li>IO classes that do not use buffers can skip steps 6 of the *read* and *write* methods.</li>
+            <li>The ranges of *read* and *write* _data_ are defined by a separate table for each class conforming to the IO Class Pattern.</li>
+            <li>When the parameters of *read* or *write* differ from the IO Class Pattern, they are defined by a separate table.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-io-async-class-pattern">
+      <h1>IO Class Pattern – asynchronous</h1>
+      <emu-annex id="alg-io-async-class-pattern-prototype-close">
+        <h1>close ( _callback_ )</h1>
+        <emu-alg>
+          1. Execute step 1 of the Base Class Pattern *close* method.
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Return if _resources_ is *null*.
+          1. Optionally, cancel asynchronous operations.
+          1. When all asynchronous operations succeeded or failed:
+            1. Mark *this* as eligible for garbage collection.
+            1. ClearInternalFields(*this*).
+            1. Free _resources_.
+            1. Execute step 5.2 and 5.3 of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-async-class-pattern-prototype-read">
+        <h1>read ( _option_ [, _callback_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null* or not readable.
+          1. Throw if _option_ is absent.
+          1. If _option_ is a number, then
+            1. Throw if _option_ is no positive integer.
+            1. Let _n_ be _option_.
+            1. Let _data_ be Construct(*"ArrayBuffer"*, _n_).
+          1. Else,
+            1. Let _data_ be _option_.
+            1. Let _pointer_ be GetBytePointer(_data_).
+            1. Let _n_ be GetProperty(_data_, *"byteLength"*).
+          1. Throw if _callback_ is not *undefined* and not IsCallable(_callback_).
+          1. Start an input operation to read _n_ bytes into _data_:
+            1. When the input operation succeeded:
+              1. If _callback_ is not *undefined*, then
+                1. Queue a task that performs:
+                  1. Call(_callback_, *this*, *null*, _data_, _n_).
+            1. When the input operation failed:
+              1. If _callback_ is not *undefined*, then
+                1. Let _error_ be an ECMAScript *Error* object describing the failure.
+                1. Queue a task that performs:
+                  1. Call(_callback_, *this*, _error_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-async-class-pattern-prototype-write">
+        <h1>write ( _data_ [, _callback_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null* or not writable.
+          1. Throw if _data_ is absent.
+          1. Let _pointer_ be GetBytePointer(_data_).
+          1. Let _n_ be GetProperty(_data_, *"byteLength"*).
+          1. Throw if _callback_ is not *undefined* and not IsCallable(_callback_).
+          1. Start an output operation to write _n_ bytes from _data_:
+            1. When the output operation succeeded:
+              1. If _callback_ is not *undefined*, then
+                1. Queue a task that performs:
+                  1. Call(_callback_, *this*, *null*, _data_, _n_).
+            1. When the output operation failed:
+              1. If _callback_ is not *undefined*, then
+                1. Let _error_ be an ECMAScript *Error* object describing the failure.
+                1. Queue a task that performs:
+                  1. Call(_callback_, *this*, _error_).
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>The input and output operations represent the implementation dependent mechanism that ensures that asynchronous read and write operations happen in the order issued.</li>
+            <li>Step 4 of the *close* method is optional since operations can be cancellable or not. Cancelled operations fail with a corresponding *Error* object.</li>
+            <li>Step 6.2 of the *read* method and step 5 of the *write* method ensures _data_ is a byte buffer.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-io-classes">
+      <h1>IO Classes</h1>
+      <emu-annex id="alg-io-digital">
+        <h1>Digital</h1>
+        <emu-annex id="alg-io-digital-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*pin*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*mode*</td><td>yes</td><td>*Digital.Input*, *Digital.InputPullUp*, *Digital.InputPullDown*, *Digital.InputPullUpDown*, *Digital.Output*, or *Digital.OutputOpenDrain*.</td><td></td></tr>
+            <tr><td>*edge*</td><td>no*</td><td>*Digital.Rising*, *Digital.Falling*, and *Digital.Rising + Digital.Falling*</td><td></td></tr>
+            <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
+          </tbody></table></emu-table>
+          <ul>
+            <li>If the *onReadable* option is not *null*, *edge* is required to have a non-zero value.</li>
+          </ul>
+        </emu-annex>
+        <emu-annex id="alg-io-digital-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"number"*</td><td>*0* or *1*</td><td>*0* or *1*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-digital-bank">
+        <h1>Digital bank</h1>
+        <emu-annex id="alg-io-digital-bank-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*pins*</td><td>yes</td><td>32-bit unsigned integer</td><td></td></tr>
+            <tr><td>*mode*</td><td>yes</td><td>*Digital.Input*, *Digital.InputPullUp*, *Digital.InputPullDown*, *Digital.InputPullUpDown*, *Digital.Output*, or *Digital.OutputOpenDrain*.</td><td></td></tr>
+            <tr><td>*rises*</td><td>no*</td><td>32-bit unsigned integer</td><td>0</td></tr>
+            <tr><td>*falls*</td><td>no*</td><td>32-bit unsigned integer</td><td>0</td></tr>
+            <tr><td>*bank*</td><td>no</td><td>number or string</td><td></td></tr>
+            <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
+          </tbody></table></emu-table>
+          <ul>
+            <li>Both *rises* and *falls* cannot be *0*; at least one pin must be selected.</li>
+          </ul>
+        </emu-annex>
+        <emu-annex id="alg-io-digital-bank-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"number"*</td><td>32-bit unsigned integer</td><td>32-bit unsigned integer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-analog-input">
+        <h1>Analog input</h1>
+        <emu-annex id="alg-io-analog-input-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*pin*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*resolution*</td><td>no</td><td>positive integer</td><td>host-dependent</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-analog-input-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"number"*</td><td>all</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-pulse-width-modulation">
+        <h1>Pulse-width modulation</h1>
+        <emu-annex id="alg-io-pulse-width-modulation-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*pin*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*hz*</td><td>no</td><td>positive number</td><td>host-dependent</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-pulse-width-modulation-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"number"*</td><td></td><td>positive integer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-i2c">
+        <h1>I²C – synchronous IO</h1>
+        <emu-annex id="alg-io-i2c-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*data*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*clock*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*hz*</td><td>yes</td><td>positive integer</td><td></td></tr>
+            <tr><td>*address*</td><td>yes</td><td>8-bit unsigned integer from 0 to 127</td><td></td></tr>
+            <tr><td>*port*</td><td>no</td><td>port specifier</td><td>host-dependent</td></tr>
+            <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"buffer"*</td><td>*"buffer"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-i2c-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-i2c-prototype-read">
+          <h1>read ( _option_ [, _stop_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*option*</td><td>yes*</td><td>positive integer, byte buffer</td><td></td></tr>
+            <tr><td>*stop*</td><td>no</td><td>*true* or *false*</td><td>*true*</td></tr>
+          </tbody></table></emu-table>
+          <ul>
+            <li>The number of readable bytes is undefined so _option_ is required</li>
+          </ul>
+        </emu-annex>
+        <emu-annex id="alg-io-i2c-prototype-write">
+          <h1>write ( _data_ [, _stop_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*data*</td><td>yes</td><td>byte buffer</td><td></td></tr>
+            <tr><td>*stop*</td><td>no</td><td>*true* or *false*</td><td>*true*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-i2c-async">
+        <h1>I²C – asynchronous IO</h1>
+        <emu-annex id="alg-io-i2c-async-prototype-read">
+          <h1>read ( _option_ [, _stop_ ] [, _callback_ ] )</h1>
+          <emu-alg>
+            1. Execute steps 1 to 7 of the IO.Async Class Pattern *read* method.
+            1. If _callback_ is not *undefined*, then
+              1. Throw if not IsCallable(_callback_).
+              1. Convert _stop_ to an ECMAScript boolean.
+            1. Else if _stop_ is not *undefined*, then
+              1. If IsCallable(_stop_), then
+                1. Let _callback_ be _stop_.
+                1. Let _stop_ be true.
+              1. Else,
+                1. Convert _stop_ to an ECMAScript boolean.
+            1. Else,
+              1. Let _stop_ be true.
+            1. Execute step 8 of the IO.Async Class Pattern *read* method.
+          </emu-alg>
+        </emu-annex>
+        <emu-annex id="alg-io-i2c-async-prototype-write">
+          <h1>write ( _data_ [, _stop_ ] [, _callback_ ] )</h1>
+          <emu-alg>
+            1. Execute steps 1 to 6 of the IO.Async Class Pattern *write* method.
+            1. If _callback_ is not *undefined*, then
+              1. Throw if not IsCallable(_callback_).
+              1. Convert _stop_ to an ECMAScript boolean.
+            1. Else if _stop_ is not *undefined*, then
+              1. If IsCallable(_stop_), then
+                1. Let _callback_ be _stop_.
+                1. Let _stop_ be true.
+              1. Else,
+                1. Convert _stop_ to an ECMAScript boolean.
+            1. Else,
+              1. Let _stop_ be true.
+            1. Execute step 8 of the IO.Async Class Pattern *write* method.
+          </emu-alg>
+          <emu-note>
+            <ul>
+              <li>The *read* and *write* methods algorithms describe how to handle an optional argument before the optional _callback_ argument.</li>
+            </ul>
+          </emu-note>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-smbus">
+        <h1>System management bus (SMBus) – synchronous IO</h1>
+        <emu-annex id="alg-io-smbus-constructor-options">
+          <h1>constructor options</h1>
+          <p>All properties from I²C plus the following:</p>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*stop*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"buffer"*</td><td>any</td><td>any</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-prototype-read">
+          <h1>read ( _option_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*option*</td><td>yes*</td><td>positive integer, byte buffer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+          <ul>
+            <li>The number of readable bytes is undefined so _option_ is required</li>
+          </ul>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-prototype-readuint8">
+          <h1>readUint8 ( _register_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-prototype-writeuint8">
+          <h1>writeUint8 ( _register_, _value_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
+            <tr><td>*value*</td><td>yes</td><td>8-bit unsigned integer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-prototype-readuint16">
+          <h1>readUint16 ( _register_, _bigEndian_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
+            <tr><td>*bigEndian*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-prototype-writeuint16">
+          <h1>writeUint16 ( _register_, _value_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
+            <tr><td>*value*</td><td>yes</td><td>16-bit unsigned integer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-prototype-readbuffer">
+          <h1>readBuffer ( _register_, _buffer_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
+            <tr><td>*buffer*</td><td>yes</td><td>byte buffer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-prototype-writebuffer">
+          <h1>writeBuffer ( _register_, _buffer_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
+            <tr><td>*buffer*</td><td>yes</td><td>byte buffer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-smbus-async">
+        <h1>System management bus (SMBus) – asynchronous IO</h1>
+        <p>All properties from I²C.Async plus the following:</p>
+        <emu-annex id="alg-io-smbus-async-prototype-readuint8">
+          <h1>readUint8 ( _register_ [, _callback_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
+            <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-async-prototype-writeuint8">
+          <h1>writeUint8 ( _register_, _value_ [, _callback_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
+            <tr><td>*value*</td><td>yes</td><td>8-bit unsigned integer</td><td>N/A</td></tr>
+            <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-async-prototype-readuint16">
+          <h1>readUint16 ( _register_ [, _bigEndian_ ] [, _callback_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
+            <tr><td>*bigEndian*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
+            <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-async-prototype-writeuint16">
+          <h1>writeUint16 ( _register_, _value_ [, _bigEndian_ ] [, _callback_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
+            <tr><td>*value*</td><td>yes</td><td>16-bit unsigned integer</td><td>N/A</td></tr>
+            <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-async-prototype-readbuffer">
+          <h1>readBuffer ( _register_, _option_ [, _callback_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
+            <tr><td>*buffer*</td><td>yes</td><td>number or byte buffer</td><td>N/A</td></tr>
+            <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-smbus-async-prototype-writebuffer">
+          <h1>writeBuffer ( _register_, _buffer_ [, _callback_ ] )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
+            <tr><td>*buffer*</td><td>yes</td><td>byte buffer</td><td>N/A</td></tr>
+            <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-note>
+          <ul>
+            <li>The asynchronous methods to read and write data behaves analogously to the I2C.Async *read* and *write* method.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-io-serial">
+        <h1>Serial</h1>
+        <emu-annex id="alg-io-serial-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*receive*</td><td>no*</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*transmit*</td><td>no*</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*baud*</td><td>yes</td><td>positive integer</td><td></td></tr>
+            <tr><td>*flowControl*</td><td>no</td><td>*"hardware"* and *"none"*</td><td>*"none"*</td></tr>
+            <tr><td>*dataTerminalReady*</td><td>no</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*requestToSend*</td><td>no</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*clearToSend*</td><td>no</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*dataSetReady*</td><td>no</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*port*</td><td>no</td><td>port specifier</td><td></td></tr>
+            <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*onWritable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"number"* or *"buffer"*</td><td>*"buffer"*</td></tr>
+          </tbody></table></emu-table>
+          <ul>
+            <li>A host may require the *receive* and/or *transmit* properties.</li>
+          </ul>
+        </emu-annex>
+        <emu-annex id="alg-io-serial-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"number"*</td><td>8-bit unsigned integer</td><td>8-bit unsigned integer</td></tr>
+            <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-serial-prototype-flush">
+          <h1>flush ( [ _input_ ] [, _output_ ] )</h1>
+          <emu-alg>
+            1. CheckInternalFields(*this*).
+            1. If _input_ and _output_ are absent, then
+              1. Let _flushInput_ be *true*.
+              1. Let _flushOutput_ be *true*.
+            1. Else if _input_ and _output_ are present, then
+              1. Convert _input_ into an ECMAScript boolean.
+              1. Let _flushInput_ be _input_.
+              1. Convert _output_ into an ECMAScript boolean.
+              1. Let _flushOutput_ be _output_.
+            1. Else,
+              1. Throw.
+            1. If _flushInput_ is *true*, then
+              1. Flush all received but unread data.
+            1. If _flushOutput_ is *true*, then
+              1. Flush all written but unsent data.
+          </emu-alg>
+        </emu-annex>
+        <emu-annex id="alg-io-serial-prototype-set">
+          <h1>set ( _options_ )</h1>
+          <emu-alg>
+            1. CheckInternalFields(*this*).
+            1. Throw if _options_ is not an object.
+            1. If HasProperty(_options_, *"dataTerminalReady"*), then
+              1. Let _value_ be GetProperty(_options_, *"dataTerminalReady"*).
+              1. Convert _value_ into an ECMAScript boolean.
+              1. If _value_ is *true*, set serial connection's DTR pin.
+              1. Else clear serial connection's DTR pin.
+            1. If HasProperty(_options_, *"requestToSend"*), then
+              1. Let _value_ be GetProperty(_options_, *"requestToSend"*).
+              1. Convert _value_ into an ECMAScript boolean.
+              1. If _value_ is *true*, set serial connection's RTS pin.
+              1. Else clear serial connection's RTS pin.
+            1. If HasProperty(_options_, *"break"*), then
+              1. Let _value_ be GetProperty(_options_, *"break"*).
+              1. Convert _value_ into an ECMAScript boolean.
+              1. If _value_ is *true*, set serial connection's break signal.
+              1. Else clear serial connection's break signal.
+          </emu-alg>
+        </emu-annex>
+        <emu-annex id="alg-io-serial-prototype-get">
+          <h1>get ( [ _options_ ] )</h1>
+          <emu-alg>
+            1. CheckInternalFields(*this*).
+            1. If _options_ is absent, then
+              1. Let _result_ be an empty object.
+            1. Else,
+              1. Throw if _options_ is not an object.
+              1. Let _result_ be _options_.
+            1. If serial connection's CTS pin is set, then
+              1. SetProperty(_result_, *"clearToSend"*, *true*).
+            1. Else,
+              1. SetProperty(_result_, *"clearToSend"*, *false*).
+            1. If serial connection's DSR pin is set, then
+              1. SetProperty(_result_, *"dataSetReady"*, *true*).
+            1. Else,
+              1. SetProperty(_result_, *"dataSetReady"*, *false*).
+            1. Return _result_.
+          </emu-alg>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-spi">
+        <h1>Serial Peripheral Interface (SPI)</h1>
+        <emu-annex id="alg-io-spi-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*out*</td><td>no*</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*in*</td><td>no*</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*clock*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*select*</td><td>no*</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*active*</td><td>no</td><td>0 or 1</td><td>0</td></tr>
+            <tr><td>*hz*</td><td>yes</td><td>positive integer</td><td></td></tr>
+            <tr><td>*mode*</td><td>no</td><td>0, 1, 2, or 3</td><td>0</td></tr>
+            <tr><td>*port*</td><td>no</td><td>port specifier</td><td></td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"buffer"*</td><td>*"buffer"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-spi-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-spi-prototype-read">
+          <h1>read ( _option_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*option*</td><td>yes*</td><td>positive integer, byte buffer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+          <ul>
+            <li>The number of readable bytes is undefined so _option_ is required</li>
+          </ul>
+        </emu-annex>
+        <emu-annex id="alg-io-spi-prototype-transfer">
+          <h1>transfer ( _buffer_ )</h1>
+          <emu-alg>
+            1. CheckInternalFields(*this*).
+            1. If _buffer_ is an ArrayBuffer, then
+              1. Let _transferBuffer_ be _buffer_.
+              1. Let _transferOffset_ be 0.
+            1. Else,
+              1. Let _transferBuffer_ be GetProperty(_buffer_, "buffer").
+              1. Let _transferOffset_ be GetProperty(_buffer_, "byteOffset").
+            1. If HasProperty(_buffer_, "bitLength"), then
+              1. Let _transferBits_ be GetProperty(_buffer_, "bitLength").
+              1. Let _availableBits_ be GetProperty(_buffer_, "byteLength") * 8.
+              1. Throw if _transferBits_ is greater than _availableBits_.
+            1. Else,
+              1. Let _transferBits_ be GetProperty(_buffer_, "byteLength") * 8.
+            1. Simultaneously write and read _transferBits_ bits into _buffer_ starting at byte offset _transferOffset_.
+            1. Return _buffer_.
+          </emu-alg>
+        </emu-annex>
+        <emu-annex id="alg-io-spi-prototype-flush">
+          <h1>flush ( [ _deselect_ ] )</h1>
+          <emu-alg>
+            1. CheckInternalFields(*this*).
+            1. Flush all written but unsent data.
+            1. If _deselect_ is present, then
+              1. Convert _deselect_ into an ECMAScript boolean.
+              1. If _deselect_ is *true*, then
+                1. If GetInternalField(*this*, *"active"*) is 0, then
+                  1. Set the select pin to 1.
+                1. Else,
+                  1. Set the select pin to 0.
+          </emu-alg>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-pulse-count">
+        <h1>Pulse count</h1>
+        <emu-annex id="alg-io-pulse-count-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*signal*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*control*</td><td>yes</td><td>pin specifier</td><td></td></tr>
+            <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-pulse-count-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"number"*</td><td>integer</td><td>integer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-tcp-socket">
+        <h1>TCP socket</h1>
+        <emu-annex id="alg-io-tcp-socket-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*address*</td><td>yes</td><td>string</td><td></td></tr>
+            <tr><td>*port*</td><td>yes</td><td>16-bit unsigned integer</td><td></td></tr>
+            <tr><td>*noDelay*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
+            <tr><td>*keepAlive*</td><td>no</td><td>positive integer</td><td>N/A</td></tr>
+            <tr><td>*from*</td><td>no</td><td>instance of TCP Socket</td><td>N/A</td></tr>
+            <tr><td>*onError*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*onWritable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"number"* or *"buffer"*</td><td>*"buffer"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-tcp-socket-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+            <tr><td>*"number"*</td><td>8-bit unsigned integer</td><td>8-bit unsigned integer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-tcp-socket-write-options">
+          <h1>write options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*more*</td><td>no</td><td>boolean</td><td>false</td></tr>
+            <tr><td>*byteLength*</td><td>no</td><td>positive integer</td><td>N/A</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-tcp-listener">
+        <h1>TCP listener socket</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*port*</td><td>no</td><td>16-bit unsigned integer</td><td>0</td></tr>
+          <tr><td>*address*</td><td>no</td><td>string</td><td>N/A</td></tr>
+          <tr><td>*onError*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+          <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+          <tr><td>*format*</td><td>no</td><td>*"socket/tcp"*</td><td>*"socket/tcp"*</td></tr>
+        </tbody></table></emu-table>
+        <emu-annex id="alg-io-tcp-listener-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"socket/tcp"*</td><td>instance of TCP Socket</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-tcp-listener-prototype-get-port">
+          <h1>get port ( )</h1>
+          <emu-alg>
+            1. CheckInternalFields(*this*).
+            1. Return the local port the listener is bound to as a number.
+          </emu-alg>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-io-udp-socket">
+        <h1>UDP socket</h1>
+        <emu-annex id="alg-io-udp-socket-constructor-options">
+          <h1>constructor options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*address*</td><td>no</td><td>string</td><td>N/A</td></tr>
+            <tr><td>*port*</td><td>no</td><td>16-bit signed integer</td><td>N/A</td></tr>
+          </tbody></table></emu-table>
+          <p>| *onError* | no | *null* or *Function* | *null*
+| *onWritable* | no | *null* or *Function* | *null*
+| *format* | no | *"buffer"* | *"buffer"*</p>
+        </emu-annex>
+        <emu-annex id="alg-io-udp-socket-read-write-data">
+          <h1>read / write data</h1>
+          <emu-table><table><tbody>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-annex id="alg-io-udp-socket-prototype-write">
+          <h1>write ( _data_, _address_, _port_ )</h1>
+          <emu-table><table><tbody>
+            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*data*</td><td>yes</td><td>byte buffer</td><td></td></tr>
+            <tr><td>*address*</td><td>yes</td><td>string</td><td></td></tr>
+            <tr><td>*port*</td><td>yes</td><td>16-bit unsigned integer</td><td>&nbsp;</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-peripheral-class-pattern">
+      <h1>Peripheral Class Pattern</h1>
+      <emu-annex id="alg-peripheral-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute steps 1 to 7 of the Base Class Pattern *constructor*.
+          1. Try:
+            1. For each supported IO connection, do
+              1. Let _name_ be the name of the supported IO connection.
+              1. Let _ioOptions_ be GetProperty(_params_, _name_).
+              1. Let _ioConstructor_ be GetProperty(_ioOptions_, *"io"*).
+              1. Let _ioConnection_ be Construct(_ioConstructor_, _ioOptions_).
+              1. SetInternalField(*this*, _name_, _ioConnection_).
+            1. Configure the peripheral with _params_.
+            1. Throw if the communication with the peripheral is not operational.
+            1. Activate the peripheral.
+            1. SetInternalField(*this*, *"status"*, *"ready"*).
+          1. Catch _exception_:
+            1. Call(GetProperty(*this*, *"close"*), *this*).
+            1. Throw _exception_.
+          1. Execute step 8 of the Base Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-peripheral-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute step 1 of the Base Class Pattern *close* method.
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Return if _status_ is *null*.
+          1. Execute steps 2 and 3 of the Base Class Pattern *close* method.
+          1. Deactivate the peripheral.
+          1. For each supported IO connection, do
+            1. Let _name_ be the name of the supported IO connection.
+            1. Let _ioConnection_ be GetInternalField(*this*, _name_).
+            1. If _ioConnection_ is not *null*, then
+              1. Call(GetProperty(_ioConnection_, *"close"*), _ioConnection_).
+          1. Execute step 4 of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-peripheral-class-pattern-prototype-configure">
+        <h1>configure ( _options_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Throw if _status_ is *null*.
+          1. Throw if _options_ is *undefined* or *null*.
+          1. For each supported option, do
+            1. Let _name_ be the name of the supported option.
+            1. If HasProperty(_options_, _name_), then
+              1. Let _value_ be GetProperty(_options_, _name_).
+              1. Throw if _value_ is not in the valid range of the supported option.
+          1. Configure the peripheral with _options_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Supported IO connections are supported options. Their value must be an object with an *io* property, which is the class of the IO connection.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-sensor-class-pattern">
+      <h1>Sensor Class Pattern</h1>
+      <emu-annex id="alg-sensor-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-sensor-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-sensor-class-pattern-prototype-configure">
+        <h1>configure ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *configure* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-sensor-class-pattern-prototype-sample">
+        <h1>sample ( [ _params_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Throw if _status_ is *null*.
+          1. Throw if _params_ are absent but required, or present but not in the valid range.
+          1. If the peripheral is readable, then
+            1. Let _result_ be an empty object.
+            1. For each sample property, do
+              1. Let _name_ be the name of the sample property.
+              1. Let _value_ be *undefined*.
+              1. Read from the peripheral into _value_.
+              1. DefineProperty(_result_, _name_, _value_).
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>The order, requirements and ranges of *sample* _params_ are defined by a separate table for each class conforming to the Sensor Class Pattern.</li>
+            <li>The requirements and ranges of properties in *sample* _result_ are defined by a separate table for each class conforming to the Sensor Class Pattern.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-sensor-classes">
+      <h1>Sensor Classes</h1>
+      <emu-annex id="alg-sensor-accelerometer">
+        <h1>Accelerometer</h1>
+        <emu-annex id="alg-sensor-accelerometer-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-accelerometer-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*x*</td><td>yes</td><td>number</td><td>acceleration along the x axis in meters per second squared</td></tr>
+            <tr><td>*y*</td><td>yes</td><td>number</td><td>acceleration along the y axis in meters per second squared</td></tr>
+            <tr><td>*z*</td><td>yes</td><td>number</td><td>acceleration along the z axis in meters per second squared</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-ambient-light">
+        <h1>Ambient light</h1>
+        <emu-annex id="alg-sensor-ambient-light-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-ambient-light-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*illuminance*</td><td>yes</td><td>positive number</td><td>ambient light level in lux</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-atmospheric-pressure">
+        <h1>Atmospheric pressure</h1>
+        <emu-annex id="alg-sensor-atmospheric-pressure-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-atmospheric-pressure-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*pressure*</td><td>yes</td><td>number</td><td>atmospheric pressure in Pascal</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-carbonDioxide">
+        <h1>Carbon Dioxide</h1>
+        <emu-annex id="alg-sensor-carbonDioxide-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-carbonDioxide-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*CO2*</td><td>yes</td><td>number</td><td>carbon dioxide in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-carbonMonoxide">
+        <h1>Carbon Monoxide</h1>
+        <emu-annex id="alg-sensor-carbonMonoxide-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-carbonMonoxide-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*CO*</td><td>yes</td><td>number</td><td>carbon monoxide in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-dust">
+        <h1>Dust</h1>
+        <emu-annex id="alg-sensor-dust-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-dust-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*dust*</td><td>yes</td><td>number</td><td>dust levels in micrograms per cubic meter</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-gyroscope">
+        <h1>Gyroscope</h1>
+        <emu-annex id="alg-sensor-gyroscope-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-gyroscope-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*x*</td><td>yes</td><td>number</td><td>angular velocity around the x axis in radian per second</td></tr>
+            <tr><td>*y*</td><td>yes</td><td>number</td><td>angular velocity around the y axis in radian per second</td></tr>
+            <tr><td>*z*</td><td>yes</td><td>number</td><td>angular velocity around the z axis in radian per second</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-humidity">
+        <h1>Humidity</h1>
+        <emu-annex id="alg-sensor-humidity-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-humidity-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*humidity*</td><td>yes</td><td>number from 0 to 1</td><td>relative humidity as a percentage</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-hydrogen">
+        <h1>Hydrogen</h1>
+        <emu-annex id="alg-sensor-hydrogen-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-hydrogen-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*H*</td><td>yes</td><td>number</td><td>hydrogen in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-hydrogenSulfide">
+        <h1>Hydrogen Sulfide</h1>
+        <emu-annex id="alg-sensor-hydrogenSulfide-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-hydrogenSulfide-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*H2S*</td><td>yes</td><td>number</td><td>hydrogen sulfide in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-magnetometer">
+        <h1>Magnetometer</h1>
+        <emu-annex id="alg-sensor-magnetometer-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-magnetometer-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*x*</td><td>yes</td><td>number</td><td>magnetic field around the x axis in microtesla</td></tr>
+            <tr><td>*y*</td><td>yes</td><td>number</td><td>magnetic field around the y axis in microtesla</td></tr>
+            <tr><td>*z*</td><td>yes</td><td>number</td><td>magnetic field around the z axis in microtesla</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-methane">
+        <h1>Methane</h1>
+        <emu-annex id="alg-sensor-methane-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-methane-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*CH4*</td><td>yes</td><td>number</td><td>methane in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-nitricOxide">
+        <h1>Nitric Oxide</h1>
+        <emu-annex id="alg-sensor-nitricOxide-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-nitricOxide-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*NO*</td><td>yes</td><td>number</td><td>nitric oxide in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-nitricDioxide">
+        <h1>Nitric Dioxide</h1>
+        <emu-annex id="alg-sensor-nitricDioxide-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-nitricDioxide-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*NO2*</td><td>yes</td><td>number</td><td>nitric dioxide in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-oxygen">
+        <h1>Oxygen</h1>
+        <emu-annex id="alg-sensor-oxygen-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-oxygen-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*O*</td><td>yes</td><td>number</td><td>oxygen in parts per million</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-particulateMatter">
+        <h1>Particulate Matter</h1>
+        <emu-annex id="alg-sensor-particulateMatter-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-particulateMatter-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*particulateMatter*</td><td>yes</td><td>number</td><td>particulate matter levels in micrograms per cubic meter</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-proximity">
+        <h1>Proximity</h1>
+        <emu-annex id="alg-sensor-proximity-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-proximity-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*near*</td><td>yes</td><td>boolean</td><td>indicator of a detected proximate object</td></tr>
+            <tr><td>*distance*</td><td>yes</td><td>positive number or *null*</td><td>distance to the nearest sensed object in centimeters or *null* if no object is detected</td></tr>
+            <tr><td>*max*</td><td>yes</td><td>positive number</td><td>maximum sensing range of the sensor in centimeters</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-soilmoisture">
+        <h1>Soil Moisture</h1>
+        <emu-annex id="alg-sensor-soilmoisture-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-soilmoisture-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*moisture*</td><td>yes</td><td>number between 0 and 1</td><td>relative soil moisture level</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-temperature">
+        <h1>Temperature</h1>
+        <emu-annex id="alg-sensor-temperature-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-temperature-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*temperature*</td><td>yes</td><td>number</td><td>temperature in degrees Celsius</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-touch">
+        <h1>Touch</h1>
+        <emu-annex id="alg-sensor-touch-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-touch-sample-result">
+          <h1>sample result:</h1>
+          <p>*Array* of *touch* objects or *undefined* if no touch is in progress.</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-touch-touch-object">
+          <h1>touch object:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*x*</td><td>yes</td><td>number</td><td>X coordinate of the touch point</td></tr>
+            <tr><td>*y*</td><td>yes</td><td>number</td><td>Y coordinate of the touch point</td></tr>
+            <tr><td>*id*</td><td>yes</td><td>positive integer</td><td>indicator of which touch point this entry corresponds to</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-sensor-VolatileOrganicCompounds">
+        <h1>Volatile Organic Compounds</h1>
+        <emu-annex id="alg-sensor-VolatileOrganicCompounds-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-VolatileOrganicCompounds-sample-result">
+          <h1>sample result:</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*tvoc*</td><td>yes</td><td>number</td><td>total volatile organic compounds in parts per billion</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-display-class-pattern">
+      <h1>Display Class Pattern</h1>
+      <emu-annex id="alg-display-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-adaptinvalid">
+        <h1>adaptInvalid ( _area_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Throw if _area_ is absent.
+          1. If HasProperty(_area_, *"x"*), then
+            1. Let _x_ be GetProperty(_area_, *"x"*).
+          1. Else,
+            1. Let _x_ be *0*.
+          1. If HasProperty(_area_, *"y"*), then
+            1. Let _y_ be GetProperty(_area_, *"y"*).
+          1. Else,
+            1. Let _y_ be *0*.
+          1. If HasProperty(_area_, *"width"*), then
+            1. Let _width_ be GetProperty(_area_, *"width"*).
+          1. Else,
+            1. Let _width_ be the width of the frame buffer in pixels.
+          1. If HasProperty(_area_, *"height"*), then
+            1. Let _height_ be GetProperty(_area_, *"height"*).
+          1. Else,
+            1. Let _height_ be the height of the frame buffer in pixels.
+          1. Adjust _x_, _y_, _width_, _height_ to define a valid area to update.
+          1. SetProperty(_area_, *"x"*, _x_).
+          1. SetProperty(_area_, *"y"*, _y_).
+          1. SetProperty(_area_, *"width"*, _width_).
+          1. SetProperty(_area_, *"height"*, _height_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-begin">
+        <h1>begin ( _options_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Throw if _status_ is *null*.
+          1. Let _x_ be *0*.
+          1. Let _y_ be *0*.
+          1. Let _width_ be the width of the frame buffer in pixels.
+          1. Let _height_ be the height of the frame buffer in pixels.
+          1. Let _continue_ be *false*.
+          1. If _options_ is present, then
+            1. If HasProperty(_options_, *"x"*), then
+              1. Let _x_ be GetProperty(_options_, *"x"*).
+            1. If HasProperty(_options_, *"y"*), then
+              1. Let _y_ be GetProperty(_options_, *"y"*).
+            1. If HasProperty(_options_, *"width"*), then
+              1. Let _width_ be GetProperty(_options_, *"width"*).
+            1. If HasProperty(_options_, *"height"*), then
+              1. Let _height_ be GetProperty(_options_, *"height"*).
+            1. If HasProperty(_options_, *"continue"*), then
+              1. Let _continue_ be GetProperty(_options_, *"continue"*).
+          1. Throw if the area defined by _x_, _y_, _width_, and _height_ is invalid.
+          1. If _status_ is *ready*, then
+            1. SetInternalField(*this*, *"status"*, *"updating"*).
+          1. Else,
+            1. Throw if _continue_ is false.
+          1. Use _x_, _y_, _width_, _height_ to prepare the frame buffer to receive scanlines.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-configure">
+        <h1>configure ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *configure* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-end">
+        <h1>end ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Throw if _status_ is not *"updating"*.
+          1. SetInternalField(*this*, *"status"*, *"finishing"*).
+          1. Make updated frame buffer visible.
+          1. SetInternalField(*this*, *"status"*, *"ready"*).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-send">
+        <h1>send ( _scanlines_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Throw if _status_ is not *"updating"*.
+          1. Throw if _scanlines_ is absent.
+          1. Let _pointer_ be GetBytePointer(_scanlines_).
+          1. Let _n_ be GetProperty(_lines_, *"byteLength"*).
+          1. Transfer _n_ bytes from _pointer_ to the frame buffer.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-get-width">
+        <h1>get width ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Return the width of the frame buffer in pixels.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-display-class-pattern-prototype-get-height">
+        <h1>get height ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Return the height of the frame buffer in pixels.
+        </emu-alg>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>When the frame buffer *rotation* is 90 or 270 degrees, *get width* returns the height of the frame buffer in pixels and *get height* returns the width of the frame buffer in pixels.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-display-class-pattern-constructor-options">
+        <h1>constructor options:</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>format</td><td>no</td><td>see text</td><td></td></tr>
+          <tr><td>rotation</td><td>no</td><td>0, 90, 180, or 270</td><td></td></tr>
+          <tr><td>brightness</td><td>no</td><td>0.0 to 1.0</td><td></td></tr>
+          <tr><td>flip</td><td>no</td><td>"", "h", "v", or "hv"</td><td>&nbsp;</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-real-time-clock-class-pattern">
+      <h1>Real-Time Clock Class Pattern</h1>
+      <emu-annex id="alg-real-time-clock-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute step 1 of the Peripheral Class Pattern *constructor*.
+          1. Let _interrupt_ be GetInternalField(*this*, *"interrupt"*).
+          1. Let _onAlarm_ be GetInternalField(*this*, *"onAlarm"*).
+          1. If _interrupt_ is not *null* and _onAlarm_ is not *null*, then
+            1. Let _interruptParams_ be GetProperty(_params_, *"interrupt"*).
+            1. Let _onReadable_ be a function with the following steps::
+              1. Queue a task that performs:
+                1. Call(_onAlarm_, *this*).
+            1. SetProperty(_interruptParams_, *"onReadable"*, _onReadable_).
+          1. Execute steps 2 to 4 of the Peripheral Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-real-time-clock-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-real-time-clock-class-pattern-prototype-configure">
+        <h1>configure ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *configure* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-real-time-clock-class-pattern-prototype-get-time">
+        <h1>get time ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Throw if _status_ is *null*.
+          1. If the peripheral is readable, then
+            1. Let _result_ be the clock time as an ECMAScript number.
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-real-time-clock-class-pattern-prototype-set-time">
+        <h1>set time ( _time_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _status_ be GetInternalField(*this*, *"status"*).
+          1. Throw if _status_ is *null*.
+          1. If the peripheral is writable, then
+            1. Convert _time_ into an ECMAScript number.
+            1. Set the clock time to _time_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-real-time-clock-class-pattern-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*clock*</td><td>yes</td><td>*Object*</td><td></td></tr>
+          <tr><td>*interrupt*</td><td>no</td><td>*null* or *Object*</td><td>*null*</td></tr>
+          <tr><td>*onAlarm*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-annex id="alg-real-time-clock-class-pattern-configure-options">
+        <h1>configure options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*alarm*</td><td>no</td><td>*number*</td><td>0</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-network-interface-class-pattern">
+      <h1>Network Interface Class Pattern</h1>
+      <emu-annex id="alg-network-interface-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-network-interface-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-network-interface-class-pattern-prototype-connect">
+        <h1>connect ( _options_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. Throw if _connection_ is not 0.
+          1. SetInternalField(*this*, *"connection"*, 100).
+          1. Let _port_ be GetInternalField(*this*, *"port"*).
+          1. Let _onChanged_ be GetInternalField(*this*, *"onChanged"*).
+          1. Monitor the network interface specified by _port_:
+            1. When changed:
+              1. If _onChanged_ is not *null*, then
+                1. Queue a task that performs:
+                  1. Call(_onChanged_, *this*).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-network-interface-class-pattern-prototype-disconnect">
+        <h1>disconnect ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. If _connection_ is not 0, then
+            1. Disconnect the network interface.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-network-interface-class-pattern-prototype-get-mac">
+        <h1>get MAC ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. If _connection_ is more than 0, then
+            1. Let _result_ be the MAC address of the network interface as an ECMAScript string.
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-network-interface-class-pattern-prototype-get-address">
+        <h1>get address ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. If _connection_ is more than or equal to 500, then
+            1. Let _result_ be the IP address of the network interface as an ECMAScript string.
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-network-interface-class-pattern-prototype-get-connection">
+        <h1>get connection ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. Return _connection_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-network-interface-class-pattern-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*onChanged*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+          <tr><td>*port*</td><td>no</td><td>string</td><td></td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-ethernet-network-interface">
+      <h1>Ethernet Network Interface</h1>
+      <emu-annex id="alg-ethernet-network-interface-prototype-connect">
+        <h1>connect ( _options_ )</h1>
+        <emu-alg>
+          1. Execute steps 1 to 6 of the Network Interface Class Pattern *connect* method.
+          1. Start connecting the network interface specified by _port_.
+          1. Execute step 7 of the Network Interface Class Pattern *connect* method.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-wifi-network-interface">
+      <h1>Wi-Fi Network Interface</h1>
+      <emu-annex id="alg-wifi-network-interface-prototype-connect">
+        <h1>connect ( _options_ )</h1>
+        <emu-alg>
+          1. Execute steps 1 to 6 of the Network Interface Class Pattern *connect* method.
+          1. Throw if _options_ is not an object.
+          1. If HasProperty(_options_, *"SSID"*), then
+            1. Let _SSID_ be GetProperty(_options_, *"SSID"*).
+            1. Convert _SSID_ into an ECMAScript string.
+          1. Else,
+            1. Let _SSID_ be *undefined*.
+          1. If HasProperty(_options_, *"BSSID"*), then
+            1. Let _BSSID_ be GetProperty(_options_, *"BSSID"*).
+            1. Convert _BSSID_ into an ECMAScript string.
+          1. Else,
+            1. Let _BSSID_ be *undefined*.
+          1. Throw if both _SSID_ and _BSSID_ are *undefined*.
+          1. If HasProperty(_options_, *"channel"*), then
+            1. Let _channel_ be GetProperty(_options_, *"channel"*).
+            1. Convert _channel_ into an ECMAScript number.
+          1. Else,
+            1. Let _channel_ be *undefined*.
+          1. If HasProperty(_options_, *"secure"*), then
+            1. Let _secure_ be GetProperty(_options_, *"secure"*).
+            1. Convert _secure_ into an ECMAScript boolean.
+          1. Else,
+            1. Let _secure_ be false.
+          1. If HasProperty(_options_, *"password"*), then
+            1. Let _password_ be GetProperty(_options_, *"password"*).
+            1. Convert _password_ into an ECMAScript string.
+          1. Else,
+            1. Let _password_ be *undefined*.
+          1. Start connecting the network interface specified by _port_ to the access point specified by _SSID_, _BSSID_, _channel_ and _secure_ with _password_.
+          1. Execute step 7 of the Network Interface Class Pattern *connect* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-wifi-network-interface-prototype-scan">
+        <h1>scan ( _options_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _scanning_ be GetInternalField(*this*, *"scanning"*).
+          1. Throw if _scanning_ is true.
+          1. Throw if _options_ is not an object.
+          1. Let _onFound_ be GetProperty(_options_, *"onFound"*).
+          1. Throw if not IsCallable(_onFound_ ).
+          1. If HasProperty(_options_, *"onComplete"*), then
+            1. Let _onComplete_ be GetProperty(_options_, *"onComplete"*).
+            1. Throw if not IsCallable(_onComplete_).
+          1. Else,
+            1. Let _onComplete_ be *undefined*.
+          1. If HasProperty(_options_, *"channel"*), then
+            1. Let _channel_ be GetProperty(_options_, *"channel"*).
+            1. Convert _channel_ into an ECMAScript number.
+          1. Else,
+            1. Let _channel_ be *undefined*.
+          1. If HasProperty(_options_, *"frequency"*), then
+            1. Let _frequency_ be GetProperty(_options_, *"frequency"*).
+            1. Convert _frequency_ into an ECMAScript number.
+            1. Throw if _frequency_ is neither 2.4 nor 5.
+          1. Else,
+            1. Let _frequency_ be *undefined*.
+          1. If HasProperty(_options_, *"secure"*), then
+            1. Let _secure_ be GetProperty(_options_, *"secure"*).
+            1. Convert _secure_ into an ECMAScript boolean.
+          1. Else,
+            1. Let _secure_ be false.
+          1. SetInternalField(*this*, *"scanning"*, true).
+          1. Start scanning for access points matching _channel_, _frequency_ and _secure_:
+            1. When an access point is found:
+              1. Let _result_ be an empty object.
+              1. Let _value_ be the SSID of the access point as an ECMAScript string.
+              1. SetProperty(_result_, *"SSID"*, _value_).
+              1. Let _value_ be the BSSID of the access point as a MAC address ECMAScript string.
+              1. SetProperty(_result_, *"BSSID"*, _value_).
+              1. Let _value_ be the RSSI of the access point as an ECMAScript number.
+              1. SetProperty(_result_, *"RSSI"*, _value_).
+              1. Let _value_ be the channel of the access point as an ECMAScript number.
+              1. SetProperty(_result_, *"channel"*, _value_).
+              1. Let _security_ be the security mode of the access point as an ECMAScript string.
+              1. SetProperty(_security_, *"security"*, _value_).
+              1. Queue a task that performs:
+                1. Call(_onFound_, *null*, *this*, _result_).
+            1. When done:
+              1. SetInternalField(*this*, *"scanning"*, false).
+              1. If _onComplete_ is not *undefined*, then
+                1. Queue a task that performs:
+                  1. Call(_onComplete_, *this*).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-wifi-network-interface-prototype-get-bssid">
+        <h1>get BSSID ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. If _connection_ is more than or equal to 400, then
+            1. Let _result_ be the BSSID of the access point as an ECMAScript string.
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-wifi-network-interface-prototype-get-rssi">
+        <h1>get RSSI ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. If _connection_ is more than or equal to 400, then
+            1. Let _result_ be the RSSI of the access point as an ECMAScript string.
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-wifi-network-interface-prototype-get-ssid">
+        <h1>get SSID ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. If _connection_ is more than or equal to 400, then
+            1. Let _result_ be the SSID of the access point as an ECMAScript string.
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-wifi-network-interface-prototype-get-channel">
+        <h1>get channel ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _connection_ be GetInternalField(*this*, *"connection"*).
+          1. If _connection_ is more than or equal to 400, then
+            1. Let _result_ be the channel of the access point as an ECMAScript number.
+          1. Else,
+            1. Let _result_ be *undefined*.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-domain-name-resolver-class-pattern">
+      <h1>Domain Name Resolver Class Pattern</h1>
+      <emu-annex id="alg-domain-name-resolver-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-domain-name-resolver-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-domain-name-resolver-class-pattern-prototype-resolve">
+        <h1>resolve ( _options_ [, _callback_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Throw if _options_ is not an object.
+          1. If HasProperty(_options_, *"host"*), then
+            1. Let _name_ be GetProperty(_options_, *"host"*).
+            1. Convert _name_ to an ECMAScript string.
+          1. Else,
+            1. Throw.
+          1. Throw if _callback_ is not *undefined* and not IsCallable(_callback_).
+          1. If _name_ matches an IP address, then
+            1. If _callback_ is not *undefined*, then
+              1. Queue a task that performs:
+                1. Call(_callback_, *this*, *null*, _name_, _name_).
+          1. Else,
+            1. Start the resolution with _name_:
+              1. When the resolution succeeded:
+                1. If _callback_ is not *undefined*, then
+                  1. Let _address_ be the resolved address as an ECMAScript string.
+                  1. Queue a task that performs:
+                    1. Call(_callback_, *this*, *null*, _name_, _address_).
+              1. When the resolution failed:
+                1. If _callback_ is not *undefined*, then
+                  1. Let _error_ be an ECMAScript *Error* object describing the failure.
+                  1. Queue a task that performs:
+                    1. Call(_callback_, *this*, _error_).
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-dns-over-udp">
+      <h1>DNS over UDP</h1>
+      <emu-annex id="alg-dns-over-udp-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The resolution itself	 can be implemented in ECMAScript. See the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/udp/dns/dns.js">sample code</a></li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-dns-over-https">
+      <h1>DNS over HTTPS</h1>
+      <emu-annex id="alg-dns-over-https-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*http*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The resolution itself	 can be implemented in ECMAScript.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-ntp-client">
+      <h1>NTP Client</h1>
+      <emu-annex id="alg-ntp-client-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-ntp-client-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-ntp-client-prototype-gettime">
+        <h1>getTime ( _callback_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _synchronizing_ be GetInternalField(*this*, *"synchronizing"*).
+          1. Throw if _synchronizing_ is true.
+          1. Throw if not IsCallable(_callback_).
+          1. SetInternalField(*this*, *"synchronizing"*, true).
+          1. Start the synchronization:
+            1. When the synchronization succeeded:
+              1. Let _time_ be the synchronized time as an ECMAScript number.
+              1. Queue a task that performs:
+                1. Call(_callback_, *this*, *null*, _time_).
+                1. SetInternalField(*this*, *"synchronizing"*, false).
+            1. When the synchronization failed:
+              1. Let _error_ be an ECMAScript *Error* object describing the failure.
+              1. Queue a task that performs:
+                1. Call(_callback_, *this*, _error_).
+                1. SetInternalField(*this*, *"synchronizing"*, false).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-ntp-client-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The synchronization itself can be implemented in ECMAScript. See the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/udp/sntp/sntp.js">sample code</a></li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-tcp-client-class-pattern">
+      <h1>TCP Client Class Pattern</h1>
+      <emu-annex id="alg-tcp-client-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *constructor*.
+          1. Let _dnsOptions_ be GetInternalField(*this*, *"dns"*).
+          1. Let _dnsConstructor_ be GetProperty(_dnsOptions_, *"io"*).
+          1. Let _dnsParams_ be a copy of _dnsOptions_.
+          1. SetProperty(_dnsParams_, *"target"*, *this*).
+          1. Let _dnsResolver_ be Construct(_dnsConstructor_, _dnsParams_).
+          1. SetInternalField(_target_, *"dnsResolver"*, _dnsResolver_).
+          1. Let _resolve_ be GetProperty(_dnsResolver_, *"resolve"*).
+          1. Let _resolveParams_ be a new object.
+          1. SetProperty(_resolveParams_, *"host"*, GetInternalField(*this*, *"host"*)).
+          1. Let _resolveCallback_ be GetInternalField(*this*, *"resolveCallback"*).
+          1. Call(_resolve_, _dnsResolver_, _resolveParams_, _resolveCallback_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Let _tcpSocket_ be GetInternalField(*this*, *"tcpSocket"*).
+          1. If _tcpSocket_ is not *null*, then
+            1. Call(GetProperty(_tcpSocket_, *"close"*), _tcpSocket_).
+          1. Let _dnsResolver_ be GetInternalField(*this*, *"dnsResolver"*).
+          1. If _dnsResolver_ is not *null*, then
+            1. Call(GetProperty(_dnsResolver_, *"close"*), _dnsResolver_).
+          1. Execute all steps of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-prototype-resolvecallback">
+        <h1>#resolveCallback ( _error_, _name_, _address_ )</h1>
+        <emu-alg>
+          1. Let _target_ be GetProperty(*this*, *"target"*).
+          1. Call(GetProperty(*this*, *"close"*), *this*).
+          1. SetInternalField(_target_, *"dnsResolver"*, *null*).
+          1. If _error_ is *null*, then
+            1. Let _tcpOptions_ be GetInternalField(_target_, *"socket"*).
+            1. Let _tcpConstructor_ be GetProperty(_tcpOptions_, *"io"*).
+            1. Let _tcpParams_ be a copy of _tcpOptions_.
+            1. SetProperty(_tcpParams_, *"address"*, _address_).
+            1. SetProperty(_tcpParams_, *"port"*, GetInternalField(_target_, *"port"*)).
+            1. SetProperty(_tcpParams_, *"onError"*, GetInternalField(*this*, *#tcpError*)).
+            1. SetProperty(_tcpParams_, *"onReadable"*, GetInternalField(*this*, *#tcpReadable*)).
+            1. SetProperty(_tcpParams_, *"onWritable"*, GetInternalField(*this*, *#tcpWritable*)).
+            1. SetProperty(_tcpParams_, *"target"*, *this*).
+            1. Let _tcpSocket_ be Construct(_tcpConstructor_, _tcpParams_).
+            1. SetInternalField(_target_, *"tcpSocket"*, _tcpSocket_).
+          1. Else,
+            1. Let _onError_ be GetInternalField(_target_, *"onError"*).
+            1. If _onError_ is not *null*, then
+              1. Queue a task that performs:
+                1. Call(_onError_, _target_, _error_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-prototype-read">
+        <h1>read ( _count_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-prototype-write">
+        <h1>write ( _data_ [, _options_ ] )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-prototype-tcperror">
+        <h1>#tcpError ( _error_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-prototype-tcpreadable">
+        <h1>#tcpReadable ( _count_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-prototype-tcpwritable">
+        <h1>#tcpWritable ( _count_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-client-class-pattern-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The *read*, *write*, *#tcpError*, *#tcpReadable*, *#tcpWritable* functions implement the network protocol, which usually requires a state machine, buffers, parsers, serializers, etc.</li>
+          <li>Such methods can read and write from the TCP socket and can queue tasks to call the client callbacks.</li>
+          <li>For each network protocol, the client has specific methods and callbacks, and the *write* method can have specific options.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-http-client">
+      <h1>HTTP Client</h1>
+      <emu-annex id="alg-http-client-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute step 1 of the TCP Client Class Pattern *constructor*.
+          1. Let _requests_ be a new *Array* object.
+          1. SetInternalField(*this*, *"requests"*, _requests_).
+          1. Execute steps 2 to 12 of the TCP Client Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-http-client-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Let _requests_ be GetInternalField(*this*, *"requests"*).
+          1. For each element _request_ of _requests_, do
+            1. Cancel _request_.
+          1. Execute all steps TCP Client Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-http-client-prototype-request">
+        <h1>request ( _options_ )</h1>
+        <emu-alg>
+          1. Let _requests_ be GetInternalField(*this*, *"requests"*).
+          1. Let _requestConstructor_ be the HTTP Client Request constructor.
+          1. Let _requestParams_ be a copy of _options_.
+          1. SetProperty(_requestParams_, *"target"*, *this*).
+          1. Let _request_ be Construct(_requestConstructor_, _requestParams_).
+          1. Add _request_ to _request_.
+          1. When *this* is ready:
+            1. Start the _request_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-http-client-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*dns*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*host*</td><td>yes</td><td>string</td><td>N/A</td></tr>
+          <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*port*</td><td>no</td><td>number</td><td>*80*</td></tr>
+          <tr><td>*onError*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The HTTP Client Request constructor is available only to the HTTP Client class.</li>
+          <li>The HTTP Client class conforms to the TCP Client Class Pattern here above except:
+          <ul>
+            <li>The *read* and *write* methods are provided by the HTTP Client Request instance.</li>
+            <li>The HTTP Client Request instance owns the network protocol specific callbacks.</li>
+          </ul></li>
+          <li>If the HTTP Client handles a single request at time, step 7 of the *request* method waits for the former request to complete.</li>
+          <li>For details about the implementation of the HTTP Client, see the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/tcp/httpclient/httpclient.js">sample code</a></li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-http-client-request">
+      <h1>HTTP Client Request</h1>
+      <emu-annex id="alg-http-client-request-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*method*</td><td>no</td><td>string</td><td>*GET*</td></tr>
+          <tr><td>*path*</td><td>no</td><td>string</td><td>*/*</td></tr>
+          <tr><td>*headers*</td><td>no</td><td>*Map*</td><td>*null*</td></tr>
+          <tr><td>*port*</td><td>no</td><td>number</td><td>*80*</td></tr>
+          <tr><td>*onHeaders*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onReadable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onWritable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onDone*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-annex id="alg-http-client-request-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-mqtt-client">
+      <h1>MQTT Client</h1>
+      <emu-annex id="alg-mqtt-client-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*dns*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*host*</td><td>yes</td><td>string</td><td>N/A</td></tr>
+          <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*port*</td><td>no</td><td>number</td><td>1883</td></tr>
+          <tr><td>*id*</td><td>no</td><td>string</td><td></td></tr>
+          <tr><td>*user*</td><td>no</td><td>string</td><td></td></tr>
+          <tr><td>*password*</td><td>no</td><td>string or Byte Buffer</td><td></td></tr>
+          <tr><td>*keepAlive*</td><td>no</td><td>number</td><td>0</td></tr>
+          <tr><td>*clean*</td><td>no</td><td>boolean</td><td>*true*</td></tr>
+          <tr><td>*will*</td><td>no</td><td>Object*</td><td>*null*</td></tr>
+          <tr><td>*onReadable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onWritable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onError*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onControl*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+        </tbody></table></emu-table>
+        <ul>
+          <li>The *will* object has:</li>
+        </ul>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*topic*</td><td>yes</td><td>string</td><td>N/A</td></tr>
+          <tr><td>*message*</td><td>yes</td><td>string or Byte Buffer</td><td>N/A</td></tr>
+          <tr><td>*QoS*</td><td>no</td><td>0, 1, or 2</td><td>0</td></tr>
+          <tr><td>*retain*</td><td>no</td><td>boolean</td><td>false</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-annex id="alg-mqtt-client-write-options">
+        <h1>write options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*operation*</td><td>no</td><td>number</td><td>*MQTTCLient.PUBLISH*</td></tr>
+          <tr><td>*id*</td><td>no</td><td>number</td><td></td></tr>
+          <tr><td>*topic*</td><td>yes*</td><td>string</td><td>N/A</td></tr>
+          <tr><td>*QoS*</td><td>no*</td><td>0, 1, or 2</td><td>0</td></tr>
+          <tr><td>*retain*</td><td>no*</td><td>boolean</td><td>false</td></tr>
+          <tr><td>*duplicate*</td><td>no*</td><td>boolean</td><td>false</td></tr>
+          <tr><td>*byteLength*</td><td>no*</td><td>number</td><td>*data.byteLength*</td></tr>
+          <tr><td>*items*</td><td>yes*</td><td>*Array*</td><td>N/A</td></tr>
+        </tbody></table></emu-table>
+        <ul>
+          <li>*topic* is required when *operation* is *MQTTCLient.PUBLISH*</li>
+          <li>*QoS*, *retain*, *duplicate*, *byteLength* are used when *operation* is *MQTTCLient.PUBLISH*</li>
+          <li>*items* is required and used when *operation* is *MQTTCLient.SUBSCRIBE* or *MQTTCLient.UNSUBSCRIBE*.</li>
+          <li>*items* is an array of objects that have:</li>
+        </ul>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*topic*</td><td>yes</td><td>string</td><td>N/A</td></tr>
+          <tr><td>*QoS*</td><td>no*</td><td>0, 1, or 2</td><td>0</td></tr>
+        </tbody></table></emu-table>
+        <ul>
+          <li>*QoS* is used when *operation* is *MQTTCLient.SUBSCRIBE*</li>
+        </ul>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The MQTT Client class conforms to the TCP Client Class Pattern here above.</li>
+          <li>For details about the implementation of the MQTT Client, see the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/tcp/mqttclient/mqttclient.js">sample code</a></li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-websocket-client">
+      <h1>WebSocket Client</h1>
+      <emu-annex id="alg-websocket-client-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute step 1 of the TCP Client Class Pattern *constructor*.
+          1. Let _tcpSocket_ be GetInternalField(*this*, *"attach"*).
+          1. If _tcpSocket_ is *null*, then
+            1. Execute steps 2 to 12 of the TCP Client Class Pattern *constructor*.
+          1. Else,
+            1. SetInternalField(*this*, *"tcpSocket"*, _tcpSocket_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-websocket-client-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*attach*</td><td>no</td><td>instance of TCP Socket</td><td>*null*</td></tr>
+          <tr><td>*dns*</td><td>yes*</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*host*</td><td>yes*</td><td>string</td><td>N/A</td></tr>
+          <tr><td>*socket*</td><td>yes*</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*port*</td><td>no*</td><td>number</td><td>80</td></tr>
+          <tr><td>*protocol*</td><td>no*</td><td>string</td><td>""</td></tr>
+          <tr><td>*headers*</td><td>no*</td><td>*Map*</td><td>*null*</td></tr>
+          <tr><td>*onReadable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onWritable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onError*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onControl*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*onClose*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          <tr><td>*format*</td><td>no</td><td>*"number"* or *"buffer"*</td><td>*"buffer"*</td></tr>
+        </tbody></table></emu-table>
+        <ul>
+          <li>If *attach* is present, *dns*, *host*, *socket*, *port*, *protocol* and *headers* are neither required nor used.</li>
+        </ul>
+      </emu-annex>
+      <emu-annex id="alg-websocket-client-write-options">
+        <h1>write options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*binary*</td><td>no</td><td>boolean</td><td>true</td></tr>
+          <tr><td>*more*</td><td>no</td><td>boolean</td><td>false</td></tr>
+          <tr><td>*opcode*</td><td>no</td><td>number</td><td></td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The WebSocket Client class conforms to the TCP Client Class Pattern here above.</li>
+          <li>For details about the implementation of the WebSocket Client, see the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/tcp/websocketclient/websocketclient.js">sample code</a></li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-tcp-server-class-pattern">
+      <h1>TCP Server Class Pattern</h1>
+      <emu-annex id="alg-tcp-server-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Base Class Pattern *constructor*.
+          1. Let _connections_ be a new *Set* object.
+          1. SetInternalField(*this*, *"connections"*, _connections_).
+          1. Let _tcpOptions_ be GetInternalField(_target_, *"listener"*).
+          1. Let _tcpConstructor_ be GetProperty(_tcpOptions_, *"io"*).
+          1. Let _tcpParams_ be a copy of _tcpOptions_.
+          1. SetProperty(_tcpParams_, *"port"*, GetInternalField(_target_, *"port"*)).
+          1. SetProperty(_tcpParams_, *"onReadable"*, GetInternalField(*this*, *#tcpReadable*)).
+          1. SetProperty(_tcpParams_, *"target"*, *this*).
+          1. Let _tcpSocket_ be Construct(_tcpConstructor_, _tcpParams_).
+          1. SetInternalField(*this*, *"tcpSocket"*, _tcpSocket_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Let _connections_ be GetInternalField(*this*, *"connections"*).
+          1. For each element _connection_ of _connections_, do
+            1. Call(GetProperty(_connection_, *"close"*), _connection_).
+          1. Let _tcpSocket_ be GetInternalField(*this*, *"tcpSocket"*).
+          1. If _tcpSocket_ is not *null*, then
+            1. Call(GetProperty(_tcpSocket_, *"close"*), _tcpSocket_).
+          1. Execute all steps of the Base Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-class-pattern-prototype-tcpreadable">
+        <h1>#tcpReadable ( _count_ )</h1>
+        <emu-alg>
+          1. Let _target_ be GetProperty(*this*, *"target"*).
+          1. Let _connections_ be GetInternalField(_target_, *"connections"*).
+          1. Let _onConnect_ be GetInternalField(_target_, *"onConnect"*).
+          1. Let _connectionConstructor_ be a class conforming to the TCP Server Connection Class Pattern.
+          1. While _count_ &gt; 0:
+            1. Let _from_ be Call(GetProperty(*this*, *"read"*), *this*).
+            1. Let _connection_ be Construct(_connectionConstructor_, _target_, _from_).
+            1. Add _connection_ to _connections_.
+            1. Queue a task that performs:
+              1. Call(_onConnect_, _target_, _connection_).
+            1. Let _count_ be _count_ - 1.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-class-pattern-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*listener*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*port*</td><td>no*</td><td>number</td><td>80</td></tr>
+          <tr><td>*onConnect*</td><td>yes</td><td>*Function*</td><td>N/A</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The connection constructor is specific to each network protocol, and available only to the implementation: a static private field of the server class, a closure of the server module, etc.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-tcp-server-connection-class-pattern">
+      <h1>TCP Server Connection Class Pattern</h1>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-constructor">
+        <h1>constructor ( _server_, _from_ )</h1>
+        <emu-alg>
+          1. SetInternalField(*this*, *"server"*, _server_).
+          1. Let _tcpConstructor_ be GetProperty(_from_, *"constructor"*).
+          1. Let _tcpParams_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. SetProperty(_tcpParams_, *"from"*, _from_).
+          1. SetProperty(_tcpParams_, *"onError"*, GetInternalField(*this*, *#tcpError*)).
+          1. SetProperty(_tcpParams_, *"onReadable"*, GetInternalField(*this*, *#tcpReadable*)).
+          1. SetProperty(_tcpParams_, *"onWritable"*, GetInternalField(*this*, *#tcpWritable*)).
+          1. SetProperty(_tcpParams_, *"target"*, *this*).
+          1. Let _tcpSocket_ be Construct(_tcpConstructor_, _tcpParams_).
+          1. SetInternalField(*this*, *"tcpSocket"*, _tcpSocket_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Let _tcpSocket_ be GetInternalField(*this*, *"tcpSocket"*).
+          1. If _tcpSocket_ is not *null*, then
+            1. Call(GetProperty(_tcpSocket_, *"close"*), _tcpSocket_).
+          1. Let _server_ be GetInternalField(*this*, *"server"*).
+          1. Let _connections_ be GetInternalField(_server_, *"connections"*).
+          1. Remove *this* from _connections_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-prototype-read">
+        <h1>read ( _count_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-prototype-write">
+        <h1>write ( _data_ [, _options_ ] )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-prototype-tcperror">
+        <h1>#tcpError ( _error_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-prototype-tcpreadable">
+        <h1>#tcpReadable ( _count_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-prototype-tcpwritable">
+        <h1>#tcpWritable ( _count_ )</h1>
+      </emu-annex>
+      <emu-annex id="alg-tcp-server-connection-class-pattern-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The *read*, *write*, *#tcpError*, *#tcpReadable*, *#tcpWritable* functions implement the network protocol, which usually requires a state machine, buffers, parsers, serializers, etc.</li>
+          <li>Such methods can read and write from the TCP socket and can queue tasks to call the server connection callbacks.</li>
+          <li>For each network protocol, the server connection has specific methods and callbacks, and the *write* method can have specific options.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-http-server">
+      <h1>HTTP Server</h1>
+      <emu-note>
+        <ul>
+          <li>The HTTP Server class conforms to the TCP Server Class Pattern here above.</li>
+          <li>The server connection constructor is the HTTP Server Connection class.</li>
+          <li>For details about the implementation of the HTTP Server, see the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/listener/httpserver/httpserver.js">sample code</a></li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-http-server-connection">
+      <h1>HTTP Server Connection</h1>
+      <emu-annex id="alg-http-server-connection-prototype-detach">
+        <h1>detach ( )</h1>
+        <emu-alg>
+          1. Let _tcpSocket_ be GetInternalField(*this*, *"tcpSocket"*).
+          1. SetInternalField(*this*, *"tcpSocket"*, *null*).
+          1. Let _server_ be GetInternalField(*this*, *"server"*).
+          1. Let _connections_ be GetInternalField(_server_, *"connections"*).
+          1. Remove *this* from _connections_.
+          1. Return _tcpSocket_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-http-server-connection-prototype-accept">
+        <h1>accept ( _options_ )</h1>
+        <emu-alg>
+          1. Throw if options is not an object.
+          1. For each supported callback, do
+            1. Let _name_ be the name of the supported callback.
+            1. Let _callback_ be GetProperty(_options_, _name_).
+            1. If _callback_ is not *undefined*, then
+              1. Throw if not IsCallable(_callback_).
+              1. SetInternalField(*this*, _name_, _callback_).
+          1. Start receiving the request.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-http-server-connection-prototype-get-route">
+        <h1>get route ( )</h1>
+        <emu-alg>
+          1. Let _result_ be GetInternalField(*this*, *"route"*).
+          1. Return result.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-http-server-connection-prototype-set-route">
+        <h1>set route ( _options_ )</h1>
+        <emu-alg>
+          1. Execute steps 1 and 2 of the *accept* method.
+          1. SetInternalField(*this*, *"route"*, _options_).
+        </emu-alg>
+        <emu-annex id="alg-http-server-connection-accept-and-set-route-options">
+          <h1>accept and set route options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*onDone*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+            <tr><td>*onError*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+            <tr><td>*onReadable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+            <tr><td>*onRequest*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+            <tr><td>*onWritable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-annex id="alg-http-server-connection-prototype-respond">
+        <h1>respond ( _options_ )</h1>
+        <emu-alg>
+          1. Throw if options is not an object.
+          1. Let _status_ be GetProperty(_options_, *"status"*).
+          1. Convert _status_ into an ECMAScript number.
+          1. Throw if _status_ is no positive integer.
+          1. Let _headers_ be GetProperty(_options_, *"headers"*).
+          1. Throw if _headers_ is no *Map* instance.
+          1. Start sending the response with _status_ and _headers_.
+        </emu-alg>
+        <emu-annex id="alg-http-server-connection-respond-options">
+          <h1>respond options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*status*</td><td>yes</td><td>positive integer</td><td>N/A</td></tr>
+            <tr><td>*headers*</td><td>yes</td><td>*Map*</td><td>N/A</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The HTTP Server Connection class conforms to the TCP Server Connection Class Pattern here above.</li>
+          <li>The HTTP Connection callbacks can be changed with the *route* setter, usually in the *onRequest* callback, when the HTTP method, path, and headers are available.</li>
+          <li>For examples of routes, see the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/listener/httpserver/options">sample code</a></li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-sensor-prov-class-pattern">
+      <h1>Provenance Sensor Class Pattern</h1>
+      <emu-annex id="alg-sensor-prov-class-pattern-prototype-configure">
+        <h1>configure ( _options_ )</h1>
+        <emu-alg>
+          1. Execute all steps of the Sensor Class Pattern configure method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-sensor-prov-class-pattern-prototype-sample">
+        <h1>sample ( [ _params_ ] )</h1>
+        <emu-alg>
+          1. Execute steps 1 to 6 of the Sensor Class Pattern *sample* method.
+          1. If _result_ is an object, then
+            1. If an absolute clock is available, then
+              1. Let _time_ be the value of the absolute clock upon sampling.
+              1. DefineProperty(_result_, *"time"*, _time_).
+            1. If a relative clock is available, then
+              1. Let _ticks_ be the value of a relative clock upon sampling.
+              1. DefineProperty(_result_, *"ticks"*, _ticks_).
+            1. If faults are readable from the sensor upon sampling, then
+              1. Read from the sensor into _faults_.
+              1. DefineProperty(_result_, *"faults"*, _faults_).
+          1. Execute steps 7 of the Sensor Class Pattern *sample* method.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>The absolute clock is the most precise clock available to get an absolute time value (since the Epoch), from either the sensor, the microcontroller, or another peripheral.</li>
+            <li>The relative clock is any clock available to get a consistent relative time value (for instance since the device started), from either the sensor, the microcontroller, or another peripheral.</li>
+          </ul>
+        </emu-note>
+        <emu-annex id="alg-sensor-prov-class-pattern-sample-params">
+          <h1>sample params:</h1>
+          <p>None</p>
+        </emu-annex>
+        <emu-annex id="alg-sensor-prov-class-pattern-sample-result">
+          <h1>sample result:</h1>
+          <p>In addition to the sample results defined in the <emu-xref href="#alg-sensor-class-pattern">Sensor Class Pattern</emu-xref>, the Provenance Sensor Class Pattern adds properties as follows:</p>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            <tr><td>*time*</td><td>yes, if available</td><td>positive number</td><td>number originating from an absolute clock describing the instant that the sample returned was captured</td></tr>
+            <tr><td>*ticks*</td><td>yes, if available</td><td>positive number</td><td>number originating from a non-absolute clock describing the instant that the sample returned was captured</td></tr>
+            <tr><td>*faults*</td><td>no</td><td>boolean, number, or string</td><td>object representing a record of any sensor-level faults that occurred during this sensor sample or since the previously reported sample</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The order, requirements, and ranges of options for configure extend those found in a separate table for every class conforming to the Sensor Class Pattern, and add the options *configuration* and *identification* as defined in the Sensor Provenance Class Pattern.</li>
+          <li>Metadata (_time_, _ticks_, _faults_) reflect only the metadata associated with the first sample. In cases where multiple samples may be taken from a single device, timing and fault data may be imprecise for subsequent samples.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-audio-input">
+      <h1>Audio Input Class</h1>
+      <emu-annex id="alg-audio-input-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*audioType*</td><td>no</td><td>*"LPCM"*</td><td>*"LPCM"*</td></tr>
+          <tr><td>*bitsPerSample*</td><td>no</td><td>*8* or *16*</td><td>(host defined)</td></tr>
+          <tr><td>*channels*</td><td>no</td><td>*1* or *2*</td><td>(host defined)</td></tr>
+          <tr><td>*sampleRate*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
+          <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+          <tr><td>*format*</td><td>no</td><td>*"buffer"*</td><td>*"buffer"*</td></tr>
+        </tbody></table></emu-table>
+        <emu-note>
+          <ul>
+            <li>The Audio Input Class conforms to the IO Class Pattern for its *constructor*, *close* and *read* methods. There is no *write* method.</li>
+            <li>The *"resources"* internal field of an Audio Input instance represents the hardware and software necessary to capture audio samples on the device.</li>
+            <li>The *constructor* does not start capturing audio samples. Use the *start* method.</li>
+            <li>When audio samples are available to read, the *onReadable* callback is invoked with two arguments, _byteLength_ and _sampleCount_.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-audio-input-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>&nbsp;</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-annex id="alg-audio-input-prototype-start">
+        <h1>start ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. If _resources_ already started, then
+            1. Return.
+          1. Start capturing audio with _resources_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-input-prototype-stop">
+        <h1>stop ( [ _options_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _flush_ be *false*.
+          1. If _options_ is provided, then
+            1. If HasProperty(_options_, *"flush"*), then
+              1. Let _flush_ be GetProperty(_options_, *"flush"*).
+              1. Convert _flush_ into an ECMAScript boolean.
+          1. If _resources_ capturing audio, then
+            1. Stop capturing audio with _resources_.
+          1. If _flush_, then
+            1. Flush unread samples in _resources_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-input-prototype-get-audiotype">
+        <h1>get audioType ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _audioType_ be the encoding of _resources_.
+          1. Return _audioType_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-input-prototype-get-bitspersample">
+        <h1>get bitsPerSample ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _bitsPerSample_ be the number of bits per sample of _resources_.
+          1. Return _bitsPerSample_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-input-prototype-get-channels">
+        <h1>get channels ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _channels_ be the number of channels of _resources_.
+          1. Return _channels_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-input-prototype-get-samplerate">
+        <h1>get sampleRate ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _sampleRate_ be the sample rate of _resources_.
+          1. Return _sampleRate_.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-audio-input-async">
+      <h1>Audio Input Class – asynchronous</h1>
+      <emu-note>
+        <ul>
+          <li>The asynchronous version of the Audio Input Class extends the Audio Input Class in order to conform to the asynchronous version of the IO Class Pattern.</li>
+          <li>The *onReadable* callback is never invoked.</li>
+          <li>The _callback_ of the *read* method is invoked when audio samples have been read.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-audio-output">
+      <h1>Audio Output Class</h1>
+      <emu-annex id="alg-audio-output-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*audioType*</td><td>no</td><td>*"LPCM"*</td><td>*"LPCM"*</td></tr>
+          <tr><td>*bitsPerSample*</td><td>no</td><td>*8* or *16*</td><td>(host defined)</td></tr>
+          <tr><td>*channels*</td><td>no</td><td>*1* or *2*</td><td>(host defined)</td></tr>
+          <tr><td>*sampleRate*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
+          <tr><td>*onWritable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+          <tr><td>*format*</td><td>no</td><td>*"buffer"*</td><td>*"buffer"*</td></tr>
+        </tbody></table></emu-table>
+        <emu-note>
+          <ul>
+            <li>The Audio Output Class conforms to the IO Class Pattern for its *constructor*, *close* and *write* methods. There is no *read* method.</li>
+            <li>The *"resources"* internal field of an Audio Output instance represents the hardware and software necessary to play audio samples on the device.</li>
+            <li>The *constructor* does not start playing audio samples. Use the *start* method.</li>
+            <li>When space is available to write audio samples, the *onWritable* callback is invoked with two arguments, _byteLength_ and _sampleCount_.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-audio-output-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>&nbsp;</td><td>byte buffer</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-annex id="alg-audio-output-prototype-start">
+        <h1>start ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. If _resources_ already started, then
+            1. Return.
+          1. Start playing audio with _resources_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-output-prototype-stop">
+        <h1>stop ( [ _options_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _flush_ be *false*.
+          1. If _options_ is provided, then
+            1. If HasProperty(_options_, *"flush"*), then
+              1. Let _flush_ be GetProperty(_options_, *"flush"*).
+              1. Convert _flush_ into an ECMAScript boolean.
+          1. If _resources_ playing audio, then
+            1. Stop playing audio with _resources_.
+          1. If _flush_, then
+            1. Flush unplayed samples in _resources_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-output-prototype-get-audiotype">
+        <h1>get audioType ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _audioType_ be the encoding of _resources_.
+          1. Return _audioType_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-output-prototype-get-bitspersample">
+        <h1>get bitsPerSample ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _bitsPerSample_ be the number of bits per sample of _resources_.
+          1. Return _bitsPerSample_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-output-prototype-get-channels">
+        <h1>get channels ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _channels_ be the number of channels of _resources_.
+          1. Return _channels_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-audio-output-prototype-get-samplerate">
+        <h1>get sampleRate ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _sampleRate_ be the sample rate of _resources_.
+          1. Return _sampleRate_.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-audio-output-async">
+      <h1>Audio Output Class – asynchronous</h1>
+      <emu-note>
+        <ul>
+          <li>The asynchronous version of the Audio Output Class extends the Audio Output Class in order to conform to the asynchronous version of the IO Class Pattern.</li>
+          <li>The *onWritable* callback is never invoked.</li>
+          <li>The _callback_ of the *write* method is invoked when audio samples have been written.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-image-input">
+      <h1>Image Input Class</h1>
+      <emu-annex id="alg-image-input-constructor-options">
+        <h1>constructor options</h1>
+        <emu-table><table><tbody>
+          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <tr><td>*imageType*</td><td>no</td><td>a <emu-xref href="#pixel-formats">pixel format</emu-xref> or *"jpeg*"</td><td>(host defined)</td></tr>
+          <tr><td>*width*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
+          <tr><td>*height*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
+          <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
+          <tr><td>*format*</td><td>no</td><td>*"buffer"* or *"buffer/disposable"*</td><td>*"buffer"*</td></tr>
+        </tbody></table></emu-table>
+        <emu-note>
+          <ul>
+            <li>The Image Input Class conforms to the IO Class Pattern for its *constructor* and *close* method. There is no *write* method.</li>
+            <li>The *"resources"* internal field of an Image Input instance represents the hardware and software necessary to capture image frames on the device. Typically, an Image Input instance manages a queue of image frames.</li>
+            <li>The *constructor* does not start capturing image frames. Use the *start* method.</li>
+            <li>When an image frame is available to read, the *onReadable* callback is invoked.</li>
+            <li>If the application provides a byte buffer to the *read* method, its byte length must be at least the byte length of a frame.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-image-input-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>&nbsp;</td></tr>
+          <tr><td>*"buffer/disposable"*</td><td><emu-xref href="#alg-image-input-buffer">Image Input Buffer</emu-xref></td><td>&nbsp;</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+      <emu-annex id="alg-image-input-prototype-read">
+        <h1>read ( [ _option_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _format_ be GetInternalField(*this*, *"format"*).
+          1. If _format_ is *"buffer/disposable"*, then
+            1. If an image frame is available in _resources_, then
+              1. Let _buffer_ be CreateImageInputBuffer(_resources_).
+              1. Return _buffer_.
+            1. Else,
+              1. Return *undefined*.
+          1. Else,
+            1. Execute step 6 to 10 of the IO Class Pattern *read* method.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-image-input-prototype-start">
+        <h1>start ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. If _resources_ already started, then
+            1. Return.
+          1. Start capturing image frames with _resources_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-image-input-prototype-stop">
+        <h1>stop ( [ _options_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _flush_ be *false*.
+          1. If _options_ is provided, then
+            1. If HasProperty(_options_, *"flush"*), then
+              1. Let _flush_ be GetProperty(_options_, *"flush"*).
+              1. Convert _flush_ into an ECMAScript boolean.
+          1. If _resources_ capturing image frames, then
+            1. Stop capturing image frames with _resources_.
+          1. If _flush_, then
+            1. Flush unread image frames in _resources_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-image-input-prototype-get-imagetype">
+        <h1>get imageType ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _imageType_ be the image type of _resources_.
+          1. Return _imageType_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-image-input-prototype-get-width">
+        <h1>get width ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _width_ be the image width of _resources_.
+          1. Return _width_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-image-input-prototype-get-height">
+        <h1>get height ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null*.
+          1. Let _height_ be the image height of _resources_.
+          1. Return _height_.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-image-input-async">
+      <h1>Image Input Class – asynchronous</h1>
+      <emu-note>
+        <ul>
+          <li>The asynchronous version of the Image Input Class extends the Image Input Class in order to conform to the asynchronous version of the IO Class Pattern.</li>
+          <li>The *onReadable* callback is never invoked.</li>
+          <li>The _callback_ of the *read* method is invoked when a frame has been read.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-image-input-async-prototype-read">
+        <h1>read ( _option_ [, _callback_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _resources_ is *null* or not readable.
+          1. Let _format_ be GetInternalField(*this*, *"format"*).
+          1. If _format_ is *"buffer/disposable"*, then
+            1. Throw if _callback_ is not *undefined* and not IsCallable(_callback_).
+            1. When an image frame is available in _resources_:
+              1. Queue a task that performs:
+                1. Let _buffer_ be CreateImageInputBuffer(_resources_).
+                1. Call(_callback_, *this*, *null*, _buffer_).
+          1. Else,
+            1. Execute step 4 to 8 of the IO Class Pattern – asynchronous *read* method.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-image-input-buffer">
+      <h1>Image Input Buffer Prototype</h1>
+      <emu-note>
+        <ul>
+          <li>The Image Input Buffer Prototype conforms to the <emu-xref href="#disposable-buffer">Disposable Buffer Pattern</emu-xref>. Its instances are byte buffers that reference image frames in the Image Input instance.</li>
+          <li>It is the responsibility of the application to close Image Input Buffer instances as soon as possible to allow the Image Input instance to reuse the referenced image frames.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-image-input-buffer-createimageinputbuffer" type="abstract operation">
+        <h1>
+          CreateImageInputBuffer (
+            _resources_: a value
+          )
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. Let _result_ be a new byte buffer whose prototype is Image Input Buffer Prototype.
+          1. Let _frame_ be the current image frame of _resources_.
+          1. Lock _frame_ in _resources_.
+          1. Attach _result_ to _frame_.
+          1. SetInternalField(*this*, *"resources"*, _resources_).
+          1. SetInternalField(*this*, *"frame"*, _frame_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-image-input-buffer-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+          1. Let _frame_ be GetInternalField(*this*, *"frame"*).
+          1. Detach *this* from _frame_.
+          1. Unlock _frame_ in _resources_.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-io-provider-class-pattern">
+      <h1>IO Provider Class Pattern</h1>
+      <emu-annex id="alg-io-provider-class-pattern-constructor">
+        <h1>constructor ( _options_ )</h1>
+        <emu-alg>
+          1. Execute steps 1 to 7 of the Base Class Pattern *constructor*.
+          1. Let _onReadable_ be a function with the following steps::
+            1. Let _data_ be Call(GetProperty(*this*, *"read"*), *this*).
+            1. Let _provider_ be GetProperty(*this*, *"target"*).
+            1. Dispatch _data_ among IO objects of _provider_.
+          1. Let _count_ be the number of supported IO connection.
+          1. Let _onWritable_ be a function with the following steps::
+            1. Let _count_ be _count_ - 1.
+            1. If _count_ is 0, then
+              1. Let _provider_ be GetProperty(*this*, *"target"*).
+              1. Configure _provider_ with _params_.
+              1. Add supported IO constructors to _provider_.
+              1. SetInternalField(_provider_, *"status"*, *"ready"*).
+              1. Let _callback_ be GetInternalField(_provider_, *"onReady"*).
+              1. If _callback_ is not *null*, then
+                1. Call(_callback_, _provider_).
+          1. Let _onError_ be a function with the following steps::
+            1. Let _provider_ be GetProperty(*this*, *"target"*).
+            1. Dispatch the error to open IO objects of _provider_.
+            1. Call(GetProperty(_provider_, *"close"*), _provider_).
+            1. Let _callback_ be GetInternalField(_provider_, *"onError"*).
+            1. If _callback_ is not *null*, then
+              1. Call(_callback_, _provider_).
+          1. Try:
+            1. For each supported IO connection, do
+              1. Let _name_ be the name of the supported IO connection.
+              1. Let _ioOptions_ be GetProperty(_params_, _name_).
+              1. Let _ioParams_ be a copy of _ioOptions_.
+              1. Let _ioConstructor_ be GetProperty(_ioParams_, *"io"*).
+              1. DefineProperty(_ioParams_, *"onReadable"*, _onReadable_).
+              1. DefineProperty(_ioParams_, *"onWritable"*, _onWritable_).
+              1. DefineProperty(_ioParams_, *"onError"*, _onError_).
+              1. DefineProperty(_ioParams_, *"target"*, *this*).
+              1. Let _ioConnection_ be Construct(_ioConstructor_, _ioParams_).
+              1. SetInternalField(*this*, _name_, _ioConnection_).
+          1. Catch _exception_:
+            1. Call(GetProperty(*this*, *"close"*), *this*).
+            1. Throw _exception_.
+          1. Execute step 8 of the Base Class Pattern *constructor*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-io-provider-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the Peripheral Class Pattern *close* method.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-flash-module-object">
+      <h1>Flash Module Object</h1>
+      <emu-note>
+        <ul>
+          <li>The Flash module default export is an object with an *open* method that creates Flash Partition instances.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-flash-module-object-prototype-open">
+        <h1>open ( _options_ )</h1>
+        <emu-alg>
+          1. Let *this* be a new instance of the Flash Partition class.
+          1. Execute all steps of the IO Class Pattern *constructor*.
+          1. Return *this*.
+        </emu-alg>
+        <emu-annex id="alg-flash-module-object-options">
+          <h1>options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*name*</td><td>yes</td><td>string</td><td>N/A</td></tr>
+            <tr><td>*mode*</td><td>no</td><td>*"r"* or *"r+"*</td><td>*"r+"*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>*"buffer"*</td><td>*"buffer"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-note>
+          <ul>
+            <li>The *"resources"* internal field of a Flash Partition instance describes the access to a specific region of flash memory. The access is read-only if *mode* is *"r"*.</li>
+            <li>For a Flash Partition instance, step 4 of the IO Class Pattern *constructor* opens the access to the flash partition specified by *name*.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-flash-module-object-prototype-symbol-iterator">
+        <h1>[Symbol.iterator] ( )</h1>
+        <emu-alg>
+          1. Let _constructor_ be the Flash Partition Iterator Class.
+          1. Let _iterator_ be Construct(_constructor_).
+          1. Return _iterator_.
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-flash-partition-class-pattern">
+      <h1>Flash Partition Class Pattern</h1>
+      <emu-annex id="alg-flash-partition-class-pattern-constructor">
+        <h1>constructor ( )</h1>
+        <emu-alg>
+          1. Throw.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Use the *open* method of the Flash Module Object to create Flash Partition instances.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the IO Class Pattern *close* method.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>For a Flash Partition instance, step 5 of the IO Class Pattern *close* method closes the access to the flash partition.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-class-pattern-prototype-eraseblock">
+        <h1>eraseBlock ( _from_ [, _to_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _partition_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _partition_ is *null* or not writable.
+          1. Let _blocks_ be the number of blocks in _partition_.
+          1. Convert _from_ into an ECMAScript number.
+          1. If _to_ is absent, then
+            1. Let _to_ be _from_ + 1.
+          1. Else,
+            1. Convert _to_ into an ECMAScript number.
+          1. Throw if _from_ < 0 or *from* &gt;= _blocks_.
+          1. Throw if _to_ <= *from* or *to* &gt; _blocks_.
+          1. While _from_ < _to_:
+            1. Erase block _from_ in _partition_.
+            1. Let _from_ be _from_ + 1.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-class-pattern-prototype-read">
+        <h1>read ( _count_, _offset_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _partition_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _partition_ is *null*.
+          1. Convert _offset_ into an ECMAScript number.
+          1. Throw if _offset_ is neither *0* nor a positive integer.
+          1. Let _size_ be number of bytes in _partition_.
+          1. Let _available_ be _size_ - _offset_.
+          1. Throw if _available_ <= 0.
+          1. If _count_ is a number, then
+            1. Throw if _count_ is not a positive integer.
+            1. If _count_ &gt; _available_, then
+              1. Let _count_ be _available_.
+            1. Let _result_ be Construct(GetProperty(*globalThis*, *"ArrayBuffer"*), _count_).
+            1. Let _pointer_ be GetBytePointer(_result_).
+          1. Else,
+            1. Let _pointer_ be GetBytePointer(_count_).
+            1. Let _count_ be GetProperty(_count_, *"byteLength"*).
+            1. If _count_ &gt; _available_, then
+              1. Let _count_ be _available_.
+            1. Let _result_ be _count_.
+          1. Read _count_ bytes into _pointer_ from _partition_ at _offset_.
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-class-pattern-prototype-status">
+        <h1>status ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _partition_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _partition_ is *null*.
+          1. Let _size_ be number of bytes in _partition_.
+          1. Let _blocks_ be number of blocks in _partition_.
+          1. Let _blockLength_ be number of bytes by block.
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. SetProperty(_result_, *"size"*, _size_).
+          1. SetProperty(_result_, *"blocks"*, _blocks_).
+          1. SetProperty(_result_, *"blockLength"*, _blockLength_).
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-class-pattern-prototype-write">
+        <h1>write ( _data_, _offset_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _partition_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _partition_ is *null* or not writable.
+          1. Convert _offset_ into an ECMAScript number.
+          1. Throw if _offset_ is neither *0* nor a positive integer.
+          1. Let _pointer_ be GetBytePointer(_data_).
+          1. Let _count_ be GetProperty(_data_, *"byteLength"*).
+          1. Let _size_ be number of bytes in _partition_.
+          1. Let _available_ be _size_ - _offset_.
+          1. Throw if _available_ < count.
+          1. Write _count_ bytes from _pointer_ into _partition_ at _offset_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-class-pattern-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-flash-partition-iterator-class">
+      <h1>Flash Partition Iterator Class</h1>
+      <emu-annex id="alg-flash-partition-iterator-class-constructor">
+        <h1>constructor ( )</h1>
+        <emu-alg>
+          1. Let _list_ be the result of opening the list of available partitions.
+          1. SetInternalField(*this*, *"list"*, _list_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-iterator-class-prototype-next">
+        <h1>next ( )</h1>
+        <emu-alg>
+          1. Let _list_ be GetInternalField(*this*, *"list"*).
+          1. If _list_ is *null*, then
+            1. Let _partition_ be *null*.
+          1. Else,
+            1. Let _partition_ be the next partition in _list_.
+            1. If _partition_ is *null*, then
+              1. Close _list_.
+              1. SetInternalField(*this*, *"list"*, *null*).
+            1. Else,
+              1. Let _name_ be the name of _partition_.
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. If _partition_ is *null*, then
+            1. SetProperty(_result_, *"done"*, *true*).
+            1. SetProperty(_result_, *"value"*, *undefined*).
+          1. Else,
+            1. SetProperty(_result_, *"done"*, *false*).
+            1. SetProperty(_result_, *"value"*, _name_).
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-flash-partition-iterator-class-prototype-return">
+        <h1>return ( )</h1>
+        <emu-alg>
+          1. Let _list_ be GetInternalField(*this*, *"list"*).
+          1. If _list_ is not *null*, then
+            1. Close _list_.
+            1. SetInternalField(*this*, *"list"*, *null*).
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. SetProperty(_result_, *"done"*, *true*).
+          1. SetProperty(_result_, *"value"*, *undefined*).
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The list order is system dependent.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-update-module-object">
+      <h1>Update Module Object</h1>
+      <emu-note>
+        <ul>
+          <li>The Update module default export is an object with an *open* method that creates Update instances.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-update-module-object-prototype-open">
+        <h1>open ( _options_ )</h1>
+        <emu-alg>
+          1. Let *this* be a new instance of the Update Class .
+          1. Execute steps 1 to 3 of the IO Class Pattern *constructor*.
+          1. Try:
+            1. Let _partition_ be GetInternalField(GetProperty(_params_, *"partition"*), *"resources"*).
+            1. Throw if _partition_ is *null* or not writable.
+            1. Let _mode_ be GetProperty(_params_, *"mode'*).
+            1. Let _size_ be the size of _partition_.
+            1. Let _byteLength_ be GetProperty(_params_, *"byteLength"*).
+            1. If _byteLength_ is not *undefined*, then
+              1. Throw if _byteLength_ &gt; _size_.
+              1. Let _size_ be _byteLength_.
+            1. Let _update_ be a new over the air update process for _partition_.
+            1. Set the mode of _update_ to _mode_.
+            1. Set the offset of _update_ to *0*.
+            1. Set the size of _update_ to _size_.
+            1. Begin _update_ .
+            1. SetInternalField(this, *"resources"*, _update_).
+          1. Execute steps 5 to 6 of the IO Class Pattern *constructor*.
+          1. Return *this*.
+        </emu-alg>
+        <emu-annex id="alg-update-module-object-options">
+          <h1>options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*partition*</td><td>yes</td><td>Flash Partition instance</td><td>N/A</td></tr>
+            <tr><td>*mode*</td><td>no</td><td>*"a"* or *"w"*</td><td>*"a"*</td></tr>
+            <tr><td>*byteLength*</td><td>no</td><td>positive integer or *undefined*</td><td>*undefined*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-note>
+          <ul>
+            <li>The *"resources"* internal field of an Update instance describes the over the air update process for a specific *partition*.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-update-class-pattern">
+      <h1>Update Class Pattern</h1>
+      <emu-annex id="alg-update-class-pattern-constructor">
+        <h1>constructor ( )</h1>
+        <emu-alg>
+          1. Throw.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Use the *open* method of the Update Module Object to create Update instances.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-update-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the IO Class Pattern *close* method.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>For an Update instance, step 5 of the IO Class Pattern *close* method aborts the over the air update process if the *complete* method has not been called.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-update-class-pattern-prototype-complete">
+        <h1>complete ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _update_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _update_ is *null*.
+          1. End and activate _update_.
+          1. Throw if former step failed.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Step 4 can fail if written data are invalid.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-update-class-pattern-prototype-write">
+        <h1>write ( _data_ [, _offset_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _update_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _update_ is *null*.
+          1. Let _pointer_ be GetBytePointer(_data_).
+          1. Let _count_ be GetProperty(_data_, *"byteLength"*).
+          1. Let _mode_ be the mode of the _update_.
+          1. If _mode_ is *"a"*, then
+            1. Throw if _offset_ is present.
+            1. Let _offset_ be the offset of the _update_.
+          1. Else,
+            1. Throw if _offset_ is absent.
+            1. Convert _offset_ into an ECMAScript number.
+            1. Throw if _offset_ is neither *0* nor a positive integer.
+          1. Let _size_ be the size of the _update_.
+          1. Let _available_ be _size_ - _offset_.
+          1. Throw if _available_ < count.
+          1. Write _count_ bytes from _pointer_ into _update_ at _offset_ .
+          1. Throw if former step failed.
+          1. If _mode_ is *"a"*, then
+            1. Let the offset of the _update_ be _offset_ + _count_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Step 12 can fail if written data are invalid.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-update-class-pattern-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>&nbsp;</td><td>byte buffer</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-key-value-object">
+      <h1>Key-Value Module Object</h1>
+      <emu-note>
+        <ul>
+          <li>The Key-Value module default export is an object with an *open* method that creates Key-Value Domain instances.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-key-value-object-prototype-open">
+        <h1>open ( _options_ )</h1>
+        <emu-alg>
+          1. Let *this* be a new instance of the Key-Value Domain class .
+          1. Execute all steps of the IO Class Pattern *constructor*.
+          1. Return *this*.
+        </emu-alg>
+        <emu-annex id="alg-key-value-object-options">
+          <h1>options</h1>
+          <emu-table><table><tbody>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            <tr><td>*path*</td><td>yes</td><td>string</td><td>N/A</td></tr>
+            <tr><td>*mode*</td><td>no</td><td>*"r"* or *"r+"*</td><td>*"r+"*</td></tr>
+            <tr><td>*format*</td><td>no</td><td>string</td><td>*"buffer"*</td></tr>
+          </tbody></table></emu-table>
+        </emu-annex>
+        <emu-note>
+          <ul>
+            <li>The *"resources"* internal field of a Key-Value Domain instance describes a specific part of the non-volatile storage used by the system to store key-value pairs.</li>
+            <li>For a Key-Value Domain instance, step 4 of the IO Class Pattern *constructor* opens the storage.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-key-value-domain-class-pattern">
+      <h1>Key-Value Domain Class Pattern</h1>
+      <emu-annex id="alg-key-value-domain-class-pattern-constructor">
+        <h1>constructor ( )</h1>
+        <emu-alg>
+          1. Throw.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Use the *open* method of the Key-Value Module Object to create Key-Value instances.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the IO Class Pattern *close* method.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>For a Key-Value Domain instance, step 5 of the IO Class Pattern *close* method closes the storage.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-class-pattern-prototype-delete">
+        <h1>delete ( _key_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _storage_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _storage_ is *null* or not writable.
+          1. Convert _key_ into an ECMAScript string.
+          1. Let _pair_ be the pair matching _key_ in _storage_.
+          1. If _pair_ is *undefined*, then
+            1. Return *false*.
+          1. Remove _pair_ from _storage_.
+          1. Return *true*.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-class-pattern-prototype-read">
+        <h1>read ( _key_ [, _buffer_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _storage_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _storage_ is *null*.
+          1. Convert _key_ into an ECMAScript string.
+          1. Let _pair_ be the pair matching _key_ in _storage_.
+          1. If _pair_ is *undefined*, then
+            1. Return.
+          1. Let _value_ be the value of _pair_.
+          1. Let _format_ be GetInternalField(*this*, *"format"*).
+          1. Throw if _value_ format does not conform to _format_.
+          1. If _format_ is *"buffer"* and _buffer_ is present, then
+            1. Let _available_ be the byte length of _value_.
+            1. Let _pointer_ be GetBytePointer(_buffer_).
+            1. Let _n_ be GetProperty(_buffer_, *"byteLength"*).
+            1. Throw if _available_ &gt; _n_.
+            1. Read _available_ bytes from _value_ into _pointer_.
+            1. Return _available_.
+          1. Return _value_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-class-pattern-prototype-write">
+        <h1>write ( _key_, _value_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _storage_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _storage_ is *null* or not writable.
+          1. Convert _key_ into an ECMAScript string.
+          1. Let _format_ be GetInternalField(*this*, *"format"*).
+          1. Convert _value_ into the ECMAScript value corresponding to _format_.
+          1. Let _pair_ be the pair matching _key_ in _storage_.
+          1. If _pair_ is *undefined*, then
+            1. Let _pair_ be a new pair with _key_ and _value_.
+            1. Insert _pair_ into _storage_.
+          1. Else,
+            1. Replace the value of _pair_ with _value_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-class-pattern-prototype-symbol-iterator">
+        <h1>[Symbol.iterator] ( )</h1>
+        <emu-alg>
+          1. Let _constructor_ be the Key-Value Domain Iterator Class.
+          1. Let _iterator_ be Construct(_constructor_, *this*).
+          1. Return _iterator_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-class-pattern-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+          <tr><td>*"string"*</td><td>string</td><td>string</td></tr>
+          <tr><td>*"uint8"*</td><td>number</td><td>number</td></tr>
+          <tr><td>*"int8"*</td><td>number</td><td>number</td></tr>
+          <tr><td>*"uint16"*</td><td>number</td><td>number</td></tr>
+          <tr><td>*"int16"*</td><td>number</td><td>number</td></tr>
+          <tr><td>*"uint32"*</td><td>number</td><td>number</td></tr>
+          <tr><td>*"int32"*</td><td>number</td><td>number</td></tr>
+          <tr><td>*"uint64"*</td><td>bigint</td><td>bigint</td></tr>
+          <tr><td>*"int64"*</td><td>bigint</td><td>bigint</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-key-value-domain-iterator-class">
+      <h1>Key-Value Domain Iterator Class</h1>
+      <emu-annex id="alg-key-value-domain-iterator-class-constructor">
+        <h1>constructor ( _domain_ )</h1>
+        <emu-alg>
+          1. Throw if _domain_ is not a Key-Value Domain instance .
+          1. Let _storage_ be GetInternalField(_domain_, *"resources"*).
+          1. Let _list_ be the result of opening the list of pairs in _storage_.
+          1. SetInternalField(*this*, *"list"*, _list_).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-iterator-class-prototype-next">
+        <h1>next ( )</h1>
+        <emu-alg>
+          1. Let _list_ be GetInternalField(*this*, *"list"*).
+          1. If _list_ is *null*, then
+            1. Let _pair_ be *null*.
+          1. Else,
+            1. Let _pair_ be the next pair in _list_.
+            1. If _pair_ is *null*, then
+              1. Close _list_.
+              1. SetInternalField(*this*, *"list"*, *null*).
+            1. Else,
+              1. Let _key_ be the key of _pair_.
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. If _pair_ is *null*, then
+            1. SetProperty(_result_, *"done"*, *true*).
+            1. SetProperty(_result_, *"value"*, *undefined*).
+          1. Else,
+            1. SetProperty(_result_, *"done"*, *false*).
+            1. SetProperty(_result_, *"value"*, _key_).
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-key-value-domain-iterator-class-prototype-return">
+        <h1>return ( )</h1>
+        <emu-alg>
+          1. Let _list_ be GetInternalField(*this*, *"list"*).
+          1. If _list_ is not *null*, then
+            1. Close _list_.
+            1. SetInternalField(*this*, *"list"*, *null*).
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. SetProperty(_result_, *"done"*, *true*).
+          1. SetProperty(_result_, *"value"*, *undefined*).
+          1. Return _result_.
+        </emu-alg>
+      </emu-annex>
+      <emu-note>
+        <ul>
+          <li>The list order is system dependent.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+    <emu-annex id="alg-file-class-pattern">
+      <h1>File Class Pattern</h1>
+      <emu-note>
+        <ul>
+          <li>The *"resources"* internal field of a File instance describes a specific file in the file system. On POSIX, the internal field is a file descriptor.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-file-class-pattern-constructor">
+        <h1>constructor ( )</h1>
+        <emu-alg>
+          1. Throw.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Use the *openFile* method of a Directory instance to create File instances.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-file-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the IO Class Pattern *close* method.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>On POSIX, step 5 of the IO Class Pattern *close* method closes the file descriptor.</li>
+            <li>See <a href="https://linux.die.net/man/2/close">man close</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-file-class-pattern-prototype-flush">
+        <h1>flush ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Flush file _fd_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/fsync">man fsync</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-file-class-pattern-prototype-read">
+        <h1>read ( _count_, _offset_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _fd_ is *null*.
+          1. Convert _offset_ into an ECMAScript number.
+          1. Throw if _offset_ is neither *0* nor a positive integer.
+          1. If _count_ is a number, then
+            1. Throw if _count_ is not a positive integer.
+            1. Let _option_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+            1. SetProperty(_option_, *"maxByteLength"*, _count_).
+            1. Let _result_ be Construct(GetProperty(*globalThis*, *"ArrayBuffer"*), _count_, _option_).
+            1. Let _pointer_ be GetBytePointer(_result_).
+            1. Read _count_ bytes into _pointer_ from _fd_ at _offset_.
+            1. Let _count_ be the number of bytes read by the former step.
+            1. Call(GetProperty(_result_, *"resize"*), _result_, _count_).
+          1. Else,
+            1. Let _pointer_ be GetBytePointer(_count_).
+            1. Let _count_ be GetProperty(_count_, *"byteLength"*).
+            1. Read _count_ bytes into _pointer_ from _fd_ at _offset_.
+            1. Let _result_ be the number of bytes read by the former step.
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/pread">man pread</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-file-class-pattern-prototype-setsize">
+        <h1>setSize(size)</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _fd_ is *null* or not writable.
+          1. Convert _size_ into an ECMAScript number.
+          1. Throw if _size_ is not a positive integer.
+          1. Set the size of _fd_ to _size_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/ftruncate">man ftruncate</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-file-class-pattern-prototype-status">
+        <h1>status ( )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _fd_ is *null*.
+          1. Let _status_ be the status of _fd_.
+          1. Let _size_ be _status_ size.
+          1. Let _mode_ be _status_ mode.
+          1. Let _isFile_ be a function that returns true.
+          1. Let _isDirectory_ be a function that returns false.
+          1. Let _isSymbolicLink_ be a function that returns false link.
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. SetProperty(_result_, *"size"*, _size_).
+          1. SetProperty(_result_, *"mode"*, _mode_).
+          1. SetProperty(_result_, *"isFile"*, _isFile_).
+          1. SetProperty(_result_, *"isDirectory"*, _isDirectory_).
+          1. SetProperty(_result_, *"isSymbolicLink"*, _isSymbolicLink_).
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/fstat">man fstat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-file-class-pattern-prototype-write">
+        <h1>write ( _buffer_, _offset_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Throw if _fd_ is *null* or not writable.
+          1. Convert _offset_ into an ECMAScript number.
+          1. Throw if _offset_ is neither *0* nor a positive integer.
+          1. Let _pointer_ be GetBytePointer(_buffer_).
+          1. Let _count_ be GetProperty(_buffer_, *"byteLength"*).
+          1. Write _count_ bytes from _pointer_ into _fd_ at _offset_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/pwrite">man pwrite</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-file-class-pattern-read-write-data">
+        <h1>read / write data</h1>
+        <emu-table><table><tbody>
+          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
+        </tbody></table></emu-table>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-directory-class-pattern">
+      <h1>Directory Class Pattern</h1>
+      <emu-note>
+        <ul>
+          <li>The *"resources"* internal field of a Directory instance describes a specific directory in the file system. On POSIX, the internal field is a file descriptor.</li>
+          <li>All directory and file entries are specified by a path relative to the specific directory described by the Directory instance resources.</li>
+          <li>Paths are strings. The path separator is *"/"*. CheckPath enforces paths to be beneath the specific directory described by the Directory instance resources.</li>
+        </ul>
+      </emu-note>
+      <emu-annex id="alg-directory-class-pattern-checkpath" type="abstract operation">
+        <h1>
+          CheckPath (
+            _path_: a value
+          )
+        </h1>
+        <dl class="header"></dl>
+        <emu-alg>
+          1. Convert _path_ into an ECMAScript string.
+          1. Throw if _path_ is *"."* or *".."*.
+          1. Throw if _path_ starts with *"/"*, *"./"*, or *"../"*.
+          1. Throw if _path_ contains *"//"*, *"/./"*, or *"/../"*.
+          1. Return _path_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-constructor">
+        <h1>constructor ( )</h1>
+        <emu-alg>
+          1. Throw.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Use the *openDirectory* method of a Directory instance to create Directory instances.</li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-close">
+        <h1>close ( )</h1>
+        <emu-alg>
+          1. Execute all steps of the IO Class Pattern *close* method.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>On POSIX, step 5 of the IO Class Pattern *close* method closes the file descriptor.</li>
+            <li>See <a href="https://linux.die.net/man/2/close">man close</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-createdirectory">
+        <h1>createDirectory ( _path_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _path_ be CheckPath(_path_).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. If the entry specified by _path_ relative to _fd_ exists, then
+            1. Return *false*.
+          1. Create a directory specified by _path_ relative to _fd_ .
+          1. Return *true*.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/mkdirat">man mkdirat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-createlink">
+        <h1>createLink ( _path_, _target_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _path_ be CheckPath(_path_).
+          1. Let _target_ be CheckPath(_target_).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Create a symbolic link specified by _path_ to the entry specified by _target_ relative to _fd_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/symlinkat">man symlinkat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-delete">
+        <h1>delete ( _path_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _path_ be CheckPath(_path_).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. If the entry specified by _path_ relative to _fd_ does not exist, then
+            1. Return *false*.
+          1. Remove the entry specified by _path_ relative to _fd_.
+          1. Return *true*.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/unlinkat">man unlinkat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-move">
+        <h1>move ( _fromPath_, _toPath_ [, _directory_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _fromPath_ be CheckPath(_fromPath_).
+          1. Let _toPath_ be CheckPath(_toPath_).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. If _directory_ is absent, then
+            1. Let _fd2_ be _fd_.
+          1. Else,
+            1. Throw if _directory_ is not a Directory instance.
+            1. Let _fd2_ be GetInternalField(_directory_, *"resources"*).
+          1. Rename the entry specified by _fromPath_ relative to _fd_ into the entry specified by _toPath_ relative to _fd2_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/renameat">man renameat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-opendirectory">
+        <h1>openDirectory ( _options_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Throw if _options_ is not an object.
+          1. Let _path_ be GetProperty(_options_, *"path"*).
+          1. Let _path_ be CheckPath(_path_).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Let _fd2_ be the result of opening the directory specified by _path_ relative to _fd_.
+          1. Let _result_ be a new Directory instance .
+          1. SetInternalField(*this*, *"resources"*, _fd2_).
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Step 6 must throw if the entry does not exist, or if the entry exists but is not a directory.</li>
+            <li>See <a href="https://man7.org/linux/man-pages/man2/openat2.2.html">man openat2</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-openfile">
+        <h1>openFile ( _options_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Throw if _options_ is not an object.
+          1. Let _path_ be GetProperty(_options_, *"path"*).
+          1. Let _path_ be CheckPath(_path_).
+          1. Let _mode_ be GetProperty(_options_, *"mode"*).
+          1. Convert _mode_ into an ECMAScript string.
+          1. Throw if _mode_ is neither *"r"*, nor *"r+"*, nor *"w"*, nor *"w+"*.
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Let _fd2_ be the result of opening the file specified by _path_ relative to _fd_ with _mode_.
+          1. Let _result_ be a new File instance .
+          1. SetInternalField(*this*, *"resources"*, _fd2_).
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Step 9 must throw if the entry does not exist and _mode_ is neither *"w"* nor *"w+"*, or if the entry exists but is not a file.</li>
+            <li>See <a href="https://linux.die.net/man/2/openat">man openat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-readlink">
+        <h1>readLink ( _path_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _path_ be CheckPath(_path_).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Let _result_ be the target of the symbolic link specified by _path_ relative to _fd_ .
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/readlinkat">man readlinkat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-scan">
+        <h1>scan ( [ _path_ ] )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _constructor_ be the Directory Iterator Class.
+          1. If _path_ is present, then
+            1. Let _iterator_ be Construct(_constructor_, *this*, path).
+          1. Else,
+            1. Let _iterator_ be Construct(_constructor_, *this*).
+          1. Return _iterator_.
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-status">
+        <h1>status ( _path_ )</h1>
+        <emu-alg>
+          1. CheckInternalFields(*this*).
+          1. Let _path_ be CheckPath(_path_).
+          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+          1. Let _status_ be the status of the entry specified by _path_ relative to _fd_.
+          1. Let _size_ be _status_ size.
+          1. Let _mode_ be _status_ mode.
+          1. Let _isFile_ be a function that returns true if _mode_ is a file .
+          1. Let _isDirectory_ be a function that returns true if _mode_ is a directory.
+          1. Let _isSymbolicLink_ be a function that returns true if _mode_ is a symbolic link.
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. SetProperty(_result_, *"size"*, _size_).
+          1. SetProperty(_result_, *"mode"*, _mode_).
+          1. SetProperty(_result_, *"isFile"*, _isFile_).
+          1. SetProperty(_result_, *"isDirectory"*, _isDirectory_).
+          1. SetProperty(_result_, *"isSymbolicLink"*, _isSymbolicLink_).
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/fstatat">man fstatat</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-class-pattern-prototype-symbol-iterator">
+        <h1>[Symbol.iterator] ( )</h1>
+        <emu-alg>
+          1. Return Call(GetProperty(*this*, *"scan"*), *this*).
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-directory-iterator-class">
+      <h1>Directory Iterator Class</h1>
+      <emu-annex id="alg-directory-iterator-class-constructor">
+        <h1>constructor ( _directory_ [, _path_ ] )</h1>
+        <emu-alg>
+          1. Throw if _directory_ is not a Directory instance.
+          1. Let _fd_ be GetInternalField(*directory*, *"resources"*).
+          1. If _path_ is present, then
+            1. Let _path_ be CheckPath(_path_).
+            1. Let _fd2_ be the result of opening the directory specified by _path_ relative to _fd_.
+          1. Else,
+            1. Let _fd2_ be the result of duplicating _fd_.
+          1. Let _stream_ be the result of opening a directory stream corresponding to _fd2_.
+          1. SetInternalField(*this*, *"stream"*, _stream_).
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/2/dup2">man dup</a> and <a href="https://linux.die.net/man/3/fdopendir">man fdopendir</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-iterator-class-prototype-next">
+        <h1>next ( )</h1>
+        <emu-alg>
+          1. Let _stream_ be GetInternalField(*this*, *"stream"*).
+          1. If _stream_ is *null*, then
+            1. Let _entry_ be *null*.
+          1. Else,
+            1. Let _entry_ be the next directory entry in _stream_.
+            1. If _entry_ is *null*, then
+              1. Close _stream_.
+              1. SetInternalField(*this*, *"stream"*, *null*).
+            1. Else,
+              1. Let _name_ be the name of _entry_.
+              1. If _name_ is *"."* or *".."* go to step 3.1.
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. If _entry_ is *null*, then
+            1. SetProperty(_result_, *"done"*, *true*).
+            1. SetProperty(_result_, *"value"*, *undefined*).
+          1. Else,
+            1. SetProperty(_result_, *"done"*, *false*).
+            1. SetProperty(_result_, *"value"*, _name_).
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>See <a href="https://linux.die.net/man/3/readdir">man readdir</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+      <emu-annex id="alg-directory-iterator-class-prototype-return">
+        <h1>return ( )</h1>
+        <emu-alg>
+          1. Let _stream_ be GetInternalField(*this*, *"stream"*).
+          1. If _stream_ is not *null*, then
+            1. Close _stream_.
+            1. SetInternalField(*this*, *"stream"*, *null*).
+          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
+          1. SetProperty(_result_, *"done"*, *true*).
+          1. SetProperty(_result_, *"value"*, *undefined*).
+          1. Return _result_.
+        </emu-alg>
+        <emu-note>
+          <ul>
+            <li>Closing the iterator stream must also close the resources used to open the iterator stream. </li>
+            <li>See <a href="https://linux.die.net/man/3/closedir">man closedir</a></li>
+          </ul>
+        </emu-note>
+      </emu-annex>
+    </emu-annex>
+    <emu-annex id="alg-home-directory-object">
+      <h1>Home Directory Object</h1>
+      <emu-note>
+        <ul>
+          <li>The File module default export is a Directory instance, which is used to access file and directory entries in the file system. </li>
+          <li>On POSIX, it is typically the *$HOME* directory.</li>
+        </ul>
+      </emu-note>
+    </emu-annex>
+  </emu-annex>

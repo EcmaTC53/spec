@@ -1,0 +1,33 @@
+
+    <emu-intro id="changes-since-the-third-edition">
+      <h1>Changes since the third edition</h1>
+      <ul>
+        <li>Add `path` to WebSocket Client constructor options object</li>
+        <li>Add note about multiple subprotocols using WebSocket Client options object `protocol` property</li>
+        <li>Add `statusText` argument to HTTP Client `onHeaders()` callback</li>
+        <li>Move HTML to Bibliography</li>
+        <li>Remove ResizableArrayBuffer and GrowableSharedArrayBuffer from Bibliography (now part of ECMA-262)</li>
+        <li>Fix markdown levels in Update module</li>
+        <li>Add <emu-xref href="#bluetoothle-central">BLE GATT and GAP Clients</emu-xref> API</li>
+        <li>Add `headersMask` to <emu-xref href="#http-client-request">HTTP Request</emu-xref></li>
+        <li>Add organization names to Normative references</li>
+        <li><emu-xref href="#uuid">UUID</emu-xref> definition</li>
+        <li>Add security settings to BLE GATT Client</li>
+        <li>Add `add` and `remove` methods to UDP socket to support multicast</li>
+        <li>Remove `multicast` properties from UDP</li>
+        <li>Add `writeRead` to I2C (sync and async)</li>
+        <li>Add `activeLow` and `initialValue` to Digital</li>
+        <li>Rename BLE `security.lazy` to `security.immediate`</li>
+        <li>Add `eraseValue` and `writeAlign` to Flash</li>
+        <li>Add `dns` property and editorial changes to <emu-xref href="#ntp-client">NTP Client</emu-xref></li>
+        <li>Clarifications on Display class pattern</li>
+        <li>Add <emu-xref href="#dns-sd">DNS-SD Class Pattern</emu-xref></li>
+        <li>Add `configure()` and `configuration` to <emu-xref href="#image-input">Image In</emu-xref></li>
+        <li>Add <emu-xref href="#bluetoothle-peripheral">BLE Peripheral</emu-xref> API</li>
+        <li>Add BLE and UUID normative references</li>
+        <li>Add note to Directory `status` about return value for non-existent paths</li>
+      </ul>
+      <emu-note>
+        <p>This change log is maintained for the convenience of reviewers and will not be incorporated into the Standard.</p>
+        </emu-note>
+    </emu-intro>
