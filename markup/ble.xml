@@ -1,5 +1,5 @@
 <emu-biblio href="./biblio.json"></emu-biblio>
-	<emu-annex id="alg-formal-algorithms">
+	<emu-annex id="alg-formal-algorithms" normative>
 		<h1>Formal algorithms</h1>
 		<emu-annex id="alg-gapclient-class-pattern">
 			<h1>GAP Client Class Pattern</h1>
@@ -305,7 +305,7 @@
 	1. Let _response_ be *false*.
 1. Else,
 	1. Throw.
-1. If _value_ is no readable byte buffer, then
+1. If _value_ is not a readable byte buffer, then
 	1. Throw.
 1. Write _resources_ value with _value_ and _response_.
 1. When the operation completes:
@@ -357,13 +357,13 @@
 1. CheckInternalFields(*this*).
 1. If _action_ is *"input"*, then
 	1. If _data_ is present, then
-		1. Convert _data_ into an ECMASctipt number.
+		1. Convert _data_ into an ECMAScript number.
 	1. Else,
 		1. Let _data_ be *0*.
 1. Else if _action_ is *"compareNumber"*, then
 	1. Convert _data_ into an ECMAScript boolean.
 1. Else if _action_ is *"outOfBand"*, then
-	1. If _data_ is no readable byte buffer, then
+	1. If _data_ is not a readable byte buffer, then
 		1. Throw.
 	1. Let _n_ be the byte length of _data_.
 	1. If _n_ is not *16*, then
@@ -399,7 +399,7 @@
 				<h1>restore ( _buffer_ )</h1>
 				<emu-alg>
 1. CheckInternalFields(*this*).
-1. If _buffer_ is no readable byte buffer, then
+1. If _buffer_ is not a readable byte buffer, then
 	1. Throw.
 1. Let _n_ be the byte length of _buffer_.
 1. If _n_ is less than the size of a record tag, then
@@ -488,7 +488,7 @@
 				<emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _resources_ be GetInternalField(*this*, *"resources"*).
-1. Let _uuid_ be _resources_ UUID as a byte buffer.
+1. Let _uuid_ be _resources_ UUID as a readable byte buffer.
 1. Return UUIDBufferToString(_uuid_).
 				</emu-alg>
 			</emu-annex>
@@ -507,7 +507,7 @@
 				<emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _resources_ be GetInternalField(*this*, *"resources"*).
-1. Let _uuid_ be _resources_ UUID as a byte buffer.
+1. Let _uuid_ be _resources_ UUID as a readable byte buffer.
 1. Return UUIDBufferToString(_uuid_).
 				</emu-alg>
 			</emu-annex>
@@ -549,7 +549,7 @@
 1. Let _connections_ be a new array.
 1. SetInternalField(*this*, *"connections"*, _connections_).
 				</emu-alg>
-				<emu-note>The internal hierarchy of services, characteristics and descriptors is specified here with arrays and objects. But only characteristic and descriptor objects corresponding to variable characteristics and descriptors are observable, thru their callbacks. The rest of the hierarchy can be implemented without arrays and objects. However, observable objects in the hierarchy cannot be garbage collected until their server is closed.</emu-note>
+				<emu-note>The internal hierarchy of services, characteristics, and descriptors is specified here with arrays and objects. But only characteristic and descriptor objects corresponding to variable characteristics and descriptors are observable, thru their callbacks. The rest of the hierarchy can be implemented without arrays and objects. However, observable objects in the hierarchy cannot be garbage collected until their server is closed.</emu-note>
 			</emu-annex>
 			<emu-annex id="alg-gattserver-prototype-close">
 				<h1>close ( )</h1>
@@ -943,7 +943,7 @@
 		1. Convert _manufacturer_ into a number.
 		1. Throw if _manufacturer_ is not a 16-bit unsigned integer.
 		1. Let _data_ be GetProperty(_value_, *"data"*).
-		1. Throw if _data_ is not a byte buffer.
+		1. Throw if _data_ is not a readable byte buffer.
 		1. Let _n_ be GetProperty(_data_, *"byteLength"*).
 		1. _appendLength_(*3* *+* _n_).
 		1. _bufferByte_(*255*).
@@ -959,7 +959,7 @@
 	1. Else,
 		1. Let _index_ be ToIndex(_key_).
 		1. Throw if _index_ is *undefined* or more than *255*.
-		1. Throw if _value_ is not a byte buffer.
+		1. Throw if _value_ is not a readable byte buffer.
 		1. Let _n_ be GetProperty(_value_, *"byteLength"*).
 		1. _appendLength_(*1* *+* _n_).
 		1. _bufferByte_(_index_).
@@ -1022,7 +1022,7 @@
 1. CheckInternalFields(*this*).
 1. If _action_ is *"input"*, then
 	1. If _data_ is present, then
-		1. Convert _data_ into an ECMASctipt number.
+		1. Convert _data_ into an ECMAScript number.
 	1. Else,
 		1. Let _data_ be *0*.
 1. Else if _action_ is *"compareNumber"*, then
@@ -1042,8 +1042,8 @@
 				<h1>get maximumWrite ( )</h1>
 				<emu-alg>
 1. CheckInternalFields(*this*).
-1. Let _resources_ be GetInternalField(*this*, *"resources"*).
-1. Let _mtu_ be _resources_ MTU as an ECMAScript number.
+1. Let _mtu_ be the MTU negotiated between the peripheral and the central.
+1. Convert _mtu_ into an ECMAScript number.
 1. Return _mtu_ *-* *3*.
 				</emu-alg>
 			</emu-annex>
@@ -1062,7 +1062,7 @@
 				<emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _resources_ be GetInternalField(*this*, *"resources"*).
-1. Let _uuid_ be _resources_ UUID as a byte buffer.
+1. Let _uuid_ be _resources_ UUID as a readable byte buffer.
 1. Return UUIDBufferToString(_uuid_).
 				</emu-alg>
 			</emu-annex>
@@ -1081,7 +1081,7 @@
 				<emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _resources_ be GetInternalField(*this*, *"resources"*).
-1. Let _uuid_ be _resources_ .[[UUID]] as a byte buffer.
+1. Let _uuid_ be _resources_ .[[UUID]] as a readable byte buffer.
 1. Return UUIDBufferToString(_uuid_).
 				</emu-alg>
 			</emu-annex>
@@ -1100,7 +1100,7 @@
 				<emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _resources_ be GetInternalField(*this*, *"resources"*).
-1. Let _uuid_ be _resources_ UUID as a byte buffer.
+1. Let _uuid_ be _resources_ UUID as a readable byte buffer.
 1. Return UUIDBufferToString(_uuid_).
 				</emu-alg>
 			</emu-annex>
@@ -1123,16 +1123,22 @@
 1. Else,
 	1. Let _view_ be Construct(_Uint8Array_, _buffer_).
 1. Let _string_ be Call(GetProperty(_view_, *"toHex"*), _view_).
-1. Let _n_ be GetProperty(_string_, *"length"*).
+1. Let _n_ be the number fo characters in _string_.
 1. If _n_ is *32*, then
 	1. NOTE: Format is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
-	1. Let _slice_ be GetProperty(_string_, *"slice"*).
-	1. Let _s0_ be Call(_slice_, _string_, 0, 8).
-	1. Let _s1_ be Call(_slice_, _string_, 8, 12).
-	1. Let _s2_ be Call(_slice_, _string_, 12, 16).
-	1. Let _s3_ be Call(_slice_, _string_, 16, 20).
-	1. Let _s4_ be Call(_slice_, _string_, 20).
-	1. Let _string_ be _s0_ *+* *"-"* *+* _s1_ *+* *"-"* *+* _s2_ *+* *"-"* *+* _s3_ *+* *"-"* *+* _s4_.
+	1. Let _s0_ be _string_ characters from index *0* to *7*.
+	1. Let _s1_ be _string_ characters from index *8* to *11*.
+	1. Let _s2_ be _string_ characters from index *12* to *15*.
+	1. Let _s3_ be _string_ characters from index *16* to *19*.
+	1. Let _s4_ be _string_ characters from index *20* to *31*.
+	1. NOTE: Canonicalizes Bluetooth Base UUID.
+	1. If _s1_ is *"0000"* and _s2_ is *"1000"* and _s3_ is *"8000"* and _s4_ is *"00805f9b34fb"*, then
+		1. If _s0_ starts with *"0000"*, then
+			1. Let _string_ be _s0_ characters from index *4* to *7*.
+		1. Else,
+			1. Let _string_ be _s0_.
+	1. Else,
+		1. Let _string_ be _s0_ *+* *"-"* *+* _s1_ *+* *"-"* *+* _s2_ *+* *"-"* *+* _s3_ *+* *"-"* *+* _s4_.
 1. Else if _n_ is neither *4* nor *8*, then
 	1. Throw.
 1. Return _string_.
@@ -1147,16 +1153,22 @@
 				<dl class="header"></dl>
 				<emu-alg>
 1. Convert _string_ into an ECMAScript string.
-1. Let _n_ be GetProperty(_string_, *"length"*).
+1. Let _n_ be the number fo characters in _string_.
 1. If _n_ is *36*, then
 	1. NOTE: Format is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
-	1. Let _slice_ be GetProperty(_string_, *"slice"*).
-	1. Let _s0_ be Call(_slice_, _string_, 0, 8).
-	1. Let _s1_ be Call(_slice_, _string_, 9, 13).
-	1. Let _s2_ be Call(_slice_, _string_, 14, 18).
-	1. Let _s3_ be Call(_slice_, _string_, 19, 21).
-	1. Let _s4_ be Call(_slice_, _string_, 22).
-	1. Let _string_ be _s0_ *+* _s1_ *+* _s2_ *+* _s3_ *+* _s4_.
+	1. Let _s0_ be _string_ characters from *0* to *7*.
+	1. Let _s1_ be _string_ characters from *9* to *12*.
+	1. Let _s2_ be _string_ characters from *14* to *17*.
+	1. Let _s3_ be _string_ characters from *19* to *22*.
+	1. Let _s4_ be _string_ characters from *24* to *35*.
+	1. NOTE: Canonicalizes Bluetooth Base UUID.
+	1. If _s1_ is *"0000"* and _s2_ is *"1000"* and _s3_ is *"8000"* and _s4_ is *"00805f9b34fb"*, then
+		1. If _s0_ starts with *"0000"*, then
+			1. Let _string_ be _s0_ characters from index *4* to *7*.
+		1. Else,
+			1. Let _string_ be _s0_.
+	1. Else,
+		1. Let _string_ be _s0_ *+* _s1_ *+* _s2_ *+* _s3_ *+* _s4_.
 1. Else if _n_ is neither *4* nor *8*, then
 	1. Throw.
 1. [declared="Uint8Array"] Let _view_ be Call(GetProperty(_Uint8Array_, "*fromHex*"), _Uint8Array_, _string_).

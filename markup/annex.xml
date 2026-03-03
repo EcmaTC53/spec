@@ -407,6 +407,8 @@ print(2);
             <tr><td>*pin*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*mode*</td><td>yes</td><td>*Digital.Input*, *Digital.InputPullUp*, *Digital.InputPullDown*, *Digital.InputPullUpDown*, *Digital.Output*, or *Digital.OutputOpenDrain*.</td><td></td></tr>
             <tr><td>*edge*</td><td>no*</td><td>*Digital.Rising*, *Digital.Falling*, and *Digital.Rising + Digital.Falling*</td><td></td></tr>
+            <tr><td>*activeLow*</td><td>no</td><td>boolean</td><td>*false*</td></tr>
+            <tr><td>*initialValue*</td><td>no</td><td>*0* or *1*</td><td>*0*</td></tr>
             <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
             <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
           </tbody></table></emu-table>
@@ -527,6 +529,33 @@ print(2);
             <tr><td>*stop*</td><td>no</td><td>*true* or *false*</td><td>*true*</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
+        <emu-annex id="alg-io-i2c-prototype-writeRead">
+          <h1>writeRead ( _data_, _option_ [, _stop_ ] )</h1>
+          <emu-alg>
+1. CheckInternalFields(*this*).
+1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+1. Throw if _resources_ is *null* or not writable or not readable.
+1. Let _pointerOut_ be GetBytePointer(_data_).
+1. Let _nOut_ be GetProperty(_data_, *"byteLength"*).
+1. If _option_ is a number, then
+	1. Throw if _option_ is no positive integer.
+	1. Let _buffer_ be Construct(*"ArrayBuffer"*, _option_).
+1. Else,
+	1. Let _buffer_ be _option_.
+1. Let _pointerIn_ be GetBytePointer(_buffer_).
+1. Let _nIn_ be GetProperty(_buffer_, *"byteLength"*).
+1. If _stop_ is absent, then
+	1. Let _stop_ be *true*.
+1. If _stop is *true*, then
+	1. Let _stop_ be *1*.
+1. Else,
+	1. Let _stop_ be *0*.
+1. Performs atomically:
+	1. Write _nOut_ bytes from _pointerOut_ into _resources_ with stop bit *0*.
+	1. Read _nIn_ bytes from _resources_ into _pointerIn_ with stop bit _stop_.
+1. Return _buffer_.
+          </emu-alg>
+        </emu-annex>
       </emu-annex>
       <emu-annex id="alg-io-i2c-async">
         <h1>I²C – asynchronous IO</h1>
@@ -570,6 +599,39 @@ print(2);
               <li>The *read* and *write* methods algorithms describe how to handle an optional argument before the optional _callback_ argument.</li>
             </ul>
           </emu-note>
+        </emu-annex>
+        <emu-annex id="alg-io-i2c-async-prototype-writeRead">
+          <h1>writeRead ( _data_, _option_ [, _stop_ ] [, _callback_ ] )</h1>
+          <emu-alg>
+1. Execute steps 1 to 7 of of the <emu-xref href="#alg-io-i2c-prototype-writeRead">I²C – synchronous IO writeRead method</emu-xref>.
+1. If _callback_ is not *undefined*, then
+	1. Throw if not IsCallable(_callback_).
+	1. Convert _stop_ to an ECMAScript boolean.
+1. Else if _stop_ is not *undefined*, then
+	1. If IsCallable(_stop_), then
+		1. Let _callback_ be _stop_.
+		1. Let _stop_ be true.
+1. Else,
+	1. Convert _stop_ to an ECMAScript boolean.
+1. Else,
+	1. Let _stop_ be true.
+1. If _stop is *true*, then
+	1. Let _stop_ be *1*.
+1. Else,
+	1. Let _stop_ be *0*.
+1. Start an operation that performs atomically:
+	1. Write _nOut_ bytes from _pointerOut_ into _resources_ with stop bit *0*.
+	1. Read _nIn_ bytes from _resources_ into _pointerIn_ with stop bit _stop_.
+	1. When the operation succeeded:
+		1. If _callback_ is not *undefined*, then
+			1. Queue a task that performs:
+				1. Call(_callback_, *this*, *null*, _buffer_, _nOut_).
+	1. When the operation failed:
+		1. If _callback_ is not *undefined*, then
+			1. Let _error_ be an ECMAScript *Error* object describing the failure.
+			1. Queue a task that performs:
+				1. Call(_callback_, *this*, _error_).
+          </emu-alg>
         </emu-annex>
       </emu-annex>
       <emu-annex id="alg-io-smbus">
@@ -980,6 +1042,26 @@ print(2);
             <tr><td>*port*</td><td>yes</td><td>16-bit unsigned integer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
+        <emu-annex id="alg-io-udp-socket-prototype-add">
+          <h1>add ( _multicastAddress_ )</h1>
+          <emu-alg>
+1. CheckInternalFields(*this*).
+1. Convert _multicastAddress_ into an ECMAScript string.
+1. Throw if _multicastAddress_ is not a valid IP address.
+1. Join the multicast group specified by _multicastAddress_.
+1. Throw if the operation failed.
+          </emu-alg>
+       </emu-annex>
+        <emu-annex id="alg-io-udp-socket-prototype-remove">
+          <h1>add ( _multicastAddress_ )</h1>
+          <emu-alg>
+1. CheckInternalFields(*this*).
+1. Convert _multicastAddress_ into an ECMAScript string.
+1. Throw if _multicastAddress_ is not a valid IP address.
+1. Leave the multicast group specified by _multicastAddress_.
+1. Throw if the operation failed.
+          </emu-alg>
+       </emu-annex>
       </emu-annex>
     </emu-annex>
     <emu-annex id="alg-peripheral-class-pattern">
@@ -1947,7 +2029,8 @@ print(2);
           <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
           <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
-        </tbody></table></emu-table>
+          <tr><td>*dns*</td><td>yes*</td><td>*Object*</td><td>N/A</td></tr>
+       </tbody></table></emu-table>
       </emu-annex>
       <emu-note>
         <ul>
@@ -2079,8 +2162,8 @@ print(2);
         <emu-table><table><tbody>
           <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
           <tr><td>*dns*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
-          <tr><td>*host*</td><td>yes</td><td>string</td><td>N/A</td></tr>
           <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*host*</td><td>yes</td><td>string</td><td>N/A</td></tr>
           <tr><td>*port*</td><td>no</td><td>number</td><td>*80*</td></tr>
           <tr><td>*onError*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
         </tbody></table></emu-table>
@@ -2107,7 +2190,7 @@ print(2);
           <tr><td>*method*</td><td>no</td><td>string</td><td>*GET*</td></tr>
           <tr><td>*path*</td><td>no</td><td>string</td><td>*/*</td></tr>
           <tr><td>*headers*</td><td>no</td><td>*Map*</td><td>*null*</td></tr>
-          <tr><td>*port*</td><td>no</td><td>number</td><td>*80*</td></tr>
+          <tr><td>*headersMask*</td><td>no</td><td>*Array* of string</td><td>*null*</td></tr>
           <tr><td>*onHeaders*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
           <tr><td>*onReadable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
           <tr><td>*onWritable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -2208,9 +2291,10 @@ print(2);
           <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
           <tr><td>*attach*</td><td>no</td><td>instance of TCP Socket</td><td>*null*</td></tr>
           <tr><td>*dns*</td><td>yes*</td><td>*Object*</td><td>N/A</td></tr>
-          <tr><td>*host*</td><td>yes*</td><td>string</td><td>N/A</td></tr>
           <tr><td>*socket*</td><td>yes*</td><td>*Object*</td><td>N/A</td></tr>
+          <tr><td>*host*</td><td>yes*</td><td>string</td><td>N/A</td></tr>
           <tr><td>*port*</td><td>no*</td><td>number</td><td>80</td></tr>
+          <tr><td>*path*</td><td>no*</td><td>string</td><td>*"/"*</td></tr>
           <tr><td>*protocol*</td><td>no*</td><td>string</td><td>""</td></tr>
           <tr><td>*headers*</td><td>no*</td><td>*Map*</td><td>*null*</td></tr>
           <tr><td>*onReadable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -2221,7 +2305,7 @@ print(2);
           <tr><td>*format*</td><td>no</td><td>*"number"* or *"buffer"*</td><td>*"buffer"*</td></tr>
         </tbody></table></emu-table>
         <ul>
-          <li>If *attach* is present, *dns*, *host*, *socket*, *port*, *protocol* and *headers* are neither required nor used.</li>
+          <li>If *attach* is present, *dns*, *socket*, *host*, *port*, *path*, *protocol* and *headers* are neither required nor used.</li>
         </ul>
       </emu-annex>
       <emu-annex id="alg-websocket-client-write-options">
@@ -2821,6 +2905,51 @@ print(2);
           1. Return _height_.
         </emu-alg>
       </emu-annex>
+      <emu-annex id="alg-image-input-prototype-configure">
+        <h1>configure ( _options_ )</h1>
+        <emu-alg>
+1. CheckInternalFields(*this*).
+1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+1. Throw if _resources_ is *null*.
+1. Throw if _options_ is not an object.
+1. Let _setOption_ be a new Abstract Closure with parameters (_feature_) that captures _options_, _resources_ and performs the following steps when called:
+	1. If _resources_ supports _feature_, then
+		1. If HasProperty(_options_, _feature_), then
+			1. Let _value_ be GetProperty(_options_, _feature_).
+			1. Convert _value_ into an ECMAScript number.
+			1. Throw if _value_ is *NaN*, less than *0* or more than *100*.
+			1. Adjust _value_ from a percentage of _feature_ range.
+			1. Set _feature_ of _resources_ to _value_.
+1. _setOption_(*"brightness"*).
+1. _setOption_(*"contrast"*).
+1. _setOption_(*"saturation"*).
+1. _setOption_(*"sharpness"*).
+1. _setOption_(*"denoise"*).
+1. _setOption_(*"whiteBalance"*).
+        </emu-alg>
+      </emu-annex>
+      <emu-annex id="alg-image-input-prototype-get-configuration">
+        <h1>get configuration ( )</h1>
+        <emu-alg>
+1. CheckInternalFields(*this*).
+1. Let _resources_ be GetInternalField(*this*, *"resources"*).
+1. Throw if _resources_ is *null*.
+1. Let _options_ be a new object.
+1. Let _getOption_ be a new Abstract Closure with parameters (_feature_) that captures _options_, _resources_ and performs the following steps when called:
+	1. If _resources_ supports _feature_, then
+		1. Get _value_ from _feature_ of _resources_.
+		1. Adjust _value_ to a percentage of _feature_ range.
+		1. Convert _value_ into an ECMAScript number.
+		1. DefineProperty(_options_, _feature_, _value_).
+1. _getOption_(*"brightness"*).
+1. _getOption_(*"contrast"*).
+1. _getOption_(*"saturation"*).
+1. _getOption_(*"sharpness"*).
+1. _getOption_(*"denoise"*).
+1. _getOption_(*"whiteBalance"*).
+1. Return _options_.
+        </emu-alg>
+      </emu-annex>
     </emu-annex>
     <emu-annex id="alg-image-input-async">
       <h1>Image Input Class – asynchronous</h1>
@@ -3052,13 +3181,17 @@ print(2);
           1. CheckInternalFields(*this*).
           1. Let _partition_ be GetInternalField(*this*, *"resources"*).
           1. Throw if _partition_ is *null*.
-          1. Let _size_ be number of bytes in _partition_.
-          1. Let _blocks_ be number of blocks in _partition_.
-          1. Let _blockLength_ be number of bytes by block.
+          1. Let _size_ be the number of bytes in _partition_.
+          1. Let _blocks_ be the number of blocks in _partition_.
+          1. Let _blockLength_ be the number of bytes by block.
+          1. Let _eraseValue_ be the value that blocks are erased to by the <emu-xref href="#alg-flash-partition-class-pattern-prototype-eraseblock">eraseBlock method</emu-xref>.
+          1. Let _writeAlign_ be the required alignment for the <emu-xref href="#alg-flash-partition-class-pattern-prototype-write">write method</emu-xref>.
           1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
           1. SetProperty(_result_, *"size"*, _size_).
           1. SetProperty(_result_, *"blocks"*, _blocks_).
           1. SetProperty(_result_, *"blockLength"*, _blockLength_).
+          1. SetProperty(_result_, *"eraseValue"*, _eraseValue_).
+          1. SetProperty(_result_, *"writeAlign"*, _writeAlign_).
           1. Return _result_.
         </emu-alg>
       </emu-annex>
@@ -3777,22 +3910,30 @@ print(2);
       <emu-annex id="alg-directory-class-pattern-prototype-status">
         <h1>status ( _path_ )</h1>
         <emu-alg>
-          1. CheckInternalFields(*this*).
-          1. Let _path_ be CheckPath(_path_).
-          1. Let _fd_ be GetInternalField(*this*, *"resources"*).
-          1. Let _status_ be the status of the entry specified by _path_ relative to _fd_.
-          1. Let _size_ be _status_ size.
-          1. Let _mode_ be _status_ mode.
-          1. Let _isFile_ be a function that returns true if _mode_ is a file .
-          1. Let _isDirectory_ be a function that returns true if _mode_ is a directory.
-          1. Let _isSymbolicLink_ be a function that returns true if _mode_ is a symbolic link.
-          1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
-          1. SetProperty(_result_, *"size"*, _size_).
-          1. SetProperty(_result_, *"mode"*, _mode_).
-          1. SetProperty(_result_, *"isFile"*, _isFile_).
-          1. SetProperty(_result_, *"isDirectory"*, _isDirectory_).
-          1. SetProperty(_result_, *"isSymbolicLink"*, _isSymbolicLink_).
-          1. Return _result_.
+1. CheckInternalFields(*this*).
+1. Let _path_ be CheckPath(_path_).
+1. Let _fd_ be GetInternalField(*this*, *"resources"*).
+1. Let _result_ be a new object.
+1. If the entry specified by _path_ relative to _fd_ exists, then
+	1. Let _status_ be the status of the entry specified by _path_ relative to _fd_.
+	1. Let _size_ be _status_ size.
+	1. Let _mode_ be _status_ mode.
+	1. Let _isFile_ be a function that returns *true* if _mode_ is a file.
+	1. Let _isDirectory_ be a function that returns *true* if _mode_ is a directory.
+	1. Let _isSymbolicLink_ be a function that returns *true* if _mode_ is a symbolic link.
+	1. SetProperty(_result_, *"size"*, _size_).
+	1. SetProperty(_result_, *"mode"*, _mode_).
+	1. SetProperty(_result_, *"isFile"*, _isFile_).
+	1. SetProperty(_result_, *"isDirectory"*, _isDirectory_).
+	1. SetProperty(_result_, *"isSymbolicLink"*, _isSymbolicLink_).
+1. Else,
+	1. Let _isNone_ be a function that returns *false*.
+	1. SetProperty(_result_, *"size"*, *0*).
+	1. SetProperty(_result_, *"mode"*, *0*).
+	1. SetProperty(_result_, *"isFile"*, _isNone_).
+	1. SetProperty(_result_, *"isDirectory"*, _isNone_).
+	1. SetProperty(_result_, *"isSymbolicLink"*, _isNone_).
+1. Return _result_.
         </emu-alg>
         <emu-note>
           <ul>
