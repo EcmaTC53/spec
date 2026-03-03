@@ -4169,10 +4169,7 @@ print(2);
 1. Let _nIn_ be GetProperty(_buffer_, *"byteLength"*).
 1. If _stop_ is absent, then
 	1. Let _stop_ be *true*.
-1. If _stop is *true*, then
-	1. Let _stop_ be *1*.
-1. Else,
-	1. Let _stop_ be *0*.
+1. Convert _stop_ into an ECMAScript number.
 1. Performs atomically:
 	1. Write _nOut_ bytes from _pointerOut_ into _resources_ with stop bit *0*.
 	1. Read _nIn_ bytes from _resources_ into _pointerIn_ with stop bit _stop_.
@@ -4238,10 +4235,7 @@ print(2);
 	1. Convert _stop_ to an ECMAScript boolean.
 1. Else,
 	1. Let _stop_ be true.
-1. If _stop is *true*, then
-	1. Let _stop_ be *1*.
-1. Else,
-	1. Let _stop_ be *0*.
+1. Convert _stop_ into an ECMAScript number.
 1. Start an operation that performs atomically:
 	1. Write _nOut_ bytes from _pointerOut_ into _resources_ with stop bit *0*.
 	1. Read _nIn_ bytes from _resources_ into _pointerIn_ with stop bit _stop_.
@@ -4676,7 +4670,7 @@ print(2);
           </emu-alg>
        </emu-annex>
         <emu-annex id="alg-io-udp-socket-prototype-remove">
-          <h1>add ( _multicastAddress_ )</h1>
+          <h1>remove ( _multicastAddress_ )</h1>
           <emu-alg>
 1. CheckInternalFields(*this*).
 1. Convert _multicastAddress_ into an ECMAScript string.
