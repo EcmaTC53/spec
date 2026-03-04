@@ -753,6 +753,7 @@
 	1. Throw if _value_ is not a readable byte buffer.
 	1. Let _n_ be GetProperty(_value_, *"byteLength"*).
 	1. Throw if _n_ is bigger than _maximumWrite_.
+	1. NOTE: When a connection is established, report an error if _n_ is bigger than the connection <emu-xref href="#alg-gattserverconnection-prototype-get-maximumWrite">maximumWrite</emu-xref>.
 	1. Let _resources_ be a new constant peripheral service characteristic specified by _uuid_, _properties_ and _value_.
 1. Else,
 	1. If _properties_ *&* READABLE is *0*, then
@@ -847,6 +848,7 @@
 	1. Throw if _value_ is not a readable byte buffer.
 	1. Let _n_ be GetProperty(_value_, *"byteLength"*).
 	1. Throw if _n_ is bigger than _maximumWrite_.
+	1. NOTE: When a connection is established, report an error if _n_ is bigger than the connection <emu-xref href="#alg-gattserverconnection-prototype-get-maximumWrite">maximumWrite</emu-xref>.
 	1. Let _resources_ be a new constant peripheral service characteristic descriptor specified by _uuid_ and _value_.
 1. Else,
 	1. Throw if both _onRead_ and _onWrite_ are *null*.
