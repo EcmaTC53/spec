@@ -96,12 +96,12 @@
 		1. While _offset_ is less than _size_:
 			1. [declared="DataView"] Let _uuid_ be Construct(_DataView_, _uuids_, _offset_, _n_).
 			1. Let _uuid_ be UUIDBufferToString(_uuid_).
-			1. Call(GetProperty(_result_, *"push"*), _result_, _uuid_).
+			1. Add _uuid_ to _result_.
 			1. Let _offset_ be _offset_ + _n_.
 1. _pushUUIDs_(*3*, *2*).
 1. _pushUUIDs_(*5*, *4*).
 1. _pushUUIDs_(*7*, *16*).
-1. Let _n_ be GetProperty(_result_, *"length"*).
+1. Let _n_ be the length of _result_.
 1. If _n_ is more than *0*, then
 	1. Return _result_.
 				</emu-alg>
@@ -164,7 +164,7 @@
 1. CheckInternalFields(*this*).
 1. Let _resources_ be GetInternalField(*this*, *"resources"*).
 1. If _filters_ is present, then
-	1. Throw if _filters_ is no array.
+	1. Throw if _filters_ is not an array.
 	1. Let _list_ be an empty list of UUID.
 	1. For each element _uuid_ of _filters_, do
 		1. Let _uuid_ be UUIDStringToBuffer(_uuid_).
@@ -184,7 +184,7 @@
 				1. Let _service_ be a new instance of the <emu-xref href="#alg-gattclientservice-class">GATTClientService Class</emu-xref>.
 				1. Let _resources_ be the discovered service.
 				1. SetInternalField(_service_, `"resources"`, _resources_).
-				1. Call(GetProperty(_result_, *"push"*), _result_, _service_).
+				1. Add _service_ to _result_.
 		1. Call(_callback_, *this*, _error_, _result_).
 				</emu-alg>
 			</emu-annex>
@@ -195,7 +195,7 @@
 1. CheckInternalFields(_service_).
 1. Let _resources_ be GetInternalField(_service_, *"resources"*).
 1. If _filters_ is present, then
-	1. Throw if _filters_ is no array.
+	1. Throw if _filters_ is not an array.
 	1. Let _list_ be an empty list of UUID.
 	1. For each element _uuid_ of _filters_, do
 		1. Let _uuid_ be UUIDStringToBuffer(_uuid_).
@@ -215,7 +215,7 @@
 				1. Let _characteristic_ be a new instance of the <emu-xref href="#alg-gattclientcharacteristic-class">GATTClientCharacteristic Class</emu-xref>.
 				1. Let _resources_ be the discovered characteristic.
 				1. SetInternalField(_characteristic_, `"resources"`, _resources_).
-				1. Call(GetProperty(_result_, *"push"*), _result_, _characteristic_).
+				1. Add _characteristics_ to _result_.
 		1. Call(_callback_, *this*, _error_, _result_).
 				</emu-alg>
 			</emu-annex>
@@ -226,7 +226,7 @@
 1. CheckInternalFields(_characteristic_).
 1. Let _resources_ be GetInternalField(_characteristic_, *"resources"*).
 1. If _filters_ is present, then
-	1. Throw if _filters_ is no array.
+	1. Throw if _filters_ is not an array.
 	1. Let _list_ be an empty list of UUID.
 	1. For each element _uuid_ of _filters_, do
 		1. Let _uuid_ be UUIDStringToBuffer(_uuid_).
@@ -246,7 +246,7 @@
 				1. Let _descriptor_ be a new instance of the <emu-xref href="#alg-gattclientdescriptor-class">GATTClientDescriptor Class</emu-xref>.
 				1. Let _resources_ be the discovered descriptor.
 				1. SetInternalField(_descriptor_, `"resources"`, _resources_).
-				1. Call(GetProperty(_result_, *"push"*), _result_, _descriptor_).
+				1. Add _descriptor_ to _result_.
 		1. Call(_callback_, *this*, _error_, _result_).
 				</emu-alg>
 			</emu-annex>
@@ -542,10 +542,9 @@
 1. SetInternalField(*this*, *"services"*, _services_).
 1. Let _serviceRecords_ be GetProperty(_params_, *"services"*).
 1. If _serviceRecords_ is not *null*, then
-	1. Let _mtu_ be _resources_ MTU as an ECMAScript number.
 	1. For each element _serviceRecord_ of _serviceRecords_, do
-		1. Let _service_ be CreateGATTService(_serviceRecord_, _mtu_ *-* *3*).
-		1. Call(GetProperty(_services_, *"push"*, _service_)).
+		1. Let _service_ be CreateGATTService(_serviceRecord_).
+		1. Add _service_ to _services_.
 1. Let _connections_ be a new array.
 1. SetInternalField(*this*, *"connections"*, _connections_).
 				</emu-alg>
@@ -570,9 +569,8 @@
 				<emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _services_ be GetInternalField(*this*, *"services"*).
-1. Let _mtu_ be _resources_ MTU as an ECMAScript number.
-1. Let _service_ be CreateGATTService(_serviceRecord_, _mtu_ *-* *3*).
-1. Call(GetProperty(_services_, *"push"*, _service_)).
+1. Let _service_ be CreateGATTService(_serviceRecord_).
+1. Add _service_ to _services_.
 				</emu-alg>
 			</emu-annex>
 			<emu-annex id="alg-gattserver-prototype-deleteservice">
@@ -580,14 +578,8 @@
 				<emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _services_ be GetInternalField(*this*, *"services"*).
-1. Let _predicate_ be a new Abstract Closure with parameters (_service_) that captures _uuid_ and performs the following steps when called:
-	1. If GetProperty(_service_, "*uuid*") is _uuid_, then
-		1. Return *true*.
-	1. Return *false*.
-1. Let _index_ be Call(GetProperty(_services_, *"findIndex"*), _services_, _predicate_).
-1. If _index_ is more than or equal to *0*, then
-	1. Let _services_ be Call(GetProperty(_services_, *"splice"*), _services_, _index_, *1*).
-	1. DeleteGATTService(GetProperty(_services_, *0*)).
+1. Remove *this* from _services_.
+1. DeleteGATTService(*this*).
 				</emu-alg>
 			</emu-annex>
 			<emu-annex id="alg-gattserver-prototype-startadvertising">
@@ -649,7 +641,6 @@
 				<h1>
 				CreateGATTService (
 				 	_serviceRecord_: a service record
-				 	_maximumWrite_: a number
 				)
 				</h1>
 				<dl class="header">
@@ -668,8 +659,8 @@
 	1. Throw if _characteristicRecords_ is not an array.
 	1. Let _characteristics_ be a new array.
 	1. For each element _characteristicRecord_ of _characteristicRecords_, do
-		1. Let _characteristic_ be CreateGATTCharacteristic(_characteristicRecord_, _maximumWrite_).
-		1. Call(GetProperty(_characteristics_, *"push"*, _characteristic_)).
+		1. Let _characteristic_ be CreateGATTCharacteristic(_characteristicRecord_).
+		1. Add _characteristic_ to _characteristics_.
 1. Else,
 	1. Let _characteristics_ be *null*.
 1. SetInternalField(_service_, *"characteristics"*, _characteristics_).
@@ -712,7 +703,6 @@
 				<h1>
 				CreateGATTCharacteristic (
 				 	_characteristicRecord_: a characteristic record
-				 	_maximumWrite_: a number
 				)
 				</h1>
 				<dl class="header">
@@ -728,22 +718,22 @@
 1. Throw if _properties_ is not a positive integer.
 1. If HasProperty(_characteristicRecord_, *"onRead"*), then
 	1. Let _onRead_ be GetProperty(_characteristicRecord_, *"onRead"*).
-	1. Throw if IsCallable(_onRead_) is *false*.
+	1. Throw if not IsCallable(_onRead_).
 1. Else,
 	1. Let _onRead_ be *null*.
 1. If HasProperty(_characteristicRecord_, *"onWrite"*), then
 	1. Let _onWrite_ be GetProperty(_characteristicRecord_, *"onWrite"*).
-	1. Throw if IsCallable(_onWrite_) is *false*.
+	1. Throw if not IsCallable(_onWrite_).
 1. Else,
 	1. Let _onWrite_ be *null*.
 1. If HasProperty(_characteristicRecord_, *"onSubscribe"*), then
 	1. Let _onSubscribe_ be GetProperty(_characteristicRecord_, *"onSubscribe"*).
-	1. Throw if IsCallable(_onSubscribe_) is *false*.
+	1. Throw if not IsCallable(_onSubscribe_).
 1. Else,
 	1. Let _onSubscribe_ be *null*.
 1. If HasProperty(_characteristicRecord_, *"onUnsubscribe"*), then
 	1. Let _onUnsubscribe_ be GetProperty(_characteristicRecord_, *"onUnsubscribe"*).
-	1. Throw if IsCallable(_onUnsubscribe_) is *false*.
+	1. Throw if not IsCallable(_onUnsubscribe_).
 1. Else,
 	1. Let _onUnsubscribe_ be *null*.
 1. Let _characteristic_ be a new instance of the <emu-xref href="#alg-gattservercharacteristic-class">GATTServerCharacteristic Class</emu-xref>.
@@ -752,8 +742,7 @@
 	1. Let _value_ be GetProperty(_characteristicRecord_, *"value"*).
 	1. Throw if _value_ is not a readable byte buffer.
 	1. Let _n_ be GetProperty(_value_, *"byteLength"*).
-	1. Throw if _n_ is bigger than _maximumWrite_.
-	1. NOTE: When a connection is established, report an error if _n_ is bigger than the connection <emu-xref href="#alg-gattserverconnection-prototype-get-maximumWrite">maximumWrite</emu-xref>.
+	1. NOTE: When a connection is established, report a warning if _n_ is bigger than the connection <emu-xref href="#alg-gattserverconnection-prototype-get-maximumWrite">maximumWrite</emu-xref>.
 	1. Let _resources_ be a new constant peripheral service characteristic specified by _uuid_, _properties_ and _value_.
 1. Else,
 	1. If _properties_ *&* READABLE is *0*, then
@@ -780,8 +769,8 @@
 	1. Throw if _descriptorRecords_ is not an array.
 	1. Let _descriptors_ be a new array.
 	1. For each element _descriptorRecord_ of _descriptorRecords_, do
-		1. Let _descriptor_ be CreateGATTDescriptor(_descriptorRecord_, _maximumWrite_).
-		1. Call(GetProperty(_descriptors_, *"push"*, _descriptor_)).
+		1. Let _descriptor_ be CreateGATTDescriptor(_descriptorRecord_).
+		1. Add _descriptor_ to _descriptors_.
 1. Else,
 	1. Let _descriptors_ be *null*.
 1. SetInternalField(_characteristic_, `"descriptors"`, _descriptors_).
@@ -820,7 +809,6 @@
 				<h1>
 				CreateGATTDescriptor (
 				 	_descriptorRecord_: a descriptor record
-				 	_maximumWrite_: a number
 				)
 				</h1>
 				<dl class="header">
@@ -833,12 +821,12 @@
 1. Let _uuid_ be UUIDStringToBuffer(_uuid_).
 1. If HasProperty(_descriptorRecord_, *"onRead"*), then
 	1. Let _onRead_ be GetProperty(_descriptorRecord_, *"onRead"*).
-	1. Throw if IsCallable(_onRead_) is *false*.
+	1. Throw if not IsCallable(_onRead_).
 1. Else,
 	1. Let _onRead_ be *null*.
 1. If HasProperty(_descriptorRecord_, *"onWrite"*), then
 	1. Let _onWrite_ be GetProperty(_descriptorRecord_, *"onWrite"*).
-	1. Throw if IsCallable(_onWrite_) is *false*.
+	1. Throw if not IsCallable(_onWrite_).
 1. Else,
 	1. Let _onWrite_ be *null*.
 1. Let _descriptor_ be a new instance of the <emu-xref href="#alg-gattserverdescriptor-class">GATTServerDescriptor Class</emu-xref>.
@@ -847,8 +835,7 @@
 	1. Let _value_ be GetProperty(_descriptorRecord_, *"value"*).
 	1. Throw if _value_ is not a readable byte buffer.
 	1. Let _n_ be GetProperty(_value_, *"byteLength"*).
-	1. Throw if _n_ is bigger than _maximumWrite_.
-	1. NOTE: When a connection is established, report an error if _n_ is bigger than the connection <emu-xref href="#alg-gattserverconnection-prototype-get-maximumWrite">maximumWrite</emu-xref>.
+	1. NOTE: When a connection is established, report a warning if _n_ is bigger than the connection <emu-xref href="#alg-gattserverconnection-prototype-get-maximumWrite">maximumWrite</emu-xref>.
 	1. Let _resources_ be a new constant peripheral service characteristic descriptor specified by _uuid_ and _value_.
 1. Else,
 	1. Throw if both _onRead_ and _onWrite_ are *null*.
@@ -910,31 +897,26 @@
 	1. Else if _key_ is *"services"*, then
 		1. Throw if _value_ is not an array.
 		1. Let _sorters_ be a new array.
-		1. Let _pushSorter_ be a new Abstract Closure with parameters (_n_, _id_) that captures _sorters_ and performs the following steps when called:
+		1. Let _addSorter_ be a new Abstract Closure with parameters (_n_, _id_) that captures _sorters_ and performs the following steps when called:
 			1. Let _sorter_ be a new object.
 			1. Let _array_ be a new array.
 			1. DefineProperty(_sorter_, *n*, _n_).
 			1. DefineProperty(_sorter_, *id*, _id_).
 			1. DefineProperty(_sorter_, *array*, _array_).
-			1. Call(GetProperty(_sorters_, "*push*"), _sorters_, _sorter_).
-		1. _pushSorter_(*2*, *3*).
-		1. _pushSorter_(*4*, *5*).
-		1. _pushSorter_(*16*, *7*).
+			1. Add _sorter_ to _sorters_.
+		1. _addSorter_(*2*, *3*).
+		1. _addSorter_(*4*, *5*).
+		1. _addSorter_(*16*, *7*).
 		1. For each element _uuid_ of _value_, do
 			1. Let _uuid_ be UUIDStringToBuffer(_uuid_).
 			1. Let _n_ be GetProperty(_uuid_, *"byteLength"*).
-			1. Let _predicate_ be a new Abstract Closure with parameters (_sorter_) that captures _n_ and performs the following steps when called:
-				1. If GetProperty(_sorter_, "*n*") is _n_, then
-					1. Return *true*.
-				1. Return *false*.
-			1. Let _sorter_ be Call(GetProperty(_sorters_, *"find"*), _sorters_, _predicate_).
+			1. Let _sorter_ be _sorters_ element matching _n_.
 			1. Throw if _sorter_ is *undefined*.
 			1. Let _array_ be GetProperty(_sorter_, "*array*").
-			1. Call(GetProperty(_array_, "*push*"), _array_, _uuid_).
+			1. Add _uuid_ to _array_.
 		1. For each element _sorter_ of _sorters, do
 			1. Let _array_ be GetProperty(_sorter_, "*array*").
-			1. Let _length_ be GetProperty(_array_, "*length*").
-			1. If _length_ is more than *0*, then
+			1. If _array_ has elements, then
 				1. Let _n_ be GetProperty(_sorter_, "*n*").
 				1. _appendLength_(*1* *+* _length_ *×* _n_).
 				1. _bufferByte_(GetProperty(_sorter_, "*id*")).
@@ -993,9 +975,7 @@
 1. Close _resources_.
 1. Let _server_ be GetInternalField(*this*, *"server"*).
 1. Let _connections_ be GetInternalField(_server_, *"connections"*).
-1. Let _index_ be Call(GetProperty(_connections_, *"indexOf"*), *this*).
-1. If _index_ is more than or equal to *0*, then
-	1. Call(GetProperty(_connections_, *"splice"*), _connections_, _index_, *1*).
+1. Remove *this* from _connections_.
 1. ClearInternalFields(*this*).
 				</emu-alg>
 			</emu-annex>
