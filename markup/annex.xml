@@ -1,5 +1,4 @@
-
-  <emu-annex id="alg-formal-algorithms">
+  <emu-annex id="alg-formal-algorithms" normative>
     <h1>Formal algorithms</h1>
     <p>This annex defines formal algorithms for behaviors defined by this specification. These algorithms are useful primarily for implementing the specification and validating implementations.</p>
       <emu-annex id="alg-internal-fields">
