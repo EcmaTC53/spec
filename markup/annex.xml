@@ -3906,7 +3906,7 @@ print(2);
         <emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _path_ be CheckPath(_path_).
-1. Let _resolveTarget_ be *false*.
+1. Let _resolveTarget_ be *true*.
 1. If _options_ is present, then
 	1. Throw if _options_ is not an object.
 	1. If HasProperty(_options_, "resolveTarget"), then
