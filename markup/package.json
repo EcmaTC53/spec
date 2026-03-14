@@ -2,14 +2,16 @@
   "name": "@moddable/md2xml",
   "version": "1.0.0",
   "dependencies": {
+    "ecmarkup": "^24.0.0",
     "marked": "^4.2.0"
   },
-  "imports": {
-  },
-  "main": "./md2xml.js",
+  "imports": {},
+  "main": "./md2xmlx.js",
   "type": "module",
   "scripts": {
-    "build": "./build.sh"
+    "build": "./build.sh && ecmarkup ECMA-419.xml out/ECMA-419.html --lint-spec",
+    "build-for-pdf": "./build.sh && ecmarkup --verbose ECMA-419.xml out/ECMA-419.html --assets external --assets-dir out --printable --lint-spec",
+    "pdf": "npm run build-for-pdf && prince-books --script ./node_modules/ecmarkup/js/print.js ./out/ECMA-419.html -o ./out/ECMA-419.pdf"
   },
   "author": "",
   "license": "ISC",
