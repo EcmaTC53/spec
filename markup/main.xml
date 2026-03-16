@@ -3025,10 +3025,12 @@ device.files.move("network_update.json", "network.json", settings);
           <emu-clause id="storage-directory-class-createlink-method">
             <h1>createLink method</h1>
             <p>The `createLink` method creates a link at the path specified by the first argument to the path specified by the second argument. Both arguments are <emu-xref href="#storage-file-subpath">subpath strings</emu-xref>.</p>
+            <p>The `createLink` method is optional. If a file system does not support symbolic links, the `createLink` should be omitted from the implementation.</p>
           </emu-clause>
           <emu-clause id="storage-directory-class-readlink-method">
             <h1>readLink method</h1>
             <p>The `readLink` method resolves a link at the path specified by the first argument <emu-xref href="#storage-file-subpath">subpath string</emu-xref> and returns the resolved path as a string. The resolved path should be within the root of the directory instance.</p>
+            <p>The `readLink` method is optional. If a file system does not support symbolic links, the `readLink` should be omitted from the implementation.</p>
           </emu-clause>
           <emu-clause id="storage-directory-class-scan-method">
             <h1>scan method</h1>

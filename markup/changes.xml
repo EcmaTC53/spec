@@ -26,6 +26,7 @@
         <li>Add <emu-xref href="#bluetoothle-peripheral">BLE Peripheral</emu-xref> API</li>
         <li>Add BLE and UUID normative references</li>
         <li>Add note to Directory `status` about return value for non-existent paths</li>
+        <li>Add note that Directory `createLink` and `readLink` are optional.</li>
       </ul>
       <emu-note>
         <p>This change log is maintained for the convenience of reviewers and will not be incorporated into the Standard.</p>
