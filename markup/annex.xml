@@ -1,6 +1,6 @@
   <emu-annex id="alg-formal-algorithms" normative>
     <h1>Formal algorithms</h1>
-    <p>This annex defines formal algorithms for behaviors defined by this specification. These algorithms are useful primarily for implementing the specification and validating implementations.</p>
+    <p>This annex defines formal algorithms for behaviours defined by this specification. These algorithms are useful primarily for implementing the specification and validating implementations.</p>
       <emu-annex id="alg-internal-fields">
         <h1>Internal fields</h1>
         <p>Internal fields are implementation-dependent and must not be accessible outside the implementation. For instance they can be C structure fields, ECMAScript private fields, or a combination of both.</p>
@@ -169,7 +169,7 @@ print(2);
               <pre><code class="javascript">
   let pin = 2;
   if (options !== undefined) {
-      if ("pin" in options)) {
+      if ("pin" in options) {
           pin = options.pin;
           if ((pin < 0) || (3 < pin))
               throw new RangeError(`invalid pin ${pin}`);
@@ -2235,7 +2235,7 @@ print(2);
         <h1>write options</h1>
         <emu-table><table><tbody>
           <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
-          <tr><td>*operation*</td><td>no</td><td>number</td><td>*MQTTCLient.PUBLISH*</td></tr>
+          <tr><td>*operation*</td><td>no</td><td>number</td><td>*MQTTClient.PUBLISH*</td></tr>
           <tr><td>*id*</td><td>no</td><td>number</td><td></td></tr>
           <tr><td>*topic*</td><td>yes*</td><td>string</td><td>N/A</td></tr>
           <tr><td>*QoS*</td><td>no*</td><td>0, 1, or 2</td><td>0</td></tr>
@@ -2245,9 +2245,9 @@ print(2);
           <tr><td>*items*</td><td>yes*</td><td>*Array*</td><td>N/A</td></tr>
         </tbody></table></emu-table>
         <ul>
-          <li>*topic* is required when *operation* is *MQTTCLient.PUBLISH*</li>
-          <li>*QoS*, *retain*, *duplicate*, *byteLength* are used when *operation* is *MQTTCLient.PUBLISH*</li>
-          <li>*items* is required and used when *operation* is *MQTTCLient.SUBSCRIBE* or *MQTTCLient.UNSUBSCRIBE*.</li>
+          <li>*topic* is required when *operation* is *MQTTClient.PUBLISH*</li>
+          <li>*QoS*, *retain*, *duplicate*, *byteLength* are used when *operation* is *MQTTClient.PUBLISH*</li>
+          <li>*items* is required and used when *operation* is *MQTTClient.SUBSCRIBE* or *MQTTClient.UNSUBSCRIBE*.</li>
           <li>*items* is an array of objects that have:</li>
         </ul>
         <emu-table><table><tbody>
@@ -2256,7 +2256,7 @@ print(2);
           <tr><td>*QoS*</td><td>no*</td><td>0, 1, or 2</td><td>0</td></tr>
         </tbody></table></emu-table>
         <ul>
-          <li>*QoS* is used when *operation* is *MQTTCLient.SUBSCRIBE*</li>
+          <li>*QoS* is used when *operation* is *MQTTClient.SUBSCRIBE*</li>
         </ul>
       </emu-annex>
       <emu-note>
@@ -2800,7 +2800,7 @@ print(2);
         <h1>constructor options</h1>
         <emu-table><table><tbody>
           <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
-          <tr><td>*imageType*</td><td>no</td><td>a <emu-xref href="#pixel-formats">pixel format</emu-xref> or *"jpeg*"</td><td>(host defined)</td></tr>
+          <tr><td>*imageType*</td><td>no</td><td>a <emu-xref href="#pixel-formats">pixel format</emu-xref> or *"jpeg"*</td><td>(host defined)</td></tr>
           <tr><td>*width*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
           <tr><td>*height*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
           <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
@@ -3279,7 +3279,7 @@ print(2);
           1. Try:
             1. Let _partition_ be GetInternalField(GetProperty(_params_, *"partition"*), *"resources"*).
             1. Throw if _partition_ is *null* or not writable.
-            1. Let _mode_ be GetProperty(_params_, *"mode'*).
+            1. Let _mode_ be GetProperty(_params_, *"mode"*).
             1. Let _size_ be the size of _partition_.
             1. Let _byteLength_ be GetProperty(_params_, *"byteLength"*).
             1. If _byteLength_ is not *undefined*, then
@@ -3674,7 +3674,7 @@ print(2);
           1. Let _mode_ be _status_ mode.
           1. Let _isFile_ be a function that returns true.
           1. Let _isDirectory_ be a function that returns false.
-          1. Let _isSymbolicLink_ be a function that returns false link.
+          1. Let _isSymbolicLink_ be a function that returns false.
           1. Let _result_ be Construct(GetProperty(*globalThis*, *"Object"*)).
           1. SetProperty(_result_, *"size"*, _size_).
           1. SetProperty(_result_, *"mode"*, _mode_).
@@ -3791,6 +3791,7 @@ print(2);
         <emu-note>
           <ul>
             <li>See <a href="https://linux.die.net/man/2/symlinkat">man symlinkat</a></li>
+            <li>The createLink method is only present on platforms that support symbolic links.</li>
           </ul>
         </emu-note>
       </emu-annex>
@@ -3886,6 +3887,7 @@ print(2);
         <emu-note>
           <ul>
             <li>See <a href="https://linux.die.net/man/2/readlinkat">man readlinkat</a></li>
+            <li>The readLink method is only present on platforms that support symbolic links.</li>
           </ul>
         </emu-note>
       </emu-annex>
@@ -3902,7 +3904,7 @@ print(2);
         </emu-alg>
       </emu-annex>
       <emu-annex id="alg-directory-class-pattern-prototype-status">
-        <h1>status ( _path_ [, _options_ ]  )</h1>
+        <h1>status ( _path_ [, _options_ ] )</h1>
         <emu-alg>
 1. CheckInternalFields(*this*).
 1. Let _path_ be CheckPath(_path_).

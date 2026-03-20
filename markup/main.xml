@@ -212,7 +212,7 @@ import Digital from "embedded:io/digital";
       </emu-clause>
       <emu-clause id="uuid">
         <h1>UUID</h1>
-        <p>UUIDs are represented by strings using hexadecimal encoding with lowercase letters, left-padded with `"0"`as necessary. A 128-bit UUID uses the form `"01234567-0000-1000-8000-00805f9b34fb"`. An abbreviated 16-bit UUID uses the form `"180d"`; an abbreviated 32-bit, `"01234567"`.</p>
+        <p>UUIDs are represented by strings using hexadecimal encoding with lowercase letters, left-padded with `"0"` as necessary. A 128-bit UUID uses the form `"01234567-0000-1000-8000-00805f9b34fb"`. An abbreviated 16-bit UUID uses the form `"180d"`; an abbreviated 32-bit, `"01234567"`.</p>
       </emu-clause>
     </emu-clause>
     <emu-clause id="requirements-for-standard-built-in-ecmascript-objects">
@@ -232,7 +232,7 @@ import Digital from "embedded:io/digital";
         <p>Whether or not a completion callback is provided, the method is performed asynchronously.</p>
         <p>If an instance provides any asynchronous methods, it should provide an asynchronous `close` method.</p>
         <emu-note>
-          <p>As defined here, an "asynchronous method" is <b>not</b> an ECMAScript function declared with the `async` keyword. Here "asynchronous" refers only to the operation being performed in without blocking the current thread of execution.</p>
+          <p>As defined here, an "asynchronous method" is <b>not</b> an ECMAScript function declared with the `async` keyword. Here "asynchronous" refers only to the operation being performed without blocking the current thread of execution.</p>
           </emu-note>
       </emu-clause>
       <emu-clause id="base-class-pattern-constructor">
@@ -250,9 +250,8 @@ import Digital from "embedded:io/digital";
       <emu-clause id="base-class-pattern-close-method">
         <h1>close method</h1>
         <p>The `close` method releases all resources associated with the instance before completing.</p>
-        <p>Once the close operation, an `Error` exception is thrown if any other instance methods are called. It is not an error to call the `close` method more than once.</p>
+        <p>Once the close operation completes, an `Error` exception is thrown if any other instance methods are called. It is not an error to call the `close` method more than once.</p>
         <p>Once the close operation completes, the object is eligible for garbage collection.</p>
-        <p>Once `close` has been called, calling other methods on the instance throws an exception. The sole exception is `close` itself which is safe to call multiple times.</p>
         <p>For synchronous `close`:</p>
         <ul>
           <li>the close operation is complete when it returns</li>
@@ -400,7 +399,7 @@ import Digital from "embedded:io/digital";
             <tr><td>`pin`</td><td>A pin specifier indicating the pin to control. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A value indicating the mode of the IO. May be `Digital.Input`, `Digital.InputPullUp`, `Digital.InputPullDown`, `Digital.InputPullUpDown`, `Digital.Output`, or `Digital.OutputOpenDrain`. This property is required.</td></tr>
             <tr><td>`edge`</td><td>A value indicating the conditions for invoking the `onReadable` callback. Values are `Digital.Rising`, `Digital.Falling`, and `Digital.Rising + Digital.Falling`. This value is required if the `onReadable` property is present and ignored otherwise.</td></tr>
-            <tr><td>`activeLow`</td><td>A boolean value indicating if the IO is active low or active high. This property is optional an defaults to `false` for active high.</td></tr>
+            <tr><td>`activeLow`</td><td>A boolean value indicating if the IO is active low or active high. This property is optional and defaults to `false` for active high.</td></tr>
             <tr><td>`initialValue`</td><td>A value indicating the initial value of an output. The value is either 0 or 1. This property is optional and is ignored for inputs.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -549,7 +548,7 @@ import I2C from "embedded:io/i2c";
           <p><b>`write(buffer[, stop])`</b></p>
           <p>The first argument to the `write` method is a Byte Buffer. The optional second argument is a `Boolean` specifying the stop bit behavior.</p>
           <p><b>`writeRead(buffer, byteLength | buffer)`</b></p>
-          <p>The `writeRead` method performs a write followed immediately by a read, with a stop bit of 0 between the operations. The first argument is a Byte Buffer. Th the second argument follows the <emu-xref href="#io-pattern-read">behavior</emu-xref> of the IO Class Pattern `read` method for the `"buffer"` data format </p>
+          <p>The `writeRead` method performs a write followed immediately by a read, with a stop bit of 0 between the operations. The first argument is a Byte Buffer. The second argument follows the <emu-xref href="#io-pattern-read">behavior</emu-xref> of the IO Class Pattern `read` method for the `"buffer"` data format </p>
         </emu-clause>
       </emu-clause>
       <emu-clause id="io-classes-i-c-asynchronous-io">
@@ -832,12 +831,12 @@ import TCP from "embedded:io/socket/tcp";
           <h1>Properties of write options object</h1>
           <emu-table><table><tbody>
             <tr><th>Property</th><th>Description</th></tr>
-            <tr><td>`more`</td><td>Set to `false` FOR the last fragment of a sequence and `true` if there is at least one more fragment. Defaults to `false`.</td></tr>
+            <tr><td>`more`</td><td>Set to `false` for the last fragment of a sequence and `true` if there is at least one more fragment. Defaults to `false`.</td></tr>
             <tr><td>`byteLength`</td><td>Number of bytes to be written across a sequence of write operations with `more` set to `true` and terminating with `more` set to `false`.</td></tr>
           </tbody></table></emu-table>
           <p>The following example transmits a message over TCP using a sequence of writes. The use of `more` and `byteLength` provide the implementation of TCP socket information needed to efficiently packetize and transmit the data.</p>
             <pre><code class="javascript">
-const payload = new Float32Array(sensorReading1, sensorReading2, sensorReading3);
+const payload = Float32Array.of(sensorReading1, sensorReading2, sensorReading3);
 const header = Uint8Array.of(0x80, 0x01);
 const length = Uint8Array.of(payload.length >> 8, payload.length);
 tcp.write(header, {more: true, byteLength: header.byteLength + length.byteLength + payload.byteLength});
@@ -926,7 +925,7 @@ import UDP from "embedded:io/socket/udp";
           <h1>Methods</h1>
           <p><b>`read([buffer])`</b></p>
           <p>The `read` method reads a complete UDP packet.</p>
-          <p>If there are no arguments, `read` allocates an `ArrayBuffer` the size of the packet, copies the packet data to the buffer, and returns the buffer. If first argument is a Byte Buffer, the packet data is copied to the buffer and the number of bytes copied is returned. If the buffer is too small to hold the packet, an exception is thrown.</p>
+          <p>If there are no arguments, `read` allocates an `ArrayBuffer` the size of the packet, copies the packet data to the buffer, and returns the buffer. If the first argument is a Byte Buffer, the packet data is copied to the buffer and the number of bytes copied is returned. If the buffer is too small to hold the packet, an exception is thrown.</p>
           <p>The following properties are attached to the buffer containing the packet data:</p>
           <ul>
             <li>`address`, a string containing the packet sender's IP address</li>
@@ -1259,7 +1258,7 @@ led.write(1);
       <emu-clause id="io-provider-class-pattern-close-method">
         <h1>close method</h1>
         <p>In addition to releasing all resources as required by the Base Class Pattern, the `close` method causes the `onError` callback to be invoked on all open instances. Note that `onError` may not be invoked from within `close` (see Callbacks section).</p>
-        <p>A class may specify that `close` accepts an optional callback function to invoke after the close operation completes. The callback must the last argument to `close`. The first argument to the callback is a `Number` with 0 indicating success and other values indicating failure. Pending callbacks from other operations are invoked before the callback passed to `close`.</p>
+        <p>A class may specify that `close` accepts an optional callback function to invoke after the close operation completes. The callback must be the last argument to `close`. The first argument to the callback is a `Number` with 0 indicating success and other values indicating failure. Pending callbacks from other operations are invoked before the callback passed to `close`.</p>
       </emu-clause>
       <emu-clause id="io-provider-class-pattern-callbacks">
         <h1>Callbacks</h1>
@@ -1435,8 +1434,8 @@ let t = new Temperature({
         <h1>Ambient light</h1>
         <p>The `AmbientLight` class implements access to an ambient light sensor. The property name `lightmeter` is used when part of a compound sensor.</p>
         <p>See Annex A for the <emu-xref href="#alg-sensor-ambient-light">formal algorithms</emu-xref> of the `AmbientLight` sensor class.</p>
-        <emu-clause id="sensor-classes-ambient-light-properties-of-sample-object">
-          <h1>Properties of sample object</h1>
+        <emu-clause id="sensor-classes-ambient-light-properties-of-a-sample-object">
+          <h1>Properties of a sample object</h1>
           <p>These properties are compatible with the attributes of the same name in the <a href="https://www.w3.org/TR/ambient-light/">W3C Ambient Light Sensor draft</a>.</p>
           <emu-table><table><tbody>
             <tr><th>Property</th><th>Description</th></tr>
@@ -1649,8 +1648,8 @@ let t = new Temperature({
       <emu-clause id="sensor-classes-switch">
         <h1>Switch</h1>
         <p>The `Switch` class implements access to a switch sensor. The property name `switch` is used when part of a compound sensor.</p>
-        <emu-clause id="sensor-classes-switch-properties-of-sample-object">
-          <h1>Properties of sample object</h1>
+        <emu-clause id="sensor-classes-switch-properties-of-a-sample-object">
+          <h1>Properties of a sample object</h1>
           <emu-table><table><tbody>
             <tr><th>Property</th><th>Description</th></tr>
             <tr><td>`position`</td><td>A number that represents the current state of the switch. This property is required.</td></tr>
@@ -2016,7 +2015,7 @@ import Resolver from "embedded:network/dns/resolver/doh";
     </emu-clause>
     <emu-clause id="ntp-client">
       <h1> NTP Client</h1>
-      <p>The NTP Client retrieves the current time from a network time source using the Network Time Protocol (NTP). It conforms to the <a href="base-class-pattern">Base Class Pattern</a>.</p>
+      <p>The NTP Client retrieves the current time from a network time source using the Network Time Protocol (NTP). It conforms to the <emu-xref href="#base-class-pattern">Base Class Pattern</emu-xref>.</p>
       <p>Implementations may use the Simple Network Time Protocol (SNTP).</p>
         <pre><code class="javascript">
 import NTP from "embedded:network/ntp/client";
@@ -2032,7 +2031,7 @@ import NTP from "embedded:network/ntp/client";
         </emu-clause>
       <emu-clause id="ntp-client-gettime-method">
         <h1>getTime method</h1>
-        <p>The `getTime` method initiates a time synchronization operation. Only one time synchronization operation may be active at a time. `getTime` throws throws on requests made before the current request completes. The sole argument is a required <emu-xref href="#base-pattern-async">completion callback function</emu-xref> that is invoked when synchronization completes. If successful, the ECMAScript time value is provided in the second argument as a `Number`.</p>
+        <p>The `getTime` method initiates a time synchronization operation. Only one time synchronization operation may be active at a time. `getTime` throws on requests made before the current request completes. The sole argument is a required <emu-xref href="#base-pattern-async">completion callback function</emu-xref> that is invoked when synchronization completes. If successful, the ECMAScript time value is provided in the second argument as a `Number`.</p>
       </emu-clause>
     </emu-clause>
     <emu-clause id="http-client-class-pattern">
@@ -2070,7 +2069,7 @@ import HTTPClient from "embedded:network/http/client";
           <tr><td>`path`</td><td>The HTTP resource to access as a string. This property is optional and defaults to `"/"`.</td></tr>
           <tr><td>`headers`</td><td>A `Map` instance containing request headers. The map keys are the header names and their values are the header values. This property is optional.</td></tr>
           <tr><td>`headersMask`</td><td>An `Array` of header names to limit the response headers provided to `onHeaders`. Headers not included may be excluded. Header names must be lowercase. This property is optional; if not specified all headers are provided to `onHeaders`.</td></tr>
-          <tr><td>`onHeaders(status, headers, statusText)`</td><td>A function to invoke to provide the HTTP status result code, the HTTP status message as a string, and the response headers as a `Map`. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional.</td></tr>
+          <tr><td>`onHeaders(status, headers, statusText)`</td><td>A function to invoke to provide the HTTP status result code, the response headers as a `Map`, and the HTTP status message as a string. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional.</td></tr>
           <tr><td>`onReadable(count)`</td><td>A function to invoke when bytes are available to read from the HTTP response body. The `count` argument is a number indicating the number of bytes available to read. This property is optional.</td></tr>
           <tr><td>`onWritable(count)`</td><td>A function to invoke when the HTTP request is ready to receive bytes for the request body. The `count` argument is a number indicating the maximum number of bytes that may be written. The `onWritable` callback is only invoked if a request has a request body. To signal that a request has a request body, set either the `content-length` header to a non-zero value or the `transfer-encoding` header to `"chunked"`. This property is optional.</td></tr>
           <tr><td>`onDone()`</td><td>A function to invoke when the HTTP request has been completed successfully. This property is optional.</td></tr>
@@ -2107,7 +2106,7 @@ import HTTPServer from "embedded:network/http/server";
         <emu-table><table><tbody>
           <tr><th>Property</th><th>Description</th></tr>
           <tr><td>`io`</td><td>An object containing a `TCP Listener` class constructor options object. This property is required.</td></tr>
-          <tr><td>`port`</td><td>The port number to listen on to as a number. This property is optional and defaults to 80.</td></tr>
+          <tr><td>`port`</td><td>The port number to listen on, as a number. This property is optional and defaults to 80.</td></tr>
           <tr><td>`onConnect(connection)`</td><td>A function to invoke when a new connection is initiated. It is passed an HTTP Server Connection instance as the sole argument. This property is required.</td></tr>
         </tbody></table></emu-table>
       </emu-clause>
@@ -2211,7 +2210,7 @@ connection.route = {
             onReadable(count, options) {
             }
         });
-    }
+    },
     onError() {
         console.log("failed");
     }
@@ -2333,7 +2332,7 @@ import MQTTClient from "embedded:network/mqtt/client";
           <tr><td>`onReadable(count, options)`</td><td>A function to invoke when part of an MQTT message is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. For the first fragment of a message, the options object contains `topic` property with a string indicating the message topic, a `QoS` property with a number indicating the quality of service, and a `byteLength` property with a number indicating the total number of bytes in the message. The `onReadable` property is optional.</td></tr>
           <tr><td>`onWritable(count)`</td><td>A function to invoke when more data may be written to the connection. The sole argument is a number indicating how many bytes may be written. This property is optional.</td></tr>
           <tr><td>`onError(error)`</td><td>A function to invoke when the remote connection terminates. This property is optional.</td></tr>
-          <tr><td>`onControl(opcode, message)`</td><td>A function to invoke when a control message is received. The first argument is the control message opcode. The second argument is an object containing an `operation` property indicating the control message (`CONNACK`, `PUBACK`, `PUBREC `, `PUBREL`, `PUBCOMP`, `SUBACK`, `UNSUBACK`, `PINGREQ `, etc.) and an `id` property if included in the message. The `SUBACK` message payload is provided on the `payload` property as an array of byte values. The `onControl` property is optional.</td></tr>
+          <tr><td>`onControl(opcode, message)`</td><td>A function to invoke when a control message is received. The first argument is the control message opcode. The second argument is an object containing an `operation` property indicating the control message (`CONNACK`, `PUBACK`, `PUBREC`, `PUBREL`, `PUBCOMP`, `SUBACK`, `UNSUBACK`, `PINGREQ`, etc.) and an `id` property if included in the message. The `SUBACK` message payload is provided on the `payload` property as an array of byte values. The `onControl` property is optional.</td></tr>
           <tr><td>`id`</td><td>The MQTT client identifier as a string. This property is optional and defaults to an empty string.</td></tr>
           <tr><td>`user`</td><td>The MQTT user for establishing a connection as a string. This property is optional and defaults to an empty string.</td></tr>
           <tr><td>`password`</td><td>The MQTT password for establishing a connection as a string or Byte Buffer. This property is optional and defaults to an empty string.</td></tr>
@@ -2364,8 +2363,8 @@ import MQTTClient from "embedded:network/mqtt/client";
           <tr><td>`id`</td><td>A number specifying the `id` for the message. If an `id` is not provided the MQTT client generates one. As a rule, either the caller should provide the `id` for all messages or none to avoid the possibility of values colliding. This property is optional.</td></tr>
           <tr><td>`topic`</td><td>A string specifying an MQTT topic for a `PUBLISH` message. This property is required for `PUBLISH` messages.</td></tr>
           <tr><td>`QoS`</td><td>A number specifying the quality of service of `PUBLISH` message. Allowed values are 0, 1, and 2. This property is for `PUBLISH` messages only. It is optional and defaults to 0.</td></tr>
-          <tr><td>`retain`</td><td>A boolean indicating if a `PUBLISH` message should be retained by the server. This property is for `PUBLISH` messages only. It is optional and default to `false`.</td></tr>
-          <tr><td>`duplicate`</td><td>A boolean indicating if a `PUBLISH` message is being retransmitted by the client. This property is for `PUBLISH` messages only. It is optional and default to `false`.</td></tr>
+          <tr><td>`retain`</td><td>A boolean indicating if a `PUBLISH` message should be retained by the server. This property is for `PUBLISH` messages only. It is optional and defaults to `false`.</td></tr>
+          <tr><td>`duplicate`</td><td>A boolean indicating if a `PUBLISH` message is being retransmitted by the client. This property is for `PUBLISH` messages only. It is optional and defaults to `false`.</td></tr>
           <tr><td>`byteLength`</td><td>A number indicating the total size of a `PUBLISH` message to allow a single `PUBLISH` message payload to be split across two or more calls to `write`. This property is optional and defaults to `data.byteLength`</td></tr>
           <tr><td>`items`</td><td>An array of objects indicating the topics to subscribe or unsubscribe from. Each object must contain a `topic` property with a string indicating the topic and, for `SUBSCRIBE` messages, may contain an optional `QoS` property with the requested quality of service as a value of 0, 1, or 2. This property is required for `SUBSCRIBE` and `UNSUBSCRIBE` messages and must contain at least one element.</td></tr>
         </tbody></table></emu-table>
@@ -2497,7 +2496,7 @@ const scan = new GAPClient({
           <p><b>`onSecured(state)`</b></p>
           <p>The `onSecured` callback is invoked when the secure connection negotiation has completed successfully. The `state` argument is an options object with the properties described in the following table.</p>
           <emu-table><table><tbody>
-            <tr><th>Action</th><th>Description</th></tr>
+            <tr><th>Property</th><th>Description</th></tr>
             <tr><td>`authenticated`</td><td>A boolean value indicating whether the connection has been authenticated.</td></tr>
             <tr><td>`bonded`</td><td>A boolean value indicating whether the central bonded with the peripheral.</td></tr>
             <tr><td>`encrypted`</td><td>A boolean value indicating whether the connection is encrypted.</td></tr>
@@ -2858,7 +2857,7 @@ new GATTServer({
           <h1>Properties of GATTServerConnection instance</h1>
           <emu-table><table><tbody>
             <tr><th>Property</th><th>Description</th></tr>
-            <tr><td>`maximumWrite`</td><td>A number indicating the maximum number of bytes the `write` method can accept.</td></tr>
+            <tr><td>`maximumWrite`</td><td>A number indicating the maximum number of bytes allowed for any transmission (MTU), such as `notify` or the returned buffer from the `onRead` callback.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
       </emu-clause>
@@ -2954,7 +2953,7 @@ import files from "embedded:storage/files";
           </emu-clause>
           <emu-clause id="storage-directory-class-opendirectory-method">
             <h1>openDirectory method</h1>
-            <p>The `openDirectory` function instantiates a Directory instance from a directory subpath. It has a single argument, an options object. The following table enumerates the properties defined for the `openFile` options object:</p>
+            <p>The `openDirectory` function instantiates a Directory instance from a directory subpath. It has a single argument, an options object. The following table enumerates the properties defined for the `openDirectory` options object:</p>
             <emu-table><table><tbody>
               <tr><th>Property</th><th>Description</th></tr>
               <tr><td>`path`</td><td>A <emu-xref href="#storage-file-subpath">subpath string</emu-xref> indicating the directory to open. This property is required.</td></tr>
@@ -2973,7 +2972,7 @@ const network = settings.openDirectory({path: "network/wifi"});
             <emu-table><table><tbody>
               <tr><th>Property</th><th>Description</th></tr>
               <tr><td>`path`</td><td>A <emu-xref href="#storage-file-subpath">subpath string</emu-xref> indicating the name of the path of the file to open. This property is required.</td></tr>
-              <tr><td>`mode`</td><td>A string indicating the mode used access to the file. Values are `"r"`, `"r+"`, `"w"` , and `"w+"`. This property is optional and defaults to `"r"`.</td></tr>
+              <tr><td>`mode`</td><td>A string indicating the mode used to access to the file. Values are `"r"`, `"r+"`, `"w"` , and `"w+"`. This property is optional and defaults to `"r"`.</td></tr>
             </tbody></table></emu-table>
             <p>The `openFile` function returns a <emu-xref href="#storage-file-class">File instance</emu-xref>.</p>
             <p>If the file path resolves to a directory, `openFile` throws an `Error` instance.</p>
@@ -2997,7 +2996,7 @@ const help = documentation.openFile({path: "wifi/help.txt"});
 device.files.move("network_update.json", "settings/network.json");
 
               </code></pre>
-            <p>The following examples performs the same operation as the preceding example passing three arguments:</p>
+            <p>The following example performs the same operation as the preceding example passing three arguments:</p>
               <pre><code class="javascript">
 const settings = device.files.openDirectory("settings");
 device.files.move("network_update.json", "network.json", settings);
@@ -3067,7 +3066,7 @@ import keyValue from "embedded:storage/key-value";
           <p>The `open` function instantiates a Key-Value Domain instance from a key-value domain name. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:</p>
           <emu-table><table><tbody>
             <tr><th>Property</th><th>Description</th></tr>
-            <tr><td>`path`</td><td>A string indicating the name of the name of the key-value domain to open. This property is required.</td></tr>
+            <tr><td>`path`</td><td>A string indicating the name of the key-value domain to open. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A string indicating the mode used to access the domain. Values are `"r"` and `"r+"`. This property is optional and defaults to `"r+"`.</td></tr>
             <tr><td>`format`</td><td>A string indicating the initial data format to use for read and write operations. This property is optional and defaults to `"buffer"`.</td></tr>
           </tbody></table></emu-table>
@@ -3084,7 +3083,7 @@ settings.format = "uint8";
 settings.write("two", 2);
 
 settings.format = "buffer";
-settings.write("threes", Uint16Array.from(3, 3, 3).buffer);
+settings.write("threes", Uint16Array.from([3, 3, 3]).buffer);
 
 console.log(new Uint16Array(settings.read("three")));
 
@@ -3121,7 +3120,7 @@ settings.close();
             <h1>[Symbol.iterator] method</h1>
             <p>The Key-Value Domain instance conforms to the <a href="https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iterable-interface">ECMAScript Iterable interface</a> through its `[Symbol.Iterator]` method. The iterator returns the keys within the domain as strings.</p>
               <pre><code class="javascript">
-for (const key in device. keyValue)
+for (const key of device.keyValue)
     console.log(key);
               </code></pre>
             <p>See Annex A for the <emu-xref href="#alg-key-value-domain-iterator-class">formal algorithms</emu-xref> of the Key-Value Domain Iterator class.</p>
@@ -3190,7 +3189,7 @@ for (const path of device.flash) {
           <emu-clause id="storage-flash-flash-partition-class-pattern-eraseblock-method">
             <h1>eraseBlock method</h1>
             <p>The `eraseBlock` method erases one or more blocks in the partition. The first argument is the block number to begin erasing. The optional second argument is the block number to end erasing. If the second argument is omitted, one block is erased.</p>
-            <p>The `eraseBlock` method set the bits in an erased to either all `0` or `1` depending on the flash technology. For example, the bits are set to `1` for NOR flash and `0` for NAND flash. The `status()` method's `eraseValue` property provides the erased value.</p>
+            <p>The `eraseBlock` method sets the bits in an erased block to either all `0` or `1` depending on the flash technology. For example, the bits are set to `1` for NOR flash and `0` for NAND flash. The `status()` method's `eraseValue` property provides the erased value.</p>
           </emu-clause>
           <emu-clause id="storage-flash-flash-partition-class-pattern-read-method">
             <h1>read method</h1>
@@ -3223,9 +3222,9 @@ import update from "embedded:update";
           <p>The `open` function instantiates an Update instance from a Flash partition. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:</p>
           <emu-table><table><tbody>
             <tr><th>Property</th><th>Description</th></tr>
-            <tr><td>`partition`</td><td>An Flash Partition instance for the partition be updated. The instance must not be closed until after the update is complete. This property is required.</td></tr>
+            <tr><td>`partition`</td><td>A Flash Partition instance for the partition to be updated. The instance must not be closed until after the update is complete. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A string indicating the mode used to write the update. Values are `"a"` for append and `"w"` for random access. This property is optional and defaults to `"a"`.</td></tr>
-            <tr><td>`byteLength`</td><td>A number indicating the size of the update in bytes that will written to the partition. This value must be less than or equal to the byte length of the partition. This property is optional and should not be specified if the number of bytes is unknown.</td></tr>
+            <tr><td>`byteLength`</td><td>A number indicating the size of the update in bytes that will be written to the partition. This value must be less than or equal to the byte length of the partition. This property is optional and should not be specified if the number of bytes is unknown.</td></tr>
           </tbody></table></emu-table>
           <p>The `open` function returns an Update instance.</p>
         </emu-clause>
@@ -3467,7 +3466,7 @@ let spi = new device.io.SPI(device.spi.default);
       </emu-clause>
       <emu-clause id="host-provider-instance-http-server">
         <h1>HTTP server</h1>
-        <p>The host provider instance should include a default HTTP Client class constructor options object on its `network.http.server` property.</p>
+        <p>The host provider instance should include a default HTTP Server class constructor options object on its `network.http.server` property.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-mqtt-client">
         <h1>MQTT client</h1>
@@ -3499,7 +3498,7 @@ const eth0 = new Ethernet0.io(Ethernet0);
       </emu-clause>
       <emu-clause id="host-provider-instance-persistent-storage">
         <h1>Persistent Storage</h1>
-        <p>The host provider instance should include its root <emu-xref href="#storage-directory-class">Directory instance</emu-xref> through its `file` property.</p>
+        <p>The host provider instance should include its root <emu-xref href="#storage-directory-class">Directory instance</emu-xref> through its `files` property.</p>
           <pre><code class="javascript">
 const settings = device.files.openDirectory({path: "settings"});
           </code></pre>
