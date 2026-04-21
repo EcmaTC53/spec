@@ -10,15 +10,16 @@ One important consideration when designing hardware products is cost. The APIs a
 
 This Standard is influenced by the [Extensible Web Manifesto](https://github.com/extensibleweb/manifesto#the-extensible-web-manifesto). It aims to provide low-level APIs that do things — primarily related to hardware and communication — that the ECMAScript language cannot do by itself. These low-level APIs are functional, simple, and efficient. The APIs may be used directly. However, it is expected that many developers will interact with them indirectly through higher-level modules and frameworks that build upon the low-level APIs. This layered approach keeps the low-level APIs small and focused while allowing a variety of uses and API styles to be built upon them.
 
-The first edition is built around the IO Class Pattern which provides consistent, efficient, extensible access to the IO capabilities of embedded systems. Driver-style classes for IO extenders, sensors, and displays build on the IO foundation. The first edition was adopted by the General Assembly of June 2021.
+The first edition established the IO Class Pattern to provide consistent, efficient, extensible access to the IO capabilities of embedded systems. Driver-style classes for IO extenders, sensors, and displays build on the IO foundation. The first edition was adopted by the General Assembly of June 2021.
 
-The second edition extends IO with asynchronous capabilities used by I²C and the system management bus. It introduces new sensor classes, including many gas sensors; classes to manage and monitor network interfaces; client support for common network protocols including HTTP, MQTT, NTP, DNS, WebSocket, and TLS; server support for the HTTP and WebSocket protocols; and a real-time clock peripheral class. It was adopted by the General Assembly of June 2023.
+The second edition extended IO with asynchronous capabilities used by I²C and the system management bus. It introduced new sensor classes, including many gas sensors; classes to manage and monitor network interfaces; client support for common network protocols including HTTP, MQTT, NTP, DNS, WebSocket, and TLS; server support for the HTTP and WebSocket protocols; and a real-time clock peripheral class. It was adopted by the General Assembly of June 2023.
 
-The third edition introduces new IO classes for audio input, audio output, and image input, such as cameras. It includes persistent storage classes for files, flash memory partitions, and key-value pair stores, and to apply over-the-air firmware updates.
+The third edition introduced new IO classes for audio input, audio output, and image input, such as cameras. It included persistent storage classes for files, flash memory partitions, and key-value pair stores, and to apply over-the-air firmware updates. It was adopted by the General Assembly of June 2025.
 
+This fourth edition introduces Bluetooth LE support for centrals and peripherals, and DNS-SD discovery and advertising.
 
+<!-- text here to indicate when this revision was adopted -->
 
-This Ecma Standard was developed by Technical Committee 53 and was adopted by the General Assembly of June 2025.
 
 ## 1 Scope
 
@@ -3470,9 +3471,13 @@ The `createDirectory` method returns `true` if the directory is successfully cre
 
 The `createLink` method creates a link at the path specified by the first argument to the path specified by the second argument. Both arguments are [subpath strings](#storage-file-subpath).
 
+The `createLink` method is optional. If a file system does not support symbolic links, the `createLink` should be omitted from the implementation.
+
 ##### `readLink` method
 
 The `readLink` method resolves a link at the path specified by the first argument [subpath string](#storage-file-subpath) and returns the resolved path as a string. The resolved path should be within the root of the directory instance.
+
+The `readLink` method is optional. If a file system does not support symbolic links, the `readLink` should be omitted from the implementation.
 
 ##### `scan` method
 

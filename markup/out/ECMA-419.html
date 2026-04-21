@@ -4021,13 +4021,11 @@ p.adoption-info {
         <li>Add <emu-xref href="#bluetoothle-peripheral" id="_ref_6"><a href="#bluetoothle-peripheral">BLE Peripheral</a></emu-xref> API</li>
         <li>Add BLE and UUID normative references</li>
         <li>Add note to Directory <code>status</code> about return value for non-existent paths</li>
-        <li>Add note that Directory <code>createLink</code> and <code>readLink</code> are optional.</li>
       </ul>
       <emu-note><span class="note">Note</span><div class="note-contents">
         <p>This change log is maintained for the convenience of reviewers and will not be incorporated into the Standard.</p>
-      </div></emu-note>
+        </div></emu-note>
     </emu-intro>
-
 <emu-intro id="introduction">
       <h1>Introduction</h1>
       <p>This Standard defines APIs for use on embedded systems. Embedded systems are far more diverse than personal computers, smartphones, and web servers where ECMAScript is most widely used. The diversity of embedded hardware is a consequence of devices being optimized for a specific product or class of products.</p>
@@ -4035,10 +4033,10 @@ p.adoption-info {
       <p>The ability for scripts to access unique hardware capabilities has an important consequence. It means that not all correct scripts will run correctly on all hardware. If a script requires a feature that is unavailable, it cannot run. While it is common in ECMAScript to emulate missing language and runtime features with a "polyfill", this is usually impractical, if not impossible, for hardware capabilities. Therefore, the goal of this Standard is to make it possible to write portable scripts for specific operations, not to guarantee that all scripts execute correctly on any conformant deployment.</p>
       <p>One important consideration when designing hardware products is cost. The APIs are designed to allow efficient execution with minimal resource use. They assume no minimum or maximum configuration. Advances in the state-of-the-art of ECMAScript engines, microcontrollers, and runtime libraries will determine where these APIs may be used.</p>
       <p>This Standard is influenced by the <a href="https://github.com/extensibleweb/manifesto#the-extensible-web-manifesto">Extensible Web Manifesto</a>. It aims to provide low-level APIs that do things — primarily related to hardware and communication — that the ECMAScript language cannot do by itself. These low-level APIs are functional, simple, and efficient. The APIs may be used directly. However, it is expected that many developers will interact with them indirectly through higher-level modules and frameworks that build upon the low-level APIs. This layered approach keeps the low-level APIs small and focused while allowing a variety of uses and API styles to be built upon them.</p>
-      <p>The first edition is built around the IO Class Pattern which provides consistent, efficient, extensible access to the IO capabilities of embedded systems. Driver-style classes for IO extenders, sensors, and displays build on the IO foundation. The first edition was adopted by the General Assembly of June 2021.</p>
-      <p>The second edition extends IO with asynchronous capabilities used by I²C and the system management bus. It introduces new sensor classes, including many gas sensors; classes to manage and monitor network interfaces; client support for common network protocols including HTTP, MQTT, NTP, DNS, WebSocket, and TLS; server support for the HTTP and WebSocket protocols; and a real-time clock peripheral class. It was adopted by the General Assembly of June 2023.</p>
-      <p>The third edition introduces new IO classes for audio input, audio output, and image input, such as cameras. It includes persistent storage classes for files, flash memory partitions, and key-value pair stores, and to apply over-the-air firmware updates.</p>
-      <p>This Ecma Standard was developed by Technical Committee 53 and was adopted by the General Assembly of June 2025.</p>
+      <p>The first edition established the IO Class Pattern to provide consistent, efficient, extensible access to the IO capabilities of embedded systems. Driver-style classes for IO extenders, sensors, and displays build on the IO foundation. The first edition was adopted by the General Assembly of June 2021.</p>
+      <p>The second edition extended IO with asynchronous capabilities used by I²C and the system management bus. It introduced new sensor classes, including many gas sensors; classes to manage and monitor network interfaces; client support for common network protocols including HTTP, MQTT, NTP, DNS, WebSocket, and TLS; server support for the HTTP and WebSocket protocols; and a real-time clock peripheral class. It was adopted by the General Assembly of June 2023.</p>
+      <p>The third edition introduced new IO classes for audio input, audio output, and image input, such as cameras. It included persistent storage classes for files, flash memory partitions, and key-value pair stores, and to apply over-the-air firmware updates. It was adopted by the General Assembly of June 2025.</p>
+      <p>This fourth edition introduces Bluetooth LE support for centrals and peripherals, and DNS-SD discovery and advertising.</p>
     </emu-intro>
     <emu-clause id="scope">
       <h1><span class="secnum">1</span>  Scope</h1>
