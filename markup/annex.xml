@@ -75,8 +75,11 @@
           <h1>Numbers</h1>
           <p>For number ranges, the value is converted into an ECMAScript number, then the value is checked to be in range. The special value *NaN* is never in range.</p>
           <p>For integer ranges, the value is converted into an ECMAScript number, then the value is checked to be an integer, then the value is checked to be in range.</p>
-          <emu-table><table><tbody>
-            <tr><th>Range</th><th>From</th><th>To</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Range</th><th>From</th><th>To</th></tr>
+            </thead>
+            <tbody>
             <tr><td>number</td><td>*-Infinity*</td><td>*Infinity*</td></tr>
             <tr><td>negative number</td><td>*-Infinity*</td><td>*-Number.MIN_VALUE*</td></tr>
             <tr><td>positive number</td><td>*Number.MIN_VALUE*</td><td>*Infinity*</td></tr>
@@ -402,8 +405,11 @@ print(2);
         <h1>Digital</h1>
         <emu-annex id="alg-io-digital-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*pin*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*mode*</td><td>yes</td><td>*Digital.Input*, *Digital.InputPullUp*, *Digital.InputPullDown*, *Digital.InputPullUpDown*, *Digital.Output*, or *Digital.OutputOpenDrain*.</td><td></td></tr>
             <tr><td>*edge*</td><td>no*</td><td>*Digital.Rising*, *Digital.Falling*, and *Digital.Rising + Digital.Falling*</td><td></td></tr>
@@ -418,8 +424,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-digital-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"number"*</td><td>*0* or *1*</td><td>*0* or *1*</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -428,8 +437,11 @@ print(2);
         <h1>Digital bank</h1>
         <emu-annex id="alg-io-digital-bank-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*pins*</td><td>yes</td><td>32-bit unsigned integer</td><td></td></tr>
             <tr><td>*mode*</td><td>yes</td><td>*Digital.Input*, *Digital.InputPullUp*, *Digital.InputPullDown*, *Digital.InputPullUpDown*, *Digital.Output*, or *Digital.OutputOpenDrain*.</td><td></td></tr>
             <tr><td>*rises*</td><td>no*</td><td>32-bit unsigned integer</td><td>0</td></tr>
@@ -444,8 +456,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-digital-bank-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"number"*</td><td>32-bit unsigned integer</td><td>32-bit unsigned integer</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -454,8 +469,11 @@ print(2);
         <h1>Analog input</h1>
         <emu-annex id="alg-io-analog-input-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*pin*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*resolution*</td><td>no</td><td>positive integer</td><td>host-dependent</td></tr>
             <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
@@ -463,8 +481,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-analog-input-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"number"*</td><td>all</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -473,8 +494,11 @@ print(2);
         <h1>Pulse-width modulation</h1>
         <emu-annex id="alg-io-pulse-width-modulation-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*pin*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*hz*</td><td>no</td><td>positive number</td><td>host-dependent</td></tr>
             <tr><td>*format*</td><td>no</td><td>*"number"*</td><td>*"number"*</td></tr>
@@ -482,8 +506,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-pulse-width-modulation-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"number"*</td><td></td><td>positive integer</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -492,8 +519,11 @@ print(2);
         <h1>I²C – synchronous IO</h1>
         <emu-annex id="alg-io-i2c-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*data*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*clock*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*hz*</td><td>yes</td><td>positive integer</td><td></td></tr>
@@ -505,15 +535,21 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-i2c-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-i2c-prototype-read">
           <h1>read ( _option_ [, _stop_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*option*</td><td>yes*</td><td>positive integer, byte buffer</td><td></td></tr>
             <tr><td>*stop*</td><td>no</td><td>*true* or *false*</td><td>*true*</td></tr>
           </tbody></table></emu-table>
@@ -523,8 +559,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-i2c-prototype-write">
           <h1>write ( _data_ [, _stop_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*data*</td><td>yes</td><td>byte buffer</td><td></td></tr>
             <tr><td>*stop*</td><td>no</td><td>*true* or *false*</td><td>*true*</td></tr>
           </tbody></table></emu-table>
@@ -633,22 +672,31 @@ print(2);
         <emu-annex id="alg-io-smbus-constructor-options">
           <h1>constructor options</h1>
           <p>All properties from I²C plus the following:</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*stop*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"buffer"*</td><td>any</td><td>any</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-prototype-read">
           <h1>read ( _option_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*option*</td><td>yes*</td><td>positive integer, byte buffer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
           <ul>
@@ -657,47 +705,65 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-smbus-prototype-readuint8">
           <h1>readUint8 ( _register_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-prototype-writeuint8">
           <h1>writeUint8 ( _register_, _value_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
             <tr><td>*value*</td><td>yes</td><td>8-bit unsigned integer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-prototype-readuint16">
           <h1>readUint16 ( _register_, _bigEndian_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
             <tr><td>*bigEndian*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-prototype-writeuint16">
           <h1>writeUint16 ( _register_, _value_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
             <tr><td>*value*</td><td>yes</td><td>16-bit unsigned integer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-prototype-readbuffer">
           <h1>readBuffer ( _register_, _buffer_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
             <tr><td>*buffer*</td><td>yes</td><td>byte buffer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-prototype-writebuffer">
           <h1>writeBuffer ( _register_, _buffer_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
             <tr><td>*buffer*</td><td>yes</td><td>byte buffer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
@@ -708,16 +774,22 @@ print(2);
         <p>All properties from I²C.Async plus the following:</p>
         <emu-annex id="alg-io-smbus-async-prototype-readuint8">
           <h1>readUint8 ( _register_ [, _callback_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
             <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-smbus-async-prototype-writeuint8">
           <h1>writeUint8 ( _register_, _value_ [, _callback_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td></td></tr>
             <tr><td>*value*</td><td>yes</td><td>8-bit unsigned integer</td><td>N/A</td></tr>
             <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -725,8 +797,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-smbus-async-prototype-readuint16">
           <h1>readUint16 ( _register_ [, _bigEndian_ ] [, _callback_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
             <tr><td>*bigEndian*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
             <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -734,8 +809,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-smbus-async-prototype-writeuint16">
           <h1>writeUint16 ( _register_, _value_ [, _bigEndian_ ] [, _callback_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
             <tr><td>*value*</td><td>yes</td><td>16-bit unsigned integer</td><td>N/A</td></tr>
             <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -743,8 +821,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-smbus-async-prototype-readbuffer">
           <h1>readBuffer ( _register_, _option_ [, _callback_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
             <tr><td>*buffer*</td><td>yes</td><td>number or byte buffer</td><td>N/A</td></tr>
             <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -752,8 +833,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-smbus-async-prototype-writebuffer">
           <h1>writeBuffer ( _register_, _buffer_ [, _callback_ ] )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*register*</td><td>yes</td><td>integer</td><td>N/A</td></tr>
             <tr><td>*buffer*</td><td>yes</td><td>byte buffer</td><td>N/A</td></tr>
             <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -769,8 +853,11 @@ print(2);
         <h1>Serial</h1>
         <emu-annex id="alg-io-serial-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*receive*</td><td>no*</td><td>pin specifier</td><td></td></tr>
             <tr><td>*transmit*</td><td>no*</td><td>pin specifier</td><td></td></tr>
             <tr><td>*baud*</td><td>yes</td><td>positive integer</td><td></td></tr>
@@ -790,8 +877,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-serial-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"number"*</td><td>8-bit unsigned integer</td><td>8-bit unsigned integer</td></tr>
             <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
           </tbody></table></emu-table>
@@ -863,8 +953,11 @@ print(2);
         <h1>Serial Peripheral Interface (SPI)</h1>
         <emu-annex id="alg-io-spi-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*out*</td><td>no*</td><td>pin specifier</td><td></td></tr>
             <tr><td>*in*</td><td>no*</td><td>pin specifier</td><td></td></tr>
             <tr><td>*clock*</td><td>yes</td><td>pin specifier</td><td></td></tr>
@@ -878,15 +971,21 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-spi-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-spi-prototype-read">
           <h1>read ( _option_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*option*</td><td>yes*</td><td>positive integer, byte buffer</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
           <ul>
@@ -932,8 +1031,11 @@ print(2);
         <h1>Pulse count</h1>
         <emu-annex id="alg-io-pulse-count-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*signal*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*control*</td><td>yes</td><td>pin specifier</td><td></td></tr>
             <tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
@@ -942,8 +1044,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-pulse-count-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"number"*</td><td>integer</td><td>integer</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -952,8 +1057,11 @@ print(2);
         <h1>TCP socket</h1>
         <emu-annex id="alg-io-tcp-socket-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*address*</td><td>yes</td><td>string</td><td></td></tr>
             <tr><td>*port*</td><td>yes</td><td>16-bit unsigned integer</td><td></td></tr>
             <tr><td>*noDelay*</td><td>no</td><td>*true* or *false*</td><td>*false*</td></tr>
@@ -967,16 +1075,22 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-tcp-socket-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
             <tr><td>*"number"*</td><td>8-bit unsigned integer</td><td>8-bit unsigned integer</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-tcp-socket-write-options">
           <h1>write options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*more*</td><td>no</td><td>boolean</td><td>false</td></tr>
             <tr><td>*byteLength*</td><td>no</td><td>positive integer</td><td>N/A</td></tr>
           </tbody></table></emu-table>
@@ -984,8 +1098,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-io-tcp-listener">
         <h1>TCP listener socket</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*port*</td><td>no</td><td>16-bit unsigned integer</td><td>0</td></tr>
           <tr><td>*address*</td><td>no</td><td>string</td><td>N/A</td></tr>
           <tr><td>*onError*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
@@ -994,8 +1111,11 @@ print(2);
         </tbody></table></emu-table>
         <emu-annex id="alg-io-tcp-listener-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"socket/tcp"*</td><td>instance of TCP Socket</td><td>&nbsp;</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1011,8 +1131,11 @@ print(2);
         <h1>UDP socket</h1>
         <emu-annex id="alg-io-udp-socket-constructor-options">
           <h1>constructor options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*address*</td><td>no</td><td>string</td><td>N/A</td></tr>
             <tr><td>*port*</td><td>no</td><td>16-bit signed integer</td><td>N/A</td></tr>
           </tbody></table></emu-table>
@@ -1022,15 +1145,21 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-io-udp-socket-read-write-data">
           <h1>read / write data</h1>
-          <emu-table><table><tbody>
-            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
         <emu-annex id="alg-io-udp-socket-prototype-write">
           <h1>write ( _data_, _address_, _port_ )</h1>
-          <emu-table><table><tbody>
-            <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Param</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*data*</td><td>yes</td><td>byte buffer</td><td></td></tr>
             <tr><td>*address*</td><td>yes</td><td>string</td><td></td></tr>
             <tr><td>*port*</td><td>yes</td><td>16-bit unsigned integer</td><td>&nbsp;</td></tr>
@@ -1174,8 +1303,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-accelerometer-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*x*</td><td>yes</td><td>number</td><td>acceleration along the x axis in meters per second squared</td></tr>
             <tr><td>*y*</td><td>yes</td><td>number</td><td>acceleration along the y axis in meters per second squared</td></tr>
             <tr><td>*z*</td><td>yes</td><td>number</td><td>acceleration along the z axis in meters per second squared</td></tr>
@@ -1190,8 +1322,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-ambient-light-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*illuminance*</td><td>yes</td><td>positive number</td><td>ambient light level in lux</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1204,8 +1339,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-atmospheric-pressure-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*pressure*</td><td>yes</td><td>number</td><td>atmospheric pressure in Pascal</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1218,8 +1356,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-carbonDioxide-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*CO2*</td><td>yes</td><td>number</td><td>carbon dioxide in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1232,8 +1373,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-carbonMonoxide-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*CO*</td><td>yes</td><td>number</td><td>carbon monoxide in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1246,8 +1390,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-dust-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*dust*</td><td>yes</td><td>number</td><td>dust levels in micrograms per cubic meter</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1260,8 +1407,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-gyroscope-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*x*</td><td>yes</td><td>number</td><td>angular velocity around the x axis in radian per second</td></tr>
             <tr><td>*y*</td><td>yes</td><td>number</td><td>angular velocity around the y axis in radian per second</td></tr>
             <tr><td>*z*</td><td>yes</td><td>number</td><td>angular velocity around the z axis in radian per second</td></tr>
@@ -1276,8 +1426,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-humidity-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*humidity*</td><td>yes</td><td>number from 0 to 1</td><td>relative humidity as a percentage</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1290,8 +1443,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-hydrogen-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*H*</td><td>yes</td><td>number</td><td>hydrogen in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1304,8 +1460,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-hydrogenSulfide-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*H2S*</td><td>yes</td><td>number</td><td>hydrogen sulfide in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1318,8 +1477,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-magnetometer-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*x*</td><td>yes</td><td>number</td><td>magnetic field around the x axis in microtesla</td></tr>
             <tr><td>*y*</td><td>yes</td><td>number</td><td>magnetic field around the y axis in microtesla</td></tr>
             <tr><td>*z*</td><td>yes</td><td>number</td><td>magnetic field around the z axis in microtesla</td></tr>
@@ -1334,8 +1496,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-methane-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*CH4*</td><td>yes</td><td>number</td><td>methane in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1348,8 +1513,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-nitricOxide-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*NO*</td><td>yes</td><td>number</td><td>nitric oxide in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1362,8 +1530,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-nitricDioxide-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*NO2*</td><td>yes</td><td>number</td><td>nitric dioxide in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1376,8 +1547,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-oxygen-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*O*</td><td>yes</td><td>number</td><td>oxygen in parts per million</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1390,8 +1564,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-particulateMatter-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*particulateMatter*</td><td>yes</td><td>number</td><td>particulate matter levels in micrograms per cubic meter</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1404,8 +1581,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-proximity-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*near*</td><td>yes</td><td>boolean</td><td>indicator of a detected proximate object</td></tr>
             <tr><td>*distance*</td><td>yes</td><td>positive number or *null*</td><td>distance to the nearest sensed object in centimeters or *null* if no object is detected</td></tr>
             <tr><td>*max*</td><td>yes</td><td>positive number</td><td>maximum sensing range of the sensor in centimeters</td></tr>
@@ -1420,8 +1600,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-soilmoisture-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*moisture*</td><td>yes</td><td>number between 0 and 1</td><td>relative soil moisture level</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1434,8 +1617,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-temperature-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*temperature*</td><td>yes</td><td>number</td><td>temperature in degrees Celsius</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1452,8 +1638,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-touch-touch-object">
           <h1>touch object:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*x*</td><td>yes</td><td>number</td><td>X coordinate of the touch point</td></tr>
             <tr><td>*y*</td><td>yes</td><td>number</td><td>Y coordinate of the touch point</td></tr>
             <tr><td>*id*</td><td>yes</td><td>positive integer</td><td>indicator of which touch point this entry corresponds to</td></tr>
@@ -1468,8 +1657,11 @@ print(2);
         </emu-annex>
         <emu-annex id="alg-sensor-VolatileOrganicCompounds-sample-result">
           <h1>sample result:</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*tvoc*</td><td>yes</td><td>number</td><td>total volatile organic compounds in parts per billion</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
@@ -1597,8 +1789,11 @@ print(2);
       </emu-note>
       <emu-annex id="alg-display-class-pattern-constructor-options">
         <h1>constructor options:</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>format</td><td>no</td><td>see text</td><td></td></tr>
           <tr><td>rotation</td><td>no</td><td>0, 90, 180, or 270</td><td></td></tr>
           <tr><td>brightness</td><td>no</td><td>0.0 to 1.0</td><td></td></tr>
@@ -1661,8 +1856,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-real-time-clock-class-pattern-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*clock*</td><td>yes</td><td>*Object*</td><td></td></tr>
           <tr><td>*interrupt*</td><td>no</td><td>*null* or *Object*</td><td>*null*</td></tr>
           <tr><td>*onAlarm*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
@@ -1670,8 +1868,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-real-time-clock-class-pattern-configure-options">
         <h1>configure options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*alarm*</td><td>no</td><td>*number*</td><td>0</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -1749,8 +1950,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-network-interface-class-pattern-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*onChanged*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
           <tr><td>*port*</td><td>no</td><td>string</td><td></td></tr>
         </tbody></table></emu-table>
@@ -1954,8 +2158,11 @@ print(2);
       <h1>DNS over UDP</h1>
       <emu-annex id="alg-dns-over-udp-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
         </tbody></table></emu-table>
@@ -1970,8 +2177,11 @@ print(2);
       <h1>DNS over HTTPS</h1>
       <emu-annex id="alg-dns-over-https-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*http*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
         </tbody></table></emu-table>
@@ -2019,8 +2229,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-ntp-client-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
           <tr><td>*dns*</td><td>*yes*</td><td>*Object*</td><td>N/A</td></tr>
@@ -2105,8 +2318,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-tcp-client-class-pattern-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -2153,8 +2369,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-http-client-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*dns*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*host*</td><td>yes</td><td>string</td><td>N/A</td></tr>
@@ -2179,8 +2398,11 @@ print(2);
       <h1>HTTP Client Request</h1>
       <emu-annex id="alg-http-client-request-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*method*</td><td>no</td><td>string</td><td>*"GET"*</td></tr>
           <tr><td>*path*</td><td>no</td><td>string</td><td>*"/"*</td></tr>
           <tr><td>*headers*</td><td>no</td><td>*Map*</td><td>*null*</td></tr>
@@ -2193,8 +2415,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-http-client-request-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -2203,8 +2428,11 @@ print(2);
       <h1>MQTT Client</h1>
       <emu-annex id="alg-mqtt-client-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*dns*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*host*</td><td>yes</td><td>string</td><td>N/A</td></tr>
           <tr><td>*socket*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
@@ -2223,8 +2451,11 @@ print(2);
         <ul>
           <li>The *will* object has:</li>
         </ul>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*topic*</td><td>yes</td><td>string</td><td>N/A</td></tr>
           <tr><td>*message*</td><td>yes</td><td>string or Byte Buffer</td><td>N/A</td></tr>
           <tr><td>*QoS*</td><td>no</td><td>0, 1, or 2</td><td>0</td></tr>
@@ -2233,8 +2464,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-mqtt-client-write-options">
         <h1>write options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*operation*</td><td>no</td><td>number</td><td>*MQTTClient.PUBLISH*</td></tr>
           <tr><td>*id*</td><td>no</td><td>number</td><td></td></tr>
           <tr><td>*topic*</td><td>yes*</td><td>string</td><td>N/A</td></tr>
@@ -2250,8 +2484,11 @@ print(2);
           <li>*items* is required and used when *operation* is *MQTTClient.SUBSCRIBE* or *MQTTClient.UNSUBSCRIBE*.</li>
           <li>*items* is an array of objects that have:</li>
         </ul>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*topic*</td><td>yes</td><td>string</td><td>N/A</td></tr>
           <tr><td>*QoS*</td><td>no*</td><td>0, 1, or 2</td><td>0</td></tr>
         </tbody></table></emu-table>
@@ -2281,8 +2518,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-websocket-client-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*attach*</td><td>no</td><td>instance of TCP Socket</td><td>*null*</td></tr>
           <tr><td>*dns*</td><td>yes*</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*socket*</td><td>yes*</td><td>*Object*</td><td>N/A</td></tr>
@@ -2304,8 +2544,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-websocket-client-write-options">
         <h1>write options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*binary*</td><td>no</td><td>boolean</td><td>true</td></tr>
           <tr><td>*more*</td><td>no</td><td>boolean</td><td>false</td></tr>
           <tr><td>*opcode*</td><td>no</td><td>number</td><td></td></tr>
@@ -2366,8 +2609,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-tcp-server-class-pattern-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*listener*</td><td>yes</td><td>*Object*</td><td>N/A</td></tr>
           <tr><td>*port*</td><td>no*</td><td>number</td><td>80</td></tr>
           <tr><td>*onConnect*</td><td>yes</td><td>*Function*</td><td>N/A</td></tr>
@@ -2424,8 +2670,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-tcp-server-connection-class-pattern-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -2488,8 +2737,11 @@ print(2);
         </emu-alg>
         <emu-annex id="alg-http-server-connection-accept-and-set-route-options">
           <h1>accept and set route options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*onDone*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
             <tr><td>*onError*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
             <tr><td>*onReadable*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
@@ -2511,8 +2763,11 @@ print(2);
         </emu-alg>
         <emu-annex id="alg-http-server-connection-respond-options">
           <h1>respond options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*status*</td><td>yes</td><td>positive integer</td><td>N/A</td></tr>
             <tr><td>*headers*</td><td>yes</td><td>*Map*</td><td>N/A</td></tr>
           </tbody></table></emu-table>
@@ -2563,8 +2818,11 @@ print(2);
         <emu-annex id="alg-sensor-prov-class-pattern-sample-result">
           <h1>sample result:</h1>
           <p>In addition to the sample results defined in the <emu-xref href="#alg-sensor-class-pattern">Sensor Class Pattern</emu-xref>, the Provenance Sensor Class Pattern adds properties as follows:</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*time*</td><td>yes, if available</td><td>positive number</td><td>number originating from an absolute clock describing the instant that the sample returned was captured</td></tr>
             <tr><td>*ticks*</td><td>yes, if available</td><td>positive number</td><td>number originating from a non-absolute clock describing the instant that the sample returned was captured</td></tr>
             <tr><td>*faults*</td><td>no</td><td>boolean, number, or string</td><td>object representing a record of any sensor-level faults that occurred during this sensor sample or since the previously reported sample</td></tr>
@@ -2582,8 +2840,11 @@ print(2);
       <h1>Audio Input Class</h1>
       <emu-annex id="alg-audio-input-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*audioType*</td><td>no</td><td>*"LPCM"*</td><td>*"LPCM"*</td></tr>
           <tr><td>*bitsPerSample*</td><td>no</td><td>*8* or *16*</td><td>(host defined)</td></tr>
           <tr><td>*channels*</td><td>no</td><td>*1* or *2*</td><td>(host defined)</td></tr>
@@ -2602,8 +2863,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-audio-input-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>&nbsp;</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -2690,8 +2954,11 @@ print(2);
       <h1>Audio Output Class</h1>
       <emu-annex id="alg-audio-output-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*audioType*</td><td>no</td><td>*"LPCM"*</td><td>*"LPCM"*</td></tr>
           <tr><td>*bitsPerSample*</td><td>no</td><td>*8* or *16*</td><td>(host defined)</td></tr>
           <tr><td>*channels*</td><td>no</td><td>*1* or *2*</td><td>(host defined)</td></tr>
@@ -2710,8 +2977,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-audio-output-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>&nbsp;</td><td>byte buffer</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -2798,8 +3068,11 @@ print(2);
       <h1>Image Input Class</h1>
       <emu-annex id="alg-image-input-constructor-options">
         <h1>constructor options</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*imageType*</td><td>no</td><td>a <emu-xref href="#pixel-formats">pixel format</emu-xref> or *"jpeg"*</td><td>(host defined)</td></tr>
           <tr><td>*width*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
           <tr><td>*height*</td><td>no</td><td>positive integer</td><td>(host defined)</td></tr>
@@ -2818,8 +3091,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-image-input-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>&nbsp;</td></tr>
           <tr><td>*"buffer/disposable"*</td><td><emu-xref href="#alg-image-input-buffer">Image Input Buffer</emu-xref></td><td>&nbsp;</td></tr>
         </tbody></table></emu-table>
@@ -3076,8 +3352,11 @@ print(2);
         </emu-alg>
         <emu-annex id="alg-flash-module-object-options">
           <h1>options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*name*</td><td>yes</td><td>string</td><td>N/A</td></tr>
             <tr><td>*mode*</td><td>no</td><td>*"r"* or *"r+"*</td><td>*"r+"*</td></tr>
             <tr><td>*format*</td><td>no</td><td>*"buffer"*</td><td>*"buffer"*</td></tr>
@@ -3207,8 +3486,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-flash-partition-class-pattern-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -3296,8 +3578,11 @@ print(2);
         </emu-alg>
         <emu-annex id="alg-update-module-object-options">
           <h1>options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*partition*</td><td>yes</td><td>Flash Partition instance</td><td>N/A</td></tr>
             <tr><td>*mode*</td><td>no</td><td>*"a"* or *"w"*</td><td>*"a"*</td></tr>
             <tr><td>*byteLength*</td><td>no</td><td>positive integer or *undefined*</td><td>*undefined*</td></tr>
@@ -3381,8 +3666,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-update-class-pattern-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>&nbsp;</td><td>byte buffer</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -3403,8 +3691,11 @@ print(2);
         </emu-alg>
         <emu-annex id="alg-key-value-object-options">
           <h1>options</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+          <emu-table><table>
+            <thead>
+              <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+            </thead>
+            <tbody>
             <tr><td>*path*</td><td>yes</td><td>string</td><td>N/A</td></tr>
             <tr><td>*mode*</td><td>no</td><td>*"r"* or *"r+"*</td><td>*"r+"*</td></tr>
             <tr><td>*format*</td><td>no</td><td>string</td><td>*"buffer"*</td></tr>
@@ -3506,8 +3797,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-key-value-domain-class-pattern-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
           <tr><td>*"string"*</td><td>string</td><td>string</td></tr>
           <tr><td>*"uint8"*</td><td>number</td><td>number</td></tr>
@@ -3709,8 +4003,11 @@ print(2);
       </emu-annex>
       <emu-annex id="alg-file-class-pattern-read-write-data">
         <h1>read / write data</h1>
-        <emu-table><table><tbody>
-          <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+        <emu-table><table>
+          <thead>
+            <tr><th>Format</th><th>Read</th><th>Write</th></tr>
+          </thead>
+          <tbody>
           <tr><td>*"buffer"*</td><td>ArrayBuffer</td><td>byte buffer</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
@@ -4033,8 +4330,9 @@ print(2);
 			<h1>GAP Client Class Pattern</h1>
 			<emu-annex id="alg-gapclient-constructor-options">
 				<h1>constructor options</h1>
-				<emu-table><table><tbody>
-				<tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr></thead>
+				<tbody>
 				<tr><td>*services*</td><td>no</td><td>*Array* of strings</td><td>N/A</td></tr>
 				<tr><td>*onError*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
 				<tr><td>*onReadable*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
@@ -4158,8 +4456,9 @@ print(2);
 			<h1>GATT Client Class Pattern</h1>
 			<emu-annex id="gattclient-constructor-options">
 				<h1>constructor options</h1>
-				<emu-table><table><tbody>
-				<tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr></thead>
+				<tbody>
 				<tr><td>*address*</td><td>yes</td><td>string</td><td></td></tr>
 				<tr><td>*mtu*</td><td>no</td><td>positive integer</td><td>host-dependent</td></tr>
 				<tr><td>*onError*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
@@ -4544,8 +4843,9 @@ print(2);
 			<h1>GATT Server Class Pattern</h1>
 			<emu-annex id="alg-gattserver-constructor-options">
 				<h1>constructor options</h1>
-				<emu-table><table><tbody>
-				<tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr></thead>
+				<tbody>
 				<tr><td>*mtu*</td><td>no</td><td>positive integer</td><td>host-dependent</td></tr>
 				<tr><td>*onConnect*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
 				<tr><td>*onDisconnect*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
@@ -4632,8 +4932,9 @@ print(2);
 			<emu-annex id="alg-gattserver-properties">
 				<h1>static properties</h1>
 				<p>An object with the following properties:</p>
-				<emu-table><table><tbody>
-				<tr><th>Property</th><th>Value</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Property</th><th>Value</th></tr></thead>
+				<tbody>
 				<tr><td>*authenticatedSignedWrites*</td><td>(1 << 6)</td></tr>
 				<tr><td>*broadcast*</td><td>(1 << 0)</td></tr>
 				<tr><td>*indicate*</td><td>(1 << 5)</td></tr>
@@ -4650,8 +4951,9 @@ print(2);
 				<tr><td>*writeWithoutResponse*</td><td>(1 << 2)</td></tr>
 				</tbody></table></emu-table>
 				<p>The algorithms also use the following constants:</p>
-				<emu-table><table><tbody>
-				<tr><th>Constant</th><th>Value</th><th>Properties</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Constant</th><th>Value</th><th>Properties</th></tr></thead>
+				<tbody>
 				<tr><td>READABLE</td><td>(1 << 1)</td><td>*read*</td></tr>
 				<tr><td>WRITABLE</td><td>(1 << 2) | (1 << 3) | (1 << 6)</td><td>*writeWithoutResponse* | *write* | *authenticatedSignedWrites*</td></tr>
 				<tr><td>NOTIFIABLE</td><td>(1 << 4) | (1 << 5)</td><td>*indicate* | *notify*</td></tr>
@@ -4659,8 +4961,9 @@ print(2);
 			</emu-annex>
 			<emu-annex id="alg-gattserver-service-records">
 				<h1>GATT Service Records</h1>
-				<emu-table><table><tbody>
-				<tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr></thead>
+				<tbody>
 				<tr><td>*uuid*</td><td>yes</td><td>string</td><td></td></tr>
 				<tr><td>*characteristics*</td><td>no</td><td>*Array* of <emu-xref href="#alg-gattserver-characteristic-records">characteristic records</emu-xref></td><td>N/A</td></tr>
 				</tbody></table></emu-table>
@@ -4715,8 +5018,9 @@ print(2);
 			</emu-annex>
 			<emu-annex id="alg-gattserver-characteristic-records">
 				<h1>GATT Characteristic Records</h1>
-				<emu-table><table><tbody>
-				<tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr></thead>
+				<tbody>
 				<tr><td>*uuid*</td><td>yes</td><td>string</td><td></td></tr>
 				<tr><td>*properties*</td><td>yes</td><td>number, a logical OR of <emu-xref href="#alg-gattserver-properties">GATTServer properties</emu-xref></td><td></td></tr>
 				<tr><td>*value*</td><td>no</td><td>byte buffer</td><td>N/A</td></tr>
@@ -4825,8 +5129,9 @@ print(2);
 			</emu-annex>
 			<emu-annex id="alg-gattserver-descriptor-records">
 				<h1>GATT Descriptor Records</h1>
-				<emu-table><table><tbody>
-				<tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
+				<emu-table><table>
+				<thead><tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr></thead>
+				<tbody>
 				<tr><td>*uuid*</td><td>yes</td><td>string</td><td></td></tr>
 				<tr><td>*value*</td><td>no</td><td>byte buffer</td><td>N/A</td></tr>
 				<tr><td>*onRead*</td><td>no</td><td>*null* or *Function*</td><td>*null*</td></tr>
