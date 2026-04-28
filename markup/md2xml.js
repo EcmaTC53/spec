@@ -380,15 +380,17 @@ function writeToken(token) {
 	}
 	else if (token.type == 'table') {
 		cr(depth);
-  		result += `<emu-table><table><tbody>`
+  		result += `<emu-table><table>`
 		cr(depth + 1);
-    	result += `<tr>`
+    	result += `<thead><tr>`
 		for (let column of token.header) {
     		result += `<th>`
     		writeText(column.tokens);
     		result += `</th>`
 		}
-    	result += `</tr>`
+    	result += `</tr></thead>`
+    cr(depth + 1);
+    	result += `<tbody>`
 		for (let row of token.rows) {
 			cr(depth + 1);
     		result += `<tr>`

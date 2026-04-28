@@ -342,8 +342,9 @@ new Button({
         <h1>format property</h1>
         <p>The `format` property is a string that indicates the type of data used by the `read` and `write` methods. It is initialized by the constructor to the default defined for its IO type. The `format` property may be set by the script at any time to change how it reads and writes data.</p>
         <p>The following values are defined by the IO Class Pattern for the `format` property. IO types may choose to support one or more and may define others.</p>
-        <emu-table><table><tbody>
-          <tr><th>Format string</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Format string</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`number`</td><td>an ECMAScript number value, typically used for bytes</td></tr>
           <tr><td>`buffer`</td><td>a <emu-xref href="#byte-buffer">Byte Buffer</emu-xref>. For buffer types with defined `byteOffset` and `byteLength` properties, these restrict the bytes accessed in views. Implementations always allocate `ArrayBuffer` instances for return values.</td></tr>
           <tr><td>`object`</td><td>an ECMAScript object, for data representing a data structure (e.g. JSON)</td></tr>
@@ -394,8 +395,9 @@ import Digital from "embedded:io/digital";
         <p>See Annex A for the <emu-xref href="#alg-io-digital">formal algorithms</emu-xref> of the `Digital` IO Class.</p>
         <emu-clause id="io-classes-digital-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`pin`</td><td>A pin specifier indicating the pin to control. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A value indicating the mode of the IO. May be `Digital.Input`, `Digital.InputPullUp`, `Digital.InputPullDown`, `Digital.InputPullUpDown`, `Digital.Output`, or `Digital.OutputOpenDrain`. This property is required.</td></tr>
             <tr><td>`edge`</td><td>A value indicating the conditions for invoking the `onReadable` callback. Values are `Digital.Rising`, `Digital.Falling`, and `Digital.Rising + Digital.Falling`. This value is required if the `onReadable` property is present and ignored otherwise.</td></tr>
@@ -426,8 +428,9 @@ import DigitalBank from "embedded:io/digitalbank";
         <p>See Annex A for the <emu-xref href="#alg-io-digital-bank">formal algorithms</emu-xref> of the `DigitalBank` bank IO Class.</p>
         <emu-clause id="io-classes-digital-bank-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`pins`</td><td>A bitmask with pins to include in the bank set to 1. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A value indicating the mode of the IO, May be `DigitalBank.Input`, `DigitalBank.InputPullUp`, `DigitalBank.InputPullDown`, `DigitalBank.InputPullUpDown`, `DigitalBank.Output`, or `DigitalBank.OutputOpenDrain`. All pins in the bank use the same mode. This property is required.</td></tr>
             <tr><td>`rises`</td><td>A bitmask indicating the pins in the bank that should trigger an `onReadable` callback when transitioning from 0 to 1. When an `onReadable` callback is provided, at least one pin must be set in `rises` and `falls`.</td></tr>
@@ -462,8 +465,9 @@ import Analog from "embedded:io/analog";
         <p>See Annex A for the <emu-xref href="#alg-io-analog-input">formal algorithms</emu-xref> of the `Analog` IO Class.</p>
         <emu-clause id="io-classes-analog-input-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`pin`</td><td>A pin specifier indicating the analog input pin. This property is required.</td></tr>
             <tr><td>`resolution`</td><td>The requested number of bits of resolution of the input. This property is optional.</td></tr>
           </tbody></table></emu-table>
@@ -486,8 +490,9 @@ import PWM from "embedded:io/pwm";
         <p>See Annex A for the <emu-xref href="#alg-io-pulse-width-modulation">formal algorithms</emu-xref> of the `PWM` IO Class.</p>
         <emu-clause id="io-classes-pulse-width-modulation-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`pin`</td><td>A pin specifier indicating the pin to operate as a PWM output. This property is required.</td></tr>
             <tr><td>`hz`</td><td>A number specifying the requested frequency of the PWM output in hertz. This property is optional.</td></tr>
           </tbody></table></emu-table>
@@ -518,8 +523,9 @@ import I2C from "embedded:io/i2c";
         <p>See Annex A for the <emu-xref href="#alg-io-i2c">formal algorithms</emu-xref> of the `I2C` IO Class.</p>
         <emu-clause id="io-classes-i-c-synchronous-io-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`data`</td><td>Pin specifier for the I²C data pin. This property is required.</td></tr>
             <tr><td>`clock`</td><td>Pin specifier for the I²C clock pin. This property is required.</td></tr>
             <tr><td>`hz`</td><td>The speed of communication on the I²C bus. This property is required.</td></tr>
@@ -599,8 +605,9 @@ import SMBus from "embedded:io/smbus";
         <p>See Annex A for the <emu-xref href="#alg-io-smbus">formal algorithms</emu-xref> of the `SMBus` IO Class.</p>
         <emu-clause id="io-classes-system-management-bus-smbus-synchronous-io-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`stop`</td><td>A boolean value indicating whether to set the stop bit when writing the SMBus register number. This property is optional and defaults to `false`.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -669,8 +676,9 @@ import Serial from "embedded:io/serial";
         <p>See Annex A for the <emu-xref href="#alg-io-serial">formal algorithms</emu-xref> of the `Serial` IO Class.</p>
         <emu-clause id="io-classes-serial-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`receive`</td><td>Pin specifier for the receive pin. This property is required by some implementations to use the serial connection to read data.</td></tr>
             <tr><td>`transmit`</td><td>Pin specifier for the transmit pin. This property is required by some implementations to use the serial connection to write data.</td></tr>
             <tr><td>`baud`</td><td>A number specifying the baud rate of the connection. This property is required.</td></tr>
@@ -727,8 +735,9 @@ import SPI from "embedded:io/spi";
         <p>See Annex A for the <emu-xref href="#alg-io-spi">formal algorithms</emu-xref> of the `SPI` IO Class.</p>
         <emu-clause id="io-classes-serial-peripheral-interface-spi-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`out`</td><td>Pin specifier for the Serial Data Out pin. This property is required when using the SPI bus to write data.</td></tr>
             <tr><td>`in`</td><td>Pin specifier for the Serial Data In pin. This property is required when using the SPI bus to read data.</td></tr>
             <tr><td>`clock`</td><td>Pin specifier for the clock pin. This property is required.</td></tr>
@@ -771,8 +780,9 @@ import PulseCount from "embedded:io/pulsecount";
         <p>See Annex A for the <emu-xref href="#alg-io-pulse-count">formal algorithms</emu-xref> of the `PulseCount` IO Class.</p>
         <emu-clause id="io-classes-pulse-count-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`signal`</td><td>Pin specifier for the signal input pin. This property is required.</td></tr>
             <tr><td>`control`</td><td>Pin specifier for the control input pin. This property is required.</td></tr>
           </tbody></table></emu-table>
@@ -807,8 +817,9 @@ import TCP from "embedded:io/socket/tcp";
         <p>See Annex A for the <emu-xref href="#alg-io-tcp-socket">formal algorithms</emu-xref> of the `TCP` IO Class.</p>
         <emu-clause id="io-classes-tcp-socket-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`address`</td><td>A string with the IP address of the remote endpoint to connect to. This property is required.</td></tr>
             <tr><td>`port`</td><td>A number specifying the remote port to connect to. This property is required.</td></tr>
             <tr><td>`noDelay`</td><td>A boolean indicating whether to disable Nagle's algorithm on the socket. This property is equivalent to the `TCP_NODELAY` option in the BSD sockets API. This property is optional and defaults to false.</td></tr>
@@ -829,8 +840,9 @@ import TCP from "embedded:io/socket/tcp";
         </emu-clause>
         <emu-clause id="tcp-write-options">
           <h1>Properties of write options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`more`</td><td>Set to `false` for the last fragment of a sequence and `true` if there is at least one more fragment. Defaults to `false`.</td></tr>
             <tr><td>`byteLength`</td><td>Number of bytes to be written across a sequence of write operations with `more` set to `true` and terminating with `more` set to `false`.</td></tr>
           </tbody></table></emu-table>
@@ -876,8 +888,9 @@ import Listener from "embedded:io/socket/listener";
         <p>See Annex A for the <emu-xref href="#alg-io-tcp-listener">formal algorithms</emu-xref> of the `Listener` IO Class.</p>
         <emu-clause id="io-classes-tcp-listener-socket-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`port`</td><td>A number specifying the port to listen on. This property is optional and defaults to 0.</td></tr>
             <tr><td>`address`</td><td>A string with the IP address of the network interface to bind to. This property is optional.</td></tr>
           </tbody></table></emu-table>
@@ -915,8 +928,9 @@ import UDP from "embedded:io/socket/udp";
         <p>See Annex A for the <emu-xref href="#alg-io-udp-socket">formal algorithms</emu-xref> of the `UDP` IO Class.</p>
         <emu-clause id="udp-socket-constructor-options">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`port`</td><td>The local port number to bind the UDP socket to. This property is optional.</td></tr>
             <tr><td>`address`</td><td>A string with the IP address of the network interface to bind to. This property is optional.</td></tr>
           </tbody></table></emu-table>
@@ -960,8 +974,9 @@ import TLS from "embedded:io/socket/tcp/tls";
           <h1>Properties of constructor options object</h1>
           <p>The TLS Client socket extends the TCP socket's options object with a required `tls` property set to an object that contains the TLS options.</p>
           <p>The following TLS version strings are defined: `"TLSv1.3"`, `"TLSv1.2"`, `"TLSv1.1"`.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`tls`</td><td>An object with the following properties. This property is required.</td></tr>
             <tr><td>`tls.host`</td><td>Supports Server Name Indication (SNI). A string with the host name of the remote endpoint. This property is required.</td></tr>
             <tr><td>`tls.minimumVersion`</td><td>A TLS version string indicating the minimum acceptable TLS version for the connection. This property is optional and the default is implementation dependent.</td></tr>
@@ -987,8 +1002,9 @@ import AudioIn from "embedded:io/audio/in";
         <p>See Annex A for the <emu-xref href="#alg-audio-input">formal algorithms</emu-xref> of the Audio Input Class.</p>
         <emu-clause id="audio-input-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`bitsPerSample`</td><td>A number indicating the number of bits per audio sample when using uncompressed audio. Allowed values are `8` and `16`. This property is optional and defaults to a host defined value.</td></tr>
             <tr><td>`channels`</td><td>A number indicating the number of audio channels returned. Allowed values are `1` and `2`. This property is optional and defaults to a host defined value.</td></tr>
             <tr><td>`sampleRate`</td><td>A number indicating the sample rate of the audio. This property is optional and defaults to a host defined value.</td></tr>
@@ -1065,8 +1081,9 @@ import AudioOut from "embedded:io/audio/out";
         <p>See Annex A for the <emu-xref href="#alg-audio-output">formal algorithms</emu-xref> of the Audio Output Class.</p>
         <emu-clause id="audio-output-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`bitsPerSample`</td><td>A number indicating the number of bits per audio sample when outputting uncompressed audio. Allowed values are `8` and `16`. This property is optional and defaults to a host defined value.</td></tr>
             <tr><td>`channels`</td><td>A number indicating the number of audio channels provided. Allowed values are `1` and `2`. This property is optional and defaults to a host defined value.</td></tr>
             <tr><td>`sampleRate`</td><td>A number indicating the sample rate of the audio. This property is optional and defaults to a host defined value.</td></tr>
@@ -1144,8 +1161,9 @@ import ImageIn from "embedded:io/image/in";
         <p>See Annex A for the <emu-xref href="#alg-image-input">formal algorithms</emu-xref> of the Image Input Class Pattern.</p>
         <emu-clause id="image-input-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`imageType`</td><td>A value indicating the encoding of the image. If the value is a number, the image is uncompressed in a <emu-xref href="#pixel-formats">pixel format</emu-xref> defined by the Display Class Pattern. If the value is a string, the allowed value is `"jpeg`". This property is optional and defaults to a host defined value.</td></tr>
             <tr><td>`width`</td><td>A number indicating the requested pixel width of the captured image. This property is optional and defaults to a host defined value.</td></tr>
             <tr><td>`height`</td><td>A number indicating the requested pixel height of the captured image. This property is optional and defaults to a host defined value.</td></tr>
@@ -1422,8 +1440,9 @@ let t = new Temperature({
         <emu-clause id="sensor-classes-accelerometer-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
           <p>These properties are compatible with the attributes of the same name in the <a href="https://w3c.github.io/accelerometer/">W3C Accelerometer draft</a>.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`x`</td><td>A number that represents the sampled acceleration along the x axis in meters per second squared. This property is required.</td></tr>
             <tr><td>`y`</td><td>A number that represents the sampled acceleration along the y axis in meters per second squared. This property is required.</td></tr>
             <tr><td>`z`</td><td>A number that represents the sampled acceleration along the z axis in meters per second squared. This property is required.</td></tr>
@@ -1437,8 +1456,9 @@ let t = new Temperature({
         <emu-clause id="sensor-classes-ambient-light-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
           <p>These properties are compatible with the attributes of the same name in the <a href="https://www.w3.org/TR/ambient-light/">W3C Ambient Light Sensor draft</a>.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`illuminance`</td><td>A number that represents the sampled ambient light level in Lux. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1449,8 +1469,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-atmospheric-pressure">formal algorithms</emu-xref> of the `AtmosphericPressure` sensor class.</p>
         <emu-clause id="sensor-classes-atmospheric-pressure-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`pressure`</td><td>A number that represents the sampled atmospheric pressure in Pascal. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1461,8 +1482,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-carbonDioxide">formal algorithms</emu-xref> of the `CarbonDioxide` sensor class.</p>
         <emu-clause id="sensor-classes-carbon-dioxide-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`CO2`</td><td>A number that represents the sampled carbon dioxide in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1473,8 +1495,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-carbonMonoxide">formal algorithms</emu-xref> of the `CarbonMonoxide` sensor class.</p>
         <emu-clause id="sensor-classes-carbon-monoxide-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`CO`</td><td>A number that represents the sampled carbon monoxide in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1485,8 +1508,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-dust">formal algorithms</emu-xref> of the `Dust` sensor class.</p>
         <emu-clause id="sensor-classes-dust-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`dust`</td><td>A number that represents the sampled dust levels in micrograms per cubic meter. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1498,8 +1522,9 @@ let t = new Temperature({
         <emu-clause id="sensor-classes-gyroscope-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
           <p>These properties are compatible with the attributes of the same name in the <a href="https://www.w3.org/TR/gyroscope/">W3C Gyroscope draft</a>.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`x`</td><td>A number that represents the sampled angular velocity around the x axis in radian per second. This property is required.</td></tr>
             <tr><td>`y`</td><td>A number that represents the sampled angular velocity around the y axis in radian per second. This property is required.</td></tr>
             <tr><td>`z`</td><td>A number that represents the sampled angular velocity around the z axis in radian per second. This property is required.</td></tr>
@@ -1513,8 +1538,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-humidity">formal algorithms</emu-xref> of the `Humidity` sensor class.</p>
         <emu-clause id="sensor-classes-humidity-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`humidity`</td><td>A number that represents the sampled relative humidity as a percentage. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1525,8 +1551,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-hydrogen">formal algorithms</emu-xref> of the `Hydrogen` sensor class.</p>
         <emu-clause id="sensor-classes-hydrogen-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`H`</td><td>A number that represents the sampled hydrogen in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1537,8 +1564,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-hydrogenSulfide">formal algorithms</emu-xref> of the `HydrogenSulfide` sensor class.</p>
         <emu-clause id="sensor-classes-hydrogen-sulfide-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`H2S`</td><td>A number that represents the sampled hydrogen sulfide in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1550,8 +1578,9 @@ let t = new Temperature({
         <emu-clause id="sensor-classes-magnetometer-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
           <p>These properties are compatible with the attributes of the same name in the <a href="https://www.w3.org/TR/magnetometer/">W3C Magnetometer draft</a>.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`x`</td><td>A number that represents the sampled magnetic field around the x axis in microtesla. This property is required.</td></tr>
             <tr><td>`y`</td><td>A number that represents the sampled magnetic field around the y axis in microtesla. This property is required.</td></tr>
             <tr><td>`z`</td><td>A number that represents the sampled magnetic field around the z axis in microtesla. This property is required.</td></tr>
@@ -1564,8 +1593,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-methane">formal algorithms</emu-xref> of the `Methane` sensor class.</p>
         <emu-clause id="sensor-classes-methane-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`CH4`</td><td>A number that represents the sampled methane in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1576,8 +1606,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-nitricOxide">formal algorithms</emu-xref> of the `NitricOxide` sensor class.</p>
         <emu-clause id="sensor-classes-nitric-oxide-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`NO`</td><td>A number that represents the sampled nitric oxide in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1588,8 +1619,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-nitricDioxide">formal algorithms</emu-xref> of the `NitricDioxide` sensor class.</p>
         <emu-clause id="sensor-classes-nitric-dioxide-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`NO2`</td><td>A number that represents the sampled nitric dioxide in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1600,8 +1632,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-oxygen">formal algorithms</emu-xref> of the `Oxygen` sensor class.</p>
         <emu-clause id="sensor-classes-oxygen-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`O`</td><td>A number that represents the sampled oxygen in parts per million. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1612,8 +1645,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-particulateMatter">formal algorithms</emu-xref> of the `ParticulateMatter` sensor class.</p>
         <emu-clause id="sensor-classes-particulate-matter-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`particulateMatter`</td><td>A number that represents the sampled particulate matter levels in micrograms per cubic meter. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1625,8 +1659,9 @@ let t = new Temperature({
         <emu-clause id="sensor-classes-proximity-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
           <p>These properties are compatible with the attributes of the same name in the <a href="https://w3c.github.io/proximity/">W3C Proximity Sensor draft</a>.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`near`</td><td>A boolean that indicates if a proximate object is detected. This property is required.</td></tr>
             <tr><td>`distance`</td><td>A number that represents the distance to the nearest sensed object in centimeters or `null` if no object is detected. This property is optional: some proximity sensors can only provide the `near` property.</td></tr>
             <tr><td>`max`</td><td>A number that represents the maximum sensing range of the sensor in centimeters.</td></tr>
@@ -1639,8 +1674,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-soilmoisture">formal algorithms</emu-xref> of the `SoilMoisture` sensor class.</p>
         <emu-clause id="sensor-classes-soil-moisture-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`moisture`</td><td>A number between 0 and 1 (inclusive) that represents the sampled relative soil moisture level, with 0 being the most dry and 1 the most wet. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1650,8 +1686,9 @@ let t = new Temperature({
         <p>The `Switch` class implements access to a switch sensor. The property name `switch` is used when part of a compound sensor.</p>
         <emu-clause id="sensor-classes-switch-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`position`</td><td>A number that represents the current state of the switch. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1662,8 +1699,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-temperature">formal algorithms</emu-xref> of the `Temperature` sensor class.</p>
         <emu-clause id="sensor-classes-temperature-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`temperature`</td><td>A number that represents the sampled temperature in degrees Celsius. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1677,8 +1715,9 @@ let t = new Temperature({
           <p>The `Touch` class `sample` method returns an array of `touch` objects, as specified below. If there is no touch in progress, `sample` returns `undefined`.</p>
           <emu-clause id="sensor-classes-touch-sample-object-properties-of-touch-object">
             <h1>Properties of touch object</h1>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`x`</td><td>Number indicating the X coordinate of the touch point</td></tr>
               <tr><td>`y`</td><td>Number indicating the Y coordinate of the touch point</td></tr>
               <tr><td>`id`</td><td>Number indicating which touch point this entry corresponds to</td></tr>
@@ -1692,8 +1731,9 @@ let t = new Temperature({
         <p>See Annex A for the <emu-xref href="#alg-sensor-VolatileOrganicCompounds">formal algorithms</emu-xref> of the `VolatileOrganicCompounds` sensor class.</p>
         <emu-clause id="sensor-classes-volatile-organic-compounds-properties-of-a-sample-object">
           <h1>Properties of a sample object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`tvoc`</td><td>A number that represents the sampled total volatile organic compounds in parts per billion. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1712,8 +1752,9 @@ let t = new Temperature({
       <emu-clause id="display-class-pattern-configure-method">
         <h1>configure method</h1>
         <p>The following table enumerates the properties defined for the options object argument:</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`format`</td><td>A number indicating the format of pixel data passed to the instance (for example, to the `send` method). This property is optional. If the format provided is not supported by the Display Class, a `RangeError` is thrown.</td></tr>
           <tr><td>`rotation`</td><td>The clockwise rotation of the display as a number. This property is optional. If the value provided is not 0, 90, 180, or 270, or is unsupported by the Display Class, a `RangeError` is thrown.</td></tr>
           <tr><td>`brightness`</td><td>The relative brightness of the display from 0 (off) to 1.0 (full brightness). This property is optional.</td></tr>
@@ -1795,8 +1836,9 @@ function adaptInvalid(options) {
       </emu-clause>
       <emu-clause id="pixel-formats">
         <h1>Pixel format values</h1>
-        <emu-table><table><tbody>
-          <tr><th>Value</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Value</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>3</td><td>1-bit monochrome</td></tr>
           <tr><td>4</td><td>4-bit grayscale (0 black, 15 white)</td></tr>
           <tr><td>5</td><td>8-bit grayscale (0 black, 255 white)</td></tr>
@@ -1816,8 +1858,9 @@ function adaptInvalid(options) {
       <p>The RTC Class Pattern conforms to the Peripheral Class Pattern.</p>
       <emu-clause id="real-time-clock-class-pattern-properties-of-constructor-options-object">
         <h1>Properties of constructor options object</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`clock`</td><td>A class constructor options object that describes the hardware connection for the RTC. This property is required.</td></tr>
           <tr><td>`interrupt`</td><td>A Digital class constructor options object that describes the hardware connection to the RTC's interrupt. This property is optional.</td></tr>
           <tr><td>`onAlarm()`</td><td>A function to invoke when an alarm is triggered by the RTC. This property is optional.</td></tr>
@@ -1826,8 +1869,9 @@ function adaptInvalid(options) {
       <emu-clause id="real-time-clock-class-pattern-configure-method">
         <h1>configure method</h1>
         <p>The following property is defined for the options object.</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`alarm`</td><td>The time in milliseconds to set the RTC's alarm. This value is an ECMAScript time value as a `Number`.</td></tr>
         </tbody></table></emu-table>
       </emu-clause>
@@ -1852,8 +1896,9 @@ function adaptInvalid(options) {
       <p>See Annex A for the <emu-xref href="#alg-network-interface-class-pattern">formal algorithms</emu-xref> of the Network Interface Class Pattern.</p>
         <emu-clause id="network-interface-class-pattern-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`onChanged(name)`</td><td>A function to invoke when the network interface's state changes. The name argument is the name of the property that changed. The `onChanged` property is optional.</td></tr>
             <tr><td>`port`</td><td>A port specifier that indicates the logical network interface to bind to. This property may be optional or required depending on the implementation of the network interface.</td></tr>
           </tbody></table></emu-table>
@@ -1870,8 +1915,9 @@ function adaptInvalid(options) {
         <emu-clause id="network-interface-class-pattern-connection-property">
           <h1>connection property</h1>
           <p>The read-only `connection` property indicates the current connection state of the network interface as a number. The following values are defined:</p>
-          <emu-table><table><tbody>
-            <tr><th>Value</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Value</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>0</td><td>unavailable</td></tr>
             <tr><td>100</td><td>initializing</td></tr>
             <tr><td>200</td><td>disconnected</td></tr>
@@ -1899,8 +1945,9 @@ import Ethernet from "embedded:network/interface/ethernet";
         <emu-clause id="network-interface-class-pattern-ethernet-network-interface-connection-property">
           <h1>connection property</h1>
           <p>For an Ethernet network interface, `connection` 200 ("disconnected") indicates that the physical Ethernet link has been lost and `connection` 400 ("connected") indicates that the physical Ethernet link has been established. Ethernet network interfaces add the following value for `connection`.</p>
-          <emu-table><table><tbody>
-            <tr><th>Value</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Value</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>150</td><td>Ethernet IO initialized</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -1915,8 +1962,9 @@ import WiFi from "embedded:network/interface/wifi";
         <emu-clause id="network-interface-class-pattern-wi-fi-network-interface-connect-method">
           <h1>connect method</h1>
           <p>Initiates the process of connecting to a Wi-Fi base station. The connection is defined by the properties of the options object. If a connection attempt is already in progress, `connect` throws an exception.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`SSID`</td><td>Name of the base station as a String. This property is optional.</td></tr>
             <tr><td>`BSSID`</td><td>BSSID of the base station as a MAC address formatted string. This property is optional.</td></tr>
             <tr><td>`password`</td><td>The base station's password as a string. This property is optional.</td></tr>
@@ -1929,8 +1977,9 @@ import WiFi from "embedded:network/interface/wifi";
           <h1>scan method</h1>
           <p>Initiates a scan for Wi-Fi base stations. The scan is time-limited to no more than 10 seconds. A continuous scan may be performed by repeated scans. If a scan is already active when `scan` is called, an exception is thrown. The sole argument is an options object.</p>
           <p>Properties of the `scan` options object:</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`onFound(options)`</td><td>A callback function to invoke with information about an access point discovered by the scan. This property is required.</td></tr>
             <tr><td>`onComplete()`</td><td>A callback function invoked when the scan is complete. This property is optional.</td></tr>
             <tr><td>`channel`</td><td>Wi-Fi channel number to scan as a number. This property is optional.</td></tr>
@@ -1938,8 +1987,9 @@ import WiFi from "embedded:network/interface/wifi";
             <tr><td>`secure`</td><td>Limit scan results to secure access points, omitting open access points, as a boolean. This property is optional and defaults to `false`.</td></tr>
           </tbody></table></emu-table>
           <p>Properties of the `onFound` options object for each access point found by the scan:</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`SSID`</td><td>Service Set Identifier of the access point as a string.</td></tr>
             <tr><td>`BSSID`</td><td>Basic Service Set Identifier of the access point as a MAC address formatted string.</td></tr>
             <tr><td>`RSSI`</td><td>Radio Signal Strength Indicator of the access point as a number.</td></tr>
@@ -1975,8 +2025,9 @@ import WiFi from "embedded:network/interface/wifi";
         <p>The first argument is a required options object. The second argument is a required <emu-xref href="#base-pattern-async">completion callback function</emu-xref> that is invoked when resolution completes. If successful, the resolved address is provided in the second argument and the requested hostname in the third.</p>
         <emu-clause id="dns-resolver-resolve-method-properties-of-resolve-options-object">
           <h1>Properties of resolve options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`host`</td><td>A string containing the hostname to resolve. This property is required.</td></tr>
           </tbody></table></emu-table>
           <p>The `host` property may be either a Domain Name or an IP address. If it is an IP address, the completion callback is invoked with the resolved address and request hostname arguments set to that IP address.</p>
@@ -1990,8 +2041,9 @@ import Resolver from "embedded:network/dns/resolver/udp";
           </code></pre>
         <emu-clause id="dns-resolver-dns-over-udp-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`socket`</td><td>A UDP class constructor options object for a UDP socket. This property is required.</td></tr>
             <tr><td>`servers`</td><td>Array of one or more IP address strings to use as DNS servers. This property is required.</td></tr>
           </tbody></table></emu-table>
@@ -2005,8 +2057,9 @@ import Resolver from "embedded:network/dns/resolver/doh";
           </code></pre>
         <emu-clause id="dns-resolver-dns-over-https-doh-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`http`</td><td>An HTTP Client class constructor options object. This property is required.</td></tr>
             <tr><td>`servers`</td><td>An array of one or more objects containing `host` and `address` properties to use as DoH servers. This property is required.</td></tr>
           </tbody></table></emu-table>
@@ -2022,8 +2075,9 @@ import NTP from "embedded:network/ntp/client";
         </code></pre>
         <emu-clause id="ntp-client-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`socket`</td><td><emu-xref href="#udp-socket-constructor-options">UDP class constructor options object</emu-xref>. This property is required.</td></tr>
             <tr><td>`servers`</td><td>An array of one or more strings indicating the NTP hosts to use to synchronize time. This property is required.</td></tr>
             <tr><td>`dns`</td><td><emu-xref href="#dns-resolver">A Domain Name Resolver class constructor options object</emu-xref> to use to resolve the `servers`. This property is required.</td></tr>
@@ -2045,8 +2099,9 @@ import HTTPClient from "embedded:network/http/client";
         <p>The `HTTPClient` class data format is always `"buffer"`.</p>
         <emu-clause id="http-client-class-pattern-data-format-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`socket`</td><td>An object containing a `TCP` class constructor options object. This property is required.</td></tr>
             <tr><td>`port`</td><td>The remote port number to connect to as a number. This property is optional and defaults to 80.</td></tr>
             <tr><td>`host`</td><td>The remote hostname to connect to as a string. This property is required.</td></tr>
@@ -2063,8 +2118,9 @@ import HTTPClient from "embedded:network/http/client";
         <h1>request method</h1>
         <p>Queues an HTTP request described by the required options object, the sole argument.</p>
         <p>The options object supports the following properties:</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`method`</td><td>The HTTP method to use to access the resource as a string. This property is optional and defaults to `"GET"`.</td></tr>
           <tr><td>`path`</td><td>The HTTP resource to access as a string. This property is optional and defaults to `"/"`.</td></tr>
           <tr><td>`headers`</td><td>A `Map` instance containing request headers. The map keys are the header names and their values are the header values. This property is optional.</td></tr>
@@ -2103,8 +2159,9 @@ import HTTPServer from "embedded:network/http/server";
       </emu-clause>
       <emu-clause id="http-server-class-pattern-properties-of-constructor-options-object">
         <h1>Properties of constructor options object</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`io`</td><td>An object containing a `TCP Listener` class constructor options object. This property is required.</td></tr>
           <tr><td>`port`</td><td>The port number to listen on, as a number. This property is optional and defaults to 80.</td></tr>
           <tr><td>`onConnect(connection)`</td><td>A function to invoke when a new connection is initiated. It is passed an HTTP Server Connection instance as the sole argument. This property is required.</td></tr>
@@ -2130,8 +2187,9 @@ import HTTPServer from "embedded:network/http/server";
           <p>The `accept` method accepts the incoming connection so that processing of the HTTP request may begin. The sole argument is an options object which contains callback functions to invoke as the HTTP request is processed.</p>
           <emu-clause id="http-server-class-pattern-http-server-connection-instance-accept-method-properties-of-accept-options-object">
             <h1>Properties of accept options object</h1>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`onRequest(method, path, headers)`</td><td>A callback function to invoke after the HTTP request headers have been received. The first argument is the HTTP request method as a string. The second argument is the HTTP request path as a string. The third argument is a map containing the headers. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional.</td></tr>
               <tr><td>`onReadable(count)`</td><td>A callback function to invoke when data is available to read from the request body. This property is optional.</td></tr>
               <tr><td>`onResponse(response)`</td><td>A callback function to invoke when the request body has been fully received. The sole argument is an options object with a `status` property set to 200 and a `headers` property set to an empty map. The callback may update these values. The option object is passed to the `respond` method to begin transmitting the HTTP response. This property is optional.</td></tr>
@@ -2146,8 +2204,9 @@ import HTTPServer from "embedded:network/http/server";
           <p>The `respond` method is called to begin transmitting the HTTP response. The `respond` method may only be called once for a given instance and must be called after the request body has been fully received. The sole argument to the `respond` method is an options object.</p>
           <emu-clause id="http-server-class-pattern-http-server-connection-instance-respond-method-properties-of-respond-options-object">
             <h1>Properties of respond options object</h1>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`status`</td><td>A number indicating the status code for the HTTP response. This property is required.</td></tr>
               <tr><td>`headers`</td><td>A map containing the HTTP response headers. The map keys are the header names and their values are the header values. This property is required.</td></tr>
             </tbody></table></emu-table>
@@ -2187,8 +2246,9 @@ connection.route = {
           </code></pre>
         <emu-clause id="http-server-connection-routes-static-data-route-properties-of-route">
           <h1>Properties of route</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`data`</td><td>A Byte Buffer or string to be transmitted as the HTTP Response body. If the value is a string, it is transmitted as UTF-8 data. This property is required.</td></tr>
             <tr><td>`contentType`</td><td>The MIME type of response body to be set as the HTTP Content-Type header. This property is optional and defaults to "text/html".</td></tr>
           </tbody></table></emu-table>
@@ -2218,8 +2278,9 @@ connection.route = {
           </code></pre>
         <emu-clause id="http-server-connection-routes-websocket-handshake-route-properties-of-route">
           <h1>Properties of route</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`protocol`</td><td>Array of strings. This property is optional.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2238,8 +2299,9 @@ import WebSocketClient from "embedded:network/ws/client";
       </emu-clause>
       <emu-clause id="websocket-client-properties-of-constructor-options-object">
         <h1>Properties of constructor options object</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`socket`</td><td>An object containing a TCP Class constructor options object. This property is optional.</td></tr>
           <tr><td>`host`</td><td>The remote hostname to connect to as a string. This property is optional.</td></tr>
           <tr><td>`attach`</td><td>An instance of a TCP Class. This property is optional.</td></tr>
@@ -2267,8 +2329,9 @@ import WebSocketClient from "embedded:network/ws/client";
       <emu-clause id="websocket-client-write-method">
         <h1>write method</h1>
         <p>The `write` method sends both message data and control messages. The first argument contains the message payload in a Byte Buffer. The second argument is an options object that has the following properties to specify the message to send.</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`binary`</td><td>A boolean value set to `true` for a binary payload and `false` for a text payload. This property is optional and defaults to `true`.</td></tr>
           <tr><td>`more`</td><td>A boolean value set to `false` for the last fragment of a message and `true` for all others. This property is optional and defaults to `false`.</td></tr>
           <tr><td>`opcode`</td><td>This property is a number specifying the `opcode` of a control message (the `data` argument is the control message's payload). This property is optional and must not be set for text and binary messages. Because control messages cannot be fragmented, the `more` property is ignored when `opcode` is present.</td></tr>
@@ -2280,8 +2343,9 @@ import WebSocketClient from "embedded:network/ws/client";
       <emu-clause id="websocket-client-static-properties-of-the-constructor">
         <h1>Static properties of the constructor</h1>
         <p>The following properties are present on the constructor. The property names and values correspond to WebSocket opcodes. The values are numbers and the properties are read-only.</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Value</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Value</th></tr></thead>
+          <tbody>
           <tr><td>`text`</td><td>1</td></tr>
           <tr><td>`binary`</td><td>2</td></tr>
           <tr><td>`close`</td><td>8</td></tr>
@@ -2323,8 +2387,9 @@ import MQTTClient from "embedded:network/mqtt/client";
       </emu-clause>
       <emu-clause id="mqtt-client-class-pattern-properties-of-constructor-options-object">
         <h1>Properties of constructor options object</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`socket`</td><td>An object containing a TCP Class constructor options object. This property is required.</td></tr>
           <tr><td>`port`</td><td>The remote port number to connect to as a number. This property is optional and defaults to 1883.</td></tr>
           <tr><td>`host`</td><td>The remote hostname to connect to as a string. This property is required.</td></tr>
@@ -2357,8 +2422,9 @@ import MQTTClient from "embedded:network/mqtt/client";
         <h1>write method</h1>
         <p>The `write` method sends both message data and control messages. The first argument contains the message payload in a Byte Buffer. The second argument is an options object that has the following properties to specify the message to send.</p>
         <p>The options object has the following properties to specify the message to publish or control message to send.</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`operation`</td><td>This property is a number specifying the `opcode` of a control message (the `data` argument is the control message's payload). This property is optional and defaults to `PUBLISH`.</td></tr>
           <tr><td>`id`</td><td>A number specifying the `id` for the message. If an `id` is not provided the MQTT client generates one. As a rule, either the caller should provide the `id` for all messages or none to avoid the possibility of values colliding. This property is optional.</td></tr>
           <tr><td>`topic`</td><td>A string specifying an MQTT topic for a `PUBLISH` message. This property is required for `PUBLISH` messages.</td></tr>
@@ -2375,8 +2441,9 @@ import MQTTClient from "embedded:network/mqtt/client";
       <emu-clause id="mqtt-client-class-pattern-static-properties-of-the-constructor">
         <h1>Static properties of the constructor</h1>
         <p>The following properties are present on the constructor. The property names and values correspond to MQTT Control Packet types in Section 2.1.1 of the MQTT 3.1.1 Standard. The values are numbers and the properties are read-only.</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Value</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Value</th></tr></thead>
+          <tbody>
           <tr><td>`CONNECT`</td><td>1</td></tr>
           <tr><td>`CONNACK`</td><td>2</td></tr>
           <tr><td>`PUBLISH`</td><td>3</td></tr>
@@ -2420,8 +2487,9 @@ const scan = new GAPClient({
           </code></pre>
         <emu-clause id="bluetoothle-central-gapclient-class-pattern-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`services`</td><td>An array of BLE UUID service values. Advertisements that do not contain at least one of the specified services are ignored. If there is no `services` property, all advertisements are provided. This property is optional.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2454,8 +2522,9 @@ const scan = new GAPClient({
         </emu-clause>
         <emu-clause id="bluetoothle-central-gapclientadvertisement-properties-of-gapclientadvertisement-instance">
           <h1>Properties of GAPClientAdvertisement instance</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`address`</td><td>The address of the peripheral as a string. The `address` property may be passed as the `address` to the `GATTClient` constructor's options object to initiate a connection to the peripheral. The format of the value is host-dependent.</td></tr>
             <tr><td>`rssi`</td><td>The RSSI of the peripheral as a number, if available.</td></tr>
             <tr><td>`name`</td><td>The complete name (ADType 9) or short name (ADType 8) of the peripheral, if available, as a string.</td></tr>
@@ -2469,8 +2538,9 @@ const scan = new GAPClient({
         <p>The `GATTClient` conforms to the IO Class Pattern.</p>
         <emu-clause id="bluetoothle-central-gattclient-class-pattern-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`address`</td><td>A string indicating the Bluetooth LE peripheral to connect to. The value typically is obtained from a `GAPClientAdvertisement`; the format of the value is host-dependent. This property is required.</td></tr>
             <tr><td>`mtu`</td><td>A number indicating desired Maximum Transmission Unit (MTU) for this connection in bytes. The MTU is negotiated as part of establishing the connection. The result is reflected in the value of the instance's `maximumWrite` property. This property is optional.</td></tr>
             <tr><td>`security`</td><td>An options object containing the requested security properties of the connection. This property is optional. Its presence indicates a request for an encrypted connection; if omitted, the connection may not be secure.</td></tr>
@@ -2486,8 +2556,9 @@ const scan = new GAPClient({
           <p>The `onReady` callback is invoked once the GATTClient instance is ready for use. The MTU negotiation has been completed when this callback is invoked. Note that the `onReady` callback is invoked before the connection's security, if any, has been negotiated.</p>
           <p><b>`onPasskey(action[, data])`</b></p>
           <p>The `onPasskey` callback is invoked as part of the security negotiation when an interaction is required to authenticate the connection. The `action` argument is a string indicating the interaction and the optional `data` argument provides information required for the interaction. Some values of `action` require the script to call the peripheral's `replyToPasskey` method, as noted in the following table.</p>
-          <emu-table><table><tbody>
-            <tr><th>Action</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Action</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`"input"`</td><td>Have the user enter the passkey with the keyboard. Provide the passkey entered to `replyToPasskey` as a number. The `data` argument is unused.</td></tr>
             <tr><td>`"display"`</td><td>Show the user the passkey provided in the `data` argument. There is no need to call `replyToPasskey`.</td></tr>
             <tr><td>`"compareNumber"`</td><td>Show the user the passkey provided in the `data` argument, and ask them to confirm that it is correct using the Yes and No keys. Provide the result as a boolean to `replyToPasskey`.</td></tr>
@@ -2495,8 +2566,9 @@ const scan = new GAPClient({
           </tbody></table></emu-table>
           <p><b>`onSecured(state)`</b></p>
           <p>The `onSecured` callback is invoked when the secure connection negotiation has completed successfully. The `state` argument is an options object with the properties described in the following table.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`authenticated`</td><td>A boolean value indicating whether the connection has been authenticated.</td></tr>
             <tr><td>`bonded`</td><td>A boolean value indicating whether the central bonded with the peripheral.</td></tr>
             <tr><td>`encrypted`</td><td>A boolean value indicating whether the connection is encrypted.</td></tr>
@@ -2566,8 +2638,9 @@ onReadable(count) {
         <emu-clause id="bluetoothle-central-gattclient-class-pattern-replytopasskey-action-data-method">
           <h1>replyToPasskey(action[, data]) method</h1>
           <p>The `replyToPasskey` method delivers a response to an action received by the `onPasskey` callback. The `action` argument must match the `action` argument provided to the `onPasskey` callback. The `data` argument depends on the value of the `action` argument.</p>
-          <emu-table><table><tbody>
-            <tr><th>`action`</th><th>`data`</th></tr>
+          <emu-table><table>
+            <thead><tr><th>`action`</th><th>`data`</th></tr></thead>
+            <tbody>
             <tr><td>`"input"`</td><td>The passkey entered to `replyToPasskey` as a number.</td></tr>
             <tr><td>`"compareNumber"`</td><td>A boolean value indicating whether the user confirmed a match of the passkey shown.</td></tr>
             <tr><td>`"outOfBand"`</td><td>A byte buffer of 16 bytes.</td></tr>
@@ -2589,8 +2662,9 @@ onReadable(count) {
         </emu-clause>
         <emu-clause id="bluetoothle-central-gattclient-class-pattern-properties-of-gattclient-instance">
           <h1>Properties of GATTClient instance</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`maximumWrite`</td><td>A number indicating the maximum number of bytes the `write` method can accept.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2600,8 +2674,9 @@ onReadable(count) {
         <p>The `GATTClientService` has no constructor; instances are provided by `GATTClient` methods.</p>
         <emu-clause id="bluetoothle-central-gattclientservice-properties-of-gattclientservice-instance">
           <h1>Properties of GATTClientService instance</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`uuid`</td><td>A string containing the Bluetooth LE UUID of the service.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2611,8 +2686,9 @@ onReadable(count) {
         <p>The `GATTClientCharacteristic` has no constructor; instances are provided by `GATTClient` methods.</p>
         <emu-clause id="bluetoothle-central-gattclientcharacteristic-properties-of-gattclientcharacteristic-instance">
           <h1>Properties of GATTClientCharacteristic instance</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`uuid`</td><td>A string containing the Bluetooth LE UUID of the characteristic.</td></tr>
             <tr><td>`handle`</td><td>A string that should contain the handle of the characteristic. It may contain another value, such as a UUID that is unique among all characteristics of the GATTClient.</td></tr>
             <tr><td>`properties`</td><td>A number containing a bitfield of Bluetooth LE client properties.</td></tr>
@@ -2624,8 +2700,9 @@ onReadable(count) {
         <p>The `GATTClientDescriptor` has no constructor; instances are provided by `GATTClient` methods.</p>
         <emu-clause id="bluetoothle-central-gattclientdescriptor-properties-of-gattclientdescriptor-instance">
           <h1>Properties of GATTClientDescriptor instance</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`uuid`</td><td>A string containing the Bluetooth LE UUID of the descriptor</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2682,16 +2759,18 @@ new GATTServer({
           </code></pre>
         <emu-clause id="bluetoothle-gattservicerecord">
           <h1>GATT Service Record</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`uuid`</td><td>A string containing the Bluetooth LE UUID of the service. This property is required.</td></tr>
             <tr><td>`characteristics`</td><td>An array of <emu-xref href="#bluetoothle-gattservicecharacteristicrecord">GATT Service Characteristic Records</emu-xref>. This property is optional.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
         <emu-clause id="bluetoothle-gattservicecharacteristicrecord">
           <h1>GATT Service Characteristic Record</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`uuid`</td><td>A string containing the Bluetooth LE UUID of the characteristic. This property is required.</td></tr>
             <tr><td>`properties`</td><td>A number containing the <emu-xref href="#bluetoothle-gattserver-properties">GATT Server property flags</emu-xref> for the characteristic. The properties determine which callbacks may be invoked. This property is optional and defaults to `0`.</td></tr>
             <tr><td>`descriptors`</td><td>An array of <emu-xref href="#bluetoothle-gattservicedescriptorrecord">GATT Service Descriptor Records</emu-xref>. This property is optional.</td></tr>
@@ -2707,8 +2786,9 @@ new GATTServer({
         </emu-clause>
         <emu-clause id="bluetoothle-gattservicedescriptorrecord">
           <h1>GATT Service Descriptor Record</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`uuid`</td><td>A string containing the Bluetooth LE UUID of the descriptor. This property is required.</td></tr>
             <tr><td>`value`</td><td>A byte buffer containing the value to return when this descriptor is read. If the `value` property is present, the `onRead` and `onWrite` callbacks must not be provided. This property is optional.</td></tr>
             <tr><td>`onRead(connection)`</td><td>A function to invoke when the descriptor is read. It receives the connection being read. It returns a byte buffer with the read value. This property is optional.</td></tr>
@@ -2718,8 +2798,9 @@ new GATTServer({
         </emu-clause>
         <emu-clause id="bluetoothle-gattserver-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`mtu`</td><td>A number indicating desired Maximum Transmission Unit (MTU) in bytes. The MTU is negotiated as part of establishing a connection. The result is reflected in the value of the instance's `maximumWrite` property. This property is optional.</td></tr>
             <tr><td>`services`</td><td>An array of <emu-xref href="#bluetoothle-gattservicerecord">GATT Service Records</emu-xref>. This property is optional.</td></tr>
             <tr><td>`security`</td><td>An options object containing the requested security properties of the connection. This property is optional. Its presence indicates a request for an encrypted connection; if omitted, the connection may not be secure.</td></tr>
@@ -2741,8 +2822,9 @@ new GATTServer({
 <emu-xref href="#bluetoothle-gattserverconnection">`GATTServerConnection`</emu-xref> for the connection.</p>
           <p><b>`onPasskey(connection, action[, data])`</b></p>
           <p>The `onPasskey` callback is invoked as part of the security negotiation when an interaction is required to authenticate the connection. The `connection` argument is the <emu-xref href="#bluetoothle-gattserverconnection">`GATTServerConnection`</emu-xref> for the connection. The `action` argument is a string indicating the interaction and the optional `data` argument provides information required for the interaction. Some values of `action` require the script to call the peripheral's `replyToPasskey` method, as noted in the following table.</p>
-          <emu-table><table><tbody>
-            <tr><th>Action</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Action</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`"input"`</td><td>Have the user enter the passkey with the keyboard. Provide the passkey entered to `replyToPasskey` as a number. The `data` argument is unused.</td></tr>
             <tr><td>`"display"`</td><td>Show the user the passkey provided in the `data` argument. There is no need to call `replyToPasskey`.</td></tr>
             <tr><td>`"compareNumber"`</td><td>Show the user the passkey provided in the `data` argument, and ask them to confirm that it is correct using the Yes and No keys. Provide the result as a boolean to `replyToPasskey`.</td></tr>
@@ -2750,8 +2832,9 @@ new GATTServer({
           </tbody></table></emu-table>
           <p><b>`onSecured(connection, state)`</b></p>
           <p>The `onSecured` callback is invoked when the secure connection negotiation has completed successfully. The `state` argument is an options object with the properties described in the following table.</p>
-          <emu-table><table><tbody>
-            <tr><th>Action</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Action</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`authenticated`</td><td>A boolean value indicating whether the connection has been authenticated.</td></tr>
             <tr><td>`bonded`</td><td>A boolean value indicating whether the central bonded with the peripheral.</td></tr>
             <tr><td>`encrypted`</td><td>A boolean value indicating whether the connection is encrypted.</td></tr>
@@ -2776,8 +2859,9 @@ new GATTServer({
           <h1>startAdvertising(broadcast[, scanResponse]) method</h1>
           <p>The `startAdvertising` method begins advertising by the `GATTServer`. The `broadcast` and optional `scanResponse` arguments specify GATT Server advertising records. The `broadcast` advertisement is continuously broadcast and the `scanResponse` is sent in reply to scan requests.</p>
           <p>The properties of GATT Server advertising records are defined by the following table. All properties are optional. </p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>ADType</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>ADType</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`name`</td><td>9</td><td>A string with the local name of the peripheral.</td></tr>
             <tr><td>`services`</td><td>3, 5, 7</td><td>An array of 16, 32, and 128-bit service UUIDs. These service UUIDs are put into 16, 32, and 128-bit incomplete service lists as appropriate.</td></tr>
             <tr><td>`manufacturerData`</td><td>255</td><td>An object with a `manufacturer` property with a number indicating the manufacturer and a `data` property with a byte buffer containing the manufacturer data.</td></tr>
@@ -2796,8 +2880,9 @@ new GATTServer({
         <emu-clause id="bluetoothle-gattserver-properties">
           <h1>properties</h1>
           <p>The `properties` property is an object with flags for use in the `properties` property of the <emu-xref href="#bluetoothle-gattservicecharacteristicrecord">GATT Service Characteristic Record</emu-xref>.</p>
-          <emu-table><table><tbody>
-            <tr><th>Flag</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Flag</th></tr></thead>
+            <tbody>
             <tr><td>`broadcast`</td></tr>
             <tr><td>`indicate`</td></tr>
             <tr><td>`notify`</td></tr>
@@ -2819,8 +2904,9 @@ new GATTServer({
         </emu-clause>
         <emu-clause id="bluetoothle-gattserver-advertise">
           <h1>advertise</h1>
-          <emu-table><table><tbody>
-            <tr><th>Flag</th><th>Value</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Flag</th><th>Value</th></tr></thead>
+            <tbody>
             <tr><td>`limitedDiscoverable`</td><td>1</td></tr>
             <tr><td>`generalDiscoverable`</td><td>2</td></tr>
             <tr><td>`bleOnly`</td><td>4</td></tr>
@@ -2843,8 +2929,9 @@ new GATTServer({
         <emu-clause id="bluetoothle-gattserverconnection-replytopasskey-action-data-method">
           <h1>replyToPasskey(action[, data]) method</h1>
           <p>The `replyToPasskey` method delivers a response to an action received by the `onPasskey` callback. The `action` argument must match the `action` argument provided to the `onPasskey` callback. The `data` argument depends on the value of the `action` argument.</p>
-          <emu-table><table><tbody>
-            <tr><th>`action`</th><th>`data`</th></tr>
+          <emu-table><table>
+            <thead><tr><th>`action`</th><th>`data`</th></tr></thead>
+            <tbody>
             <tr><td>`"input"`</td><td>The passkey entered to `replyToPasskey` as a number.</td></tr>
             <tr><td>`"compareNumber"`</td><td>A boolean value indicating whether the user confirmed a match of the passkey shown.</td></tr>
             <tr><td>`"outOfBand"`</td><td>A byte buffer of 16 bytes.</td></tr>
@@ -2855,8 +2942,9 @@ new GATTServer({
         </emu-clause>
         <emu-clause id="bluetoothle-gattserverconnection-properties-of-gattserverconnection-instance">
           <h1>Properties of GATTServerConnection instance</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`maximumWrite`</td><td>A number indicating the maximum number of bytes allowed for any transmission (MTU), such as `notify` or the returned buffer from the `onRead` callback.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2866,8 +2954,9 @@ new GATTServer({
         <p>The `GATTServerCharacteristic` class represents characteristics defined by <emu-xref href="#bluetoothle-gattservicecharacteristicrecord">GATT Service Characteristic Records</emu-xref>. The `GATTServer` invokes callbacks on GATT Service Characteristic Records with `this` set to the `GATTServerCharacteristic`. The <emu-xref href="#bluetoothle-gattserverconnection">`GATTServerConnection`</emu-xref> accepts a `GATTServerCharacteristic` in its `notify` method to identify the characteristic that has a new value.</p>
         <emu-clause id="bluetoothle-gattservercharacteristic-properties-of-gattservercharacteristic-instance">
           <h1>Properties of GATTServerCharacteristic instance</h1>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`uuid`</td><td>A string containing the Bluetooth LE UUID of the characteristic.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2877,8 +2966,9 @@ new GATTServer({
       <h1> Persistent Storage</h1>
       <p>The Persistent Storage Class Patterns store, retrieve, and delete data from several different kinds of storage. Persistent Storage is accessed using `open` methods; their constructors always throw an exception.</p>
       <p>Most Persistent Storage Class Patterns have a `mode` property in their constructor options argument. This table lists the defined values for `mode`:</p>
-      <emu-table><table><tbody>
-        <tr><th>Property</th><th>Description</th></tr>
+      <emu-table><table>
+        <thead><tr><th>Property</th><th>Description</th></tr></thead>
+        <tbody>
         <tr><td>`"a"`</td><td>Append</td></tr>
         <tr><td>`"r"`</td><td>Read-only</td></tr>
         <tr><td>`"r+"`</td><td>Read-write</td></tr>
@@ -2924,8 +3014,9 @@ import files from "embedded:storage/files";
           <emu-clause id="storage-file-class-status-method">
             <h1>status method</h1>
             <p>The `status` method returns a status instance with information about the file. It has no arguments. The following table enumerates the properties defined for the returned status instance:</p>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`size`</td><td>A number indicating the length of the file in bytes.</td></tr>
               <tr><td>`mode`</td><td>A number indicating the file's mode (implementation dependent).</td></tr>
               <tr><td>`isFile()`</td><td>A method that returns `true`.</td></tr>
@@ -2954,8 +3045,9 @@ import files from "embedded:storage/files";
           <emu-clause id="storage-directory-class-opendirectory-method">
             <h1>openDirectory method</h1>
             <p>The `openDirectory` function instantiates a Directory instance from a directory subpath. It has a single argument, an options object. The following table enumerates the properties defined for the `openDirectory` options object:</p>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`path`</td><td>A <emu-xref href="#storage-file-subpath">subpath string</emu-xref> indicating the directory to open. This property is required.</td></tr>
             </tbody></table></emu-table>
             <p>The `openDirectory` function returns a Directory instance.</p>
@@ -2969,8 +3061,9 @@ const network = settings.openDirectory({path: "network/wifi"});
           <emu-clause id="storage-directory-class-openfile-method">
             <h1>openFile method</h1>
             <p>The `openFile` function instantiates a File instance from a file path. It has a single argument, an options object. The following table enumerates the properties defined for the `openFile` options object:</p>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`path`</td><td>A <emu-xref href="#storage-file-subpath">subpath string</emu-xref> indicating the name of the path of the file to open. This property is required.</td></tr>
               <tr><td>`mode`</td><td>A string indicating the mode used to access to the file. Values are `"r"`, `"r+"`, `"w"` , and `"w+"`. This property is optional and defaults to `"r"`.</td></tr>
             </tbody></table></emu-table>
@@ -3006,8 +3099,9 @@ device.files.move("network_update.json", "network.json", settings);
           <emu-clause id="storage-directory-class-status-method">
             <h1>status method</h1>
             <p>The `status` method returns a status instance with information about the file, directory, or link specified by the first argument, a <emu-xref href="#storage-file-subpath">subpath string</emu-xref>. The following table enumerates the properties defined for the returned status instance:</p>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`size`</td><td>A number indicating the length of the file in bytes.</td></tr>
               <tr><td>`mode`</td><td>A number indicating the file's mode (implementation dependent).</td></tr>
               <tr><td>`isFile()`</td><td>A method that returns `true` if the path resolves to a file and `false` otherwise.</td></tr>
@@ -3064,8 +3158,9 @@ import keyValue from "embedded:storage/key-value";
         <emu-clause id="storage-keyvalue-open-function">
           <h1>open function</h1>
           <p>The `open` function instantiates a Key-Value Domain instance from a key-value domain name. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`path`</td><td>A string indicating the name of the key-value domain to open. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A string indicating the mode used to access the domain. Values are `"r"` and `"r+"`. This property is optional and defaults to `"r+"`.</td></tr>
             <tr><td>`format`</td><td>A string indicating the initial data format to use for read and write operations. This property is optional and defaults to `"buffer"`.</td></tr>
@@ -3151,8 +3246,9 @@ for (const path of device.flash) {
         <emu-clause id="storage-flash-open-function">
           <h1>open function</h1>
           <p>The `open` function instantiates a Flash Partition instance from a flash partition path name. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`path`</td><td>A string indicating the name of the flash partition path name to open. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A string indicating the mode used to access the partition. Values are `"r"` and `"r+"`. This property is optional and defaults to `"r+"`.</td></tr>
             <tr><td>`format`</td><td>A string indicating the data format to use for read and write operations. The only supported value is `"buffer"`. This property is optional and defaults to `"buffer"`.</td></tr>
@@ -3174,8 +3270,9 @@ for (const path of device.flash) {
           <emu-clause id="storage-flash-flash-partition-class-pattern-status-method">
             <h1>status method</h1>
             <p>The `status` method returns an object with information about the partition. There are no arguments to the `status` method.</p>
-            <emu-table><table><tbody>
-              <tr><th>Property</th><th>Description</th></tr>
+            <emu-table><table>
+              <thead><tr><th>Property</th><th>Description</th></tr></thead>
+              <tbody>
               <tr><td>`size`</td><td>The number of bytes in the partition as a number.</td></tr>
               <tr><td>`blockLength`</td><td>The number of bytes in a block (sometimes called a sector) as a number.</td></tr>
               <tr><td>`blocks`</td><td>The number of blocks in the partition as a number.</td></tr>
@@ -3220,8 +3317,9 @@ import update from "embedded:update";
         <emu-clause id="storage-update-open-function">
           <h1>open function</h1>
           <p>The `open` function instantiates an Update instance from a Flash partition. It has a single argument, an options object. The following table enumerates the properties defined for the open options object:</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`partition`</td><td>A Flash Partition instance for the partition to be updated. The instance must not be closed until after the update is complete. This property is required.</td></tr>
             <tr><td>`mode`</td><td>A string indicating the mode used to write the update. Values are `"a"` for append and `"w"` for random access. This property is optional and defaults to `"a"`.</td></tr>
             <tr><td>`byteLength`</td><td>A number indicating the size of the update in bytes that will be written to the partition. This value must be less than or equal to the byte length of the partition. This property is optional and should not be specified if the number of bytes is unknown.</td></tr>
@@ -3262,8 +3360,9 @@ import update from "embedded:update";
       <p>The DNS-SD Class Pattern provides local network name claiming, service discovery, and service advertising compatible with RFC 6762, Multicast DNS, and RFC 6763, DNS-Based Service Discovery. The DNS-SD Class Pattern conforms to the <emu-xref href="#base-class-pattern">Base Class Pattern</emu-xref>.</p>
       <emu-clause id="dns-sd-properties-of-constructor-options-object">
         <h1>Properties of constructor options object</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`socket`</td><td>A <emu-xref href="#udp-socket-constructor-options">UDP class constructor options object</emu-xref>. This property is required.</td></tr>
         </tbody></table></emu-table>
       </emu-clause>
@@ -3276,15 +3375,17 @@ import update from "embedded:update";
         <emu-clause id="dns-sd-methods-claim-options-method">
           <h1>claim(options) method</h1>
           <p>The `claim` method attempts to claim and maintain a local network name as defined by RFC 6762. The `options` argument configures the claim.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`host`</td><td>The local name to claim as a string. This local name does not include the `.local` suffix. This property is required.</td></tr>
             <tr><td>`onReady`</td><td>A callback function to invoke when the name has been successfully claimed. The callback is invoked with no arguments. This property is optional.</td></tr>
             <tr><td>`onError`</td><td>A callback function to invoke if the requested host name cannot be claimed or the claim is lost. The callback is invoked with no arguments. This property is optional.</td></tr>
           </tbody></table></emu-table>
           <p>The `claim` method returns an object with the following properties.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`close()`</td><td>Call this method to release the claim to the requested host name. This function should broadcast to the local network that the name has been released.</td></tr>
           </tbody></table></emu-table>
           <p>The claim remains active until the claim is closed, its owning DNS-SD instance is closed, or the claim to the name is lost.</p>
@@ -3292,22 +3393,25 @@ import update from "embedded:update";
         <emu-clause id="dns-sd-methods-discover-options-method">
           <h1>discover(options) method</h1>
           <p>The `discover` method initiates discovery of DNS-SD services.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`serviceType`</td><td>The type of DNS-SD service to discover (e.g. `"_airplay._tcp"`). This property is required.</td></tr>
             <tr><td>`onFound`</td><td>A callback to invoke when an instance of the requested service type is first discovered. The callback is passed a DNS-SD Service Object. This property is optional.</td></tr>
             <tr><td>`onUpdate`</td><td>A callback to invoke when an instance of the requested service type is updated – typically a change to its `txt` record. The callback is passed a DNS-SD Service Object. This property is optional.</td></tr>
             <tr><td>`onLost`</td><td>A callback to invoke when an instance of the requested service type is no longer available. The callback is passed a DNS-SD Service Object. This property is optional.</td></tr>
           </tbody></table></emu-table>
           <p>The `discover` method returns an object with the following properties.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`close()`</td><td>Call this method to end discovery of the specified `serviceType`.</td></tr>
           </tbody></table></emu-table>
           <p>Discovery remains active until the returned instance or its owning DNS-SD instance are closed.</p>
           <p>The DNS-SD Service Object has the following properties.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`name`</td><td>The Service Instance Name as a string.</td></tr>
             <tr><td>`host`</td><td>The service instance's local name as a string.</td></tr>
             <tr><td>`address`</td><td>The IP address of the host as a string.</td></tr>
@@ -3318,8 +3422,9 @@ import update from "embedded:update";
         <emu-clause id="dns-sd-methods-advertise-options-method">
           <h1>advertise(options) method</h1>
           <p>The `advertise` method initiates advertising of a DNS-SD service. The options object defines the service to be advertised.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`serviceType`</td><td>The DNS-SD service type (e.g. `"_http._tcp"`) as a string. This property is required.</td></tr>
             <tr><td>`host`</td><td>The service's host name as a string. This property is required.</td></tr>
             <tr><td>`name`</td><td>The Service Instance Name as a string. This property is optional and defaults to the value of the `host` property.</td></tr>
@@ -3327,8 +3432,9 @@ import update from "embedded:update";
             <tr><td>`txt`</td><td>The DNS-SD instance's DNS `txt` record as an ECMAScript `Map` instance with the property name as the map's keys and the value as the map's values. Values may be a string or a byte buffer. This property is optional.</td></tr>
           </tbody></table></emu-table>
           <p>The `advertise` method returns an object with the following properties.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`close()`</td><td>Call this method to end advertising of the service.</td></tr>
             <tr><td>`updateTXT()`</td><td>Call this method to update the DNS `txt` record advertised for this service. Pass the new DNS `txt` record as an ECMAScript `Map` instance with the property name as the map's keys and the value as the map's values. Values may be a string or a byte buffer.</td></tr>
           </tbody></table></emu-table>
@@ -3363,8 +3469,9 @@ let led = new Digital({
         <h1>IO bus properties</h1>
         <p>An IO Bus is two or more pins used to implement a communication protocol such as Serial, SPI, or I²C. There may be one or more instances of an IO Bus and one may be designated as the default bus of that type.</p>
         <p>The Host Provider instance may contain properties corresponding to each bus type. The following bus types are defined for those host provider instance.</p>
-        <emu-table><table><tbody>
-          <tr><th>Bus Type</th><th>Property Name</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Bus Type</th><th>Property Name</th></tr></thead>
+          <tbody>
           <tr><td>I²C</td><td>`i2c`</td></tr>
           <tr><td>Serial</td><td>`serial`</td></tr>
           <tr><td>SPI</td><td>`spi`</td></tr>
@@ -3526,8 +3633,9 @@ const update = device.update.open({partition});
       <p>A separate Technical Report, ECMA TR/110, Recommendations and Best Practices for Scripts on Connected Sensing Devices, describes the best practices for using the Provenance Sensor Class Pattern to support scripts running on connected sensing devices, for propagating static and dynamic device and state metadata, and for accurately propagating sensor samples.</p>
       <emu-clause id="provenance-sensor-class-pattern-properties-of-constructor-options-object">
         <h1>Properties of constructor options object</h1>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`onConfiguration()`</td><td>Callback to invoke when a new sensor configuration has been applied. The configuration details are obtained from the `configuration` property of the instance. This property is optional.</td></tr>
         </tbody></table></emu-table>
         <p>The `onConfiguration` callback is invoked whenever configuration parameters are changed from the originally-constructed instance. </p>
@@ -3537,8 +3645,9 @@ const update = device.update.open({partition});
         <p>The required read-only `configuration` property indicates the current configuration of the sensor. Non-default values must be reported. All configured parameters may optionally be included.</p>
         <p>The data format of this property is implementation-dependent. For instance, the data may be a binary value or may be human-readable. The data do not have to be interoperable to the connected sensing device if they can be parsed by the relevant endpoint.</p>
         <p>Configuration information recommended for the `configuration` property includes, but is not limited to:</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`calibration`</td><td>Calibration factors / parameters that impact samples presented as raw.</td></tr>
           <tr><td>`mode`</td><td>Sampling operating mode.</td></tr>
           <tr><td>`scaling`</td><td>Scaling factors that impact samples presented as raw.</td></tr>
@@ -3550,8 +3659,9 @@ const update = device.update.open({partition});
         <p>The required read-only `identification` property provides static identification information about the physical sensor and/or sensor driver.</p>
         <p>The data format of this property is implementation-dependent. For instance, the data may be a binary value or may be human-readable. The data do not have to be interoperable to the connected sensing device if they can be parsed by the relevant endpoint.</p>
         <p>Identification information recommended for the `identification` property includes, but is not limited to:</p>
-        <emu-table><table><tbody>
-          <tr><th>Property</th><th>Description</th></tr>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
           <tr><td>`model`</td><td>Identification of the manufacturer and part number of the sensor. Required.</td></tr>
           <tr><td>`classification`</td><td>Identification of the sensor classification of the sensor instance. Required for instances of defined classes.</td></tr>
           <tr><td>`uniqueID`</td><td>Hard-coded unique identifiers associated with the sensor part. This includes serial numbers, time and date of manufacture, etc. Optional.</td></tr>
@@ -3559,8 +3669,9 @@ const update = device.update.open({partition});
         <emu-clause id="provenance-sensor-class-pattern-identification-property-properties-of-sample-object">
           <h1>Properties of sample Object</h1>
           <p>The Provenance Sensor Class Pattern extends the sample object described in the Sensor Class Pattern to include the following properties.</p>
-          <emu-table><table><tbody>
-            <tr><th>Property</th><th>Description</th></tr>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
             <tr><td>`time`</td><td>Number originating from an absolute clock describing the instant that the sample returned was captured. If reported, `time` must be represented as a time value as defined in ECMA-262 in "Time Values and Time Range" (<a href="https://tc39.es/ecma262/#sec-time-values-and-time-range">https://tc39.es/ecma262/#sec-time-values-and-time-range</a>). The time should originate from the most accurate clock associable to the start of a sampling event, or be derived from the same.</td></tr>
             <tr><td>`ticks`</td><td>Number originating from a non-absolute clock describing the instant that the sample returned was captured. If reported, `ticks` must be reported as an integer representing the number of time units occurring from an arbitrary, connected sensing device-consistent start time as reported by the sensor instance.</td></tr>
             <tr><td>`faults`</td><td>Object representing a record of any sensor-level faults that occurred during this sensor sample or since the previously reported sample. Optional. </td></tr>
