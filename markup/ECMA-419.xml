@@ -3,6 +3,39 @@
 <head>
 <meta charset="UTF-8">
   <title>ECMAScript&reg; Embedded Systems API Specification</title>
+
+  <style media="print">
+  /* ECMA-419-specific styles */
+  /* Audit these styles every time a new edition is being prepared for publication. */
+
+  emu-note {
+    break-before: avoid;
+  }
+
+  #alg-base-class-pattern-constructor emu-note,
+  #alg-tcp-client-class-pattern-prototype-read h1,
+  #alg-tcp-client-class-pattern-prototype-write h1,
+  #alg-tcp-client-class-pattern-prototype-tcperror h1,
+  #alg-tcp-client-class-pattern-prototype-tcpreadable h1,
+  #alg-tcp-client-class-pattern-prototype-tcpwritable h1,
+  #alg-tcp-server-connection-class-pattern-prototype-read h1,
+  #alg-tcp-server-connection-class-pattern-prototype-write h1,
+  #alg-tcp-server-connection-class-pattern-prototype-tcperror h1,
+  #alg-tcp-server-connection-class-pattern-prototype-tcpreadable h1,
+  #alg-tcp-server-connection-class-pattern-prototype-tcpwritable h1 {
+    break-before: initial;
+    break-inside: initial;
+    break-after: initial;
+  }
+
+  #alg-directory-iterator-class-prototype-next emu-note {
+    break-before: initial;
+  }
+
+  #alg-base-class-pattern-constructor emu-note li {
+    break-inside: avoid;
+  }
+</style>
 </head>
 <body>
 
