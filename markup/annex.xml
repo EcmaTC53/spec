@@ -630,7 +630,9 @@ print(2);
               1. Let _stop_ be true.
             1. Execute step 8 of the IO.Async Class Pattern *write* method.
           </emu-alg>
-          <emu-note>The *read* and *write* methods algorithms describe how to handle an optional argument before the optional _callback_ argument.</emu-note>
+          <emu-note>
+            <p>The *read* and *write* methods algorithms describe how to handle an optional argument before the optional _callback_ argument.</p>
+          </emu-note>
         </emu-annex>
         <emu-annex id="alg-io-i2c-async-prototype-writeRead">
           <h1>writeRead ( _data_, _option_ [, _stop_ ] [, _callback_ ] )</h1>
@@ -839,7 +841,9 @@ print(2);
             <tr><td>*callback*</td><td>no</td><td>*Function*</td><td>*null*</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
-        <emu-note>The asynchronous methods to read and write data behaves analogously to the I2C.Async *read* and *write* method.</emu-note>
+        <emu-note>
+          <p>The asynchronous methods to read and write data behaves analogously to the I2C.Async *read* and *write* method.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-io-serial">
         <h1>Serial</h1>
@@ -1232,7 +1236,9 @@ print(2);
               1. Throw if _value_ is not in the valid range of the supported option.
           1. Configure the peripheral with _options_.
         </emu-alg>
-        <emu-note>Supported IO connections are supported options. Their value must be an object with an *io* property, which is the class of the IO connection.</emu-note>
+        <emu-note>
+          <p>Supported IO connections are supported options. Their value must be an object with an *io* property, which is the class of the IO connection.</p>
+        </emu-note>
       </emu-annex>
     </emu-annex>
     <emu-annex id="alg-sensor-class-pattern">
@@ -1625,7 +1631,7 @@ print(2);
           <p>*Array* of *touch* objects or *undefined* if no touch is in progress.</p>
         </emu-annex>
         <emu-annex id="alg-sensor-touch-touch-object">
-          <h1>touch object:</h1>
+          <h1>touch object</h1>
           <emu-table><table>
             <thead>
               <tr><th>Property</th><th>Required</th><th>Range</th><th>Description</th></tr>
@@ -1770,9 +1776,11 @@ print(2);
           1. Return the height of the frame buffer in pixels.
         </emu-alg>
       </emu-annex>
-      <emu-note>When the frame buffer *rotation* is 90 or 270 degrees, *get width* returns the height of the frame buffer in pixels and *get height* returns the width of the frame buffer in pixels.</emu-note>
+      <emu-note>
+        <p>When the frame buffer *rotation* is 90 or 270 degrees, *get width* returns the height of the frame buffer in pixels and *get height* returns the width of the frame buffer in pixels.</p>
+      </emu-note>
       <emu-annex id="alg-display-class-pattern-constructor-options">
-        <h1>constructor options:</h1>
+        <h1>constructor options</h1>
         <emu-table><table>
           <thead>
             <tr><th>Property</th><th>Required</th><th>Range</th><th>Default</th></tr>
@@ -2151,7 +2159,9 @@ print(2);
           <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
-      <emu-note>The resolution itself	 can be implemented in ECMAScript. See the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/udp/dns/dns.js">sample code</a></emu-note>
+      <emu-note>
+        <p>The resolution itself can be implemented in ECMAScript. See the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/udp/dns/dns.js">sample code</a></p>
+      </emu-note>
     </emu-annex>
     <emu-annex id="alg-dns-over-https">
       <h1>DNS over HTTPS</h1>
@@ -2166,7 +2176,9 @@ print(2);
           <tr><td>*servers*</td><td>yes</td><td>*Array* of strings</td><td>N/A</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
-      <emu-note>The resolution itself	 can be implemented in ECMAScript.</emu-note>
+      <emu-note>
+        <p>The resolution itself can be implemented in ECMAScript.</p>
+      </emu-note>
     </emu-annex>
     <emu-annex id="alg-ntp-client">
       <h1>NTP Client</h1>
@@ -2215,7 +2227,9 @@ print(2);
           <tr><td>*dns*</td><td>*yes*</td><td>*Object*</td><td>N/A</td></tr>
        </tbody></table></emu-table>
       </emu-annex>
-      <emu-note>The synchronization itself can be implemented in ECMAScript. See the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/udp/sntp/sntp.js">sample code</a></emu-note>
+      <emu-note>
+        <p>The synchronization itself can be implemented in ECMAScript. See the <a href="https://github.com/Moddable-OpenSource/moddable/blob/public/examples/io/udp/sntp/sntp.js">sample code</a></p>
+      </emu-note>
     </emu-annex>
     <emu-annex id="alg-tcp-client-class-pattern">
       <h1>TCP Client Class Pattern</h1>
@@ -2591,7 +2605,9 @@ print(2);
           <tr><td>*onConnect*</td><td>yes</td><td>*Function*</td><td>N/A</td></tr>
         </tbody></table></emu-table>
       </emu-annex>
-      <emu-note>The connection constructor is specific to each network protocol, and available only to the implementation: a static private field of the server class, a closure of the server module, etc.</emu-note>
+      <emu-note>
+        <p>The connection constructor is specific to each network protocol, and available only to the implementation: a static private field of the server class, a closure of the server module, etc.</p>
+      </emu-note>
     </emu-annex>
     <emu-annex id="alg-tcp-server-connection-class-pattern">
       <h1>TCP Server Connection Class Pattern</h1>
@@ -3306,7 +3322,9 @@ print(2);
     </emu-annex>
     <emu-annex id="alg-flash-module-object">
       <h1>Flash Module Object</h1>
-      <emu-note>The Flash module default export is an object with an *open* method that creates Flash Partition instances.</emu-note>
+      <emu-note>
+        <p>The Flash module default export is an object with an *open* method that creates Flash Partition instances.</p>
+      </emu-note>
       <emu-annex id="alg-flash-module-object-prototype-open">
         <h1>open ( _options_ )</h1>
         <emu-alg>
@@ -3349,14 +3367,18 @@ print(2);
         <emu-alg>
           1. Throw.
         </emu-alg>
-        <emu-note>Use the *open* method of the Flash Module Object to create Flash Partition instances.</emu-note>
+        <emu-note>
+          <p>Use the *open* method of the Flash Module Object to create Flash Partition instances.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-flash-partition-class-pattern-prototype-close">
         <h1>close ( )</h1>
         <emu-alg>
           1. Execute all steps of the IO Class Pattern *close* method.
         </emu-alg>
-        <emu-note>For a Flash Partition instance, step 5 of the IO Class Pattern *close* method closes the access to the flash partition.</emu-note>
+        <emu-note>
+          <p>For a Flash Partition instance, step 5 of the IO Class Pattern *close* method closes the access to the flash partition.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-flash-partition-class-pattern-prototype-eraseblock">
         <h1>eraseBlock ( _from_ [, _to_ ] )</h1>
@@ -3496,11 +3518,15 @@ print(2);
           1. Return _result_.
         </emu-alg>
       </emu-annex>
-      <emu-note>The list order is system dependent.</emu-note>
+      <emu-note>
+        <p>The list order is system dependent.</p>
+      </emu-note>
     </emu-annex>
     <emu-annex id="alg-update-module-object">
       <h1>Update Module Object</h1>
-      <emu-note>The Update module default export is an object with an *open* method that creates Update instances.</emu-note>
+      <emu-note>
+        <p>The Update module default export is an object with an *open* method that creates Update instances.</p>
+      </emu-note>
       <emu-annex id="alg-update-module-object-prototype-open">
         <h1>open ( _options_ )</h1>
         <emu-alg>
@@ -3536,7 +3562,9 @@ print(2);
             <tr><td>*byteLength*</td><td>no</td><td>positive integer or *undefined*</td><td>*undefined*</td></tr>
           </tbody></table></emu-table>
         </emu-annex>
-        <emu-note>The *"resources"* internal field of an Update instance describes the over the air update process for a specific *partition*.</emu-note>
+        <emu-note>
+          <p>The *"resources"* internal field of an Update instance describes the over the air update process for a specific *partition*.</p>
+        </emu-note>
       </emu-annex>
     </emu-annex>
     <emu-annex id="alg-update-class-pattern">
@@ -3546,14 +3574,18 @@ print(2);
         <emu-alg>
           1. Throw.
         </emu-alg>
-        <emu-note>Use the *open* method of the Update Module Object to create Update instances.</emu-note>
+        <emu-note>
+          <p>Use the *open* method of the Update Module Object to create Update instances.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-update-class-pattern-prototype-close">
         <h1>close ( )</h1>
         <emu-alg>
           1. Execute all steps of the IO Class Pattern *close* method.
         </emu-alg>
-        <emu-note>For an Update instance, step 5 of the IO Class Pattern *close* method aborts the over the air update process if the *complete* method has not been called.</emu-note>
+        <emu-note>
+          <p>For an Update instance, step 5 of the IO Class Pattern *close* method aborts the over the air update process if the *complete* method has not been called.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-update-class-pattern-prototype-complete">
         <h1>complete ( )</h1>
@@ -3564,7 +3596,9 @@ print(2);
           1. End and activate _update_.
           1. Throw if former step failed.
         </emu-alg>
-        <emu-note>Step 4 can fail if written data are invalid.</emu-note>
+        <emu-note>
+          <p>Step 4 can fail if written data are invalid.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-update-class-pattern-prototype-write">
         <h1>write ( _data_ [, _offset_ ] )</h1>
@@ -3590,7 +3624,9 @@ print(2);
           1. If _mode_ is *"a"*, then
             1. Let the offset of the _update_ be _offset_ + _count_.
         </emu-alg>
-        <emu-note>Step 12 can fail if written data are invalid.</emu-note>
+        <emu-note>
+          <p>Step 12 can fail if written data are invalid.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-update-class-pattern-read-write-data">
         <h1>read / write data</h1>
@@ -3605,7 +3641,9 @@ print(2);
     </emu-annex>
     <emu-annex id="alg-key-value-object">
       <h1>Key-Value Module Object</h1>
-      <emu-note>The Key-Value module default export is an object with an *open* method that creates Key-Value Domain instances.</emu-note>
+      <emu-note>
+        <p>The Key-Value module default export is an object with an *open* method that creates Key-Value Domain instances.</p>
+      </emu-note>
       <emu-annex id="alg-key-value-object-prototype-open">
         <h1>open ( _options_ )</h1>
         <emu-alg>
@@ -3640,14 +3678,18 @@ print(2);
         <emu-alg>
           1. Throw.
         </emu-alg>
-        <emu-note>Use the *open* method of the Key-Value Module Object to create Key-Value instances.</emu-note>
+        <emu-note>
+          <p>Use the *open* method of the Key-Value Module Object to create Key-Value instances.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-key-value-domain-class-pattern-prototype-close">
         <h1>close ( )</h1>
         <emu-alg>
           1. Execute all steps of the IO Class Pattern *close* method.
         </emu-alg>
-        <emu-note>For a Key-Value Domain instance, step 5 of the IO Class Pattern *close* method closes the storage.</emu-note>
+        <emu-note>
+          <p>For a Key-Value Domain instance, step 5 of the IO Class Pattern *close* method closes the storage.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-key-value-domain-class-pattern-prototype-delete">
         <h1>delete ( _key_ )</h1>
@@ -3778,17 +3820,23 @@ print(2);
           1. Return _result_.
         </emu-alg>
       </emu-annex>
-      <emu-note>The list order is system dependent.</emu-note>
+      <emu-note>
+        <p>The list order is system dependent.</p>
+      </emu-note>
     </emu-annex>
     <emu-annex id="alg-file-class-pattern">
       <h1>File Class Pattern</h1>
-      <emu-note>The *"resources"* internal field of a File instance describes a specific file in the file system. On POSIX, the internal field is a file descriptor.</emu-note>
+      <emu-note>
+        <p>The *"resources"* internal field of a File instance describes a specific file in the file system. On POSIX, the internal field is a file descriptor.</p>
+      </emu-note>
       <emu-annex id="alg-file-class-pattern-constructor">
         <h1>constructor ( )</h1>
         <emu-alg>
           1. Throw.
         </emu-alg>
-        <emu-note>Use the *openFile* method of a Directory instance to create File instances.</emu-note>
+        <emu-note>
+          <p>Use the *openFile* method of a Directory instance to create File instances.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-file-class-pattern-prototype-close">
         <h1>close ( )</h1>
@@ -3809,7 +3857,9 @@ print(2);
           1. Let _fd_ be GetInternalField(*this*, *"resources"*).
           1. Flush file _fd_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/fsync">man fsync</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/fsync">man fsync</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-file-class-pattern-prototype-read">
         <h1>read ( _count_, _offset_ )</h1>
@@ -3835,7 +3885,9 @@ print(2);
             1. Let _result_ be the number of bytes read by the former step.
           1. Return _result_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/pread">man pread</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/pread">man pread</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-file-class-pattern-prototype-setsize">
         <h1>setSize(size)</h1>
@@ -3847,7 +3899,9 @@ print(2);
           1. Throw if _size_ is not a positive integer.
           1. Set the size of _fd_ to _size_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/ftruncate">man ftruncate</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/ftruncate">man ftruncate</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-file-class-pattern-prototype-status">
         <h1>status ( )</h1>
@@ -3869,7 +3923,9 @@ print(2);
           1. SetProperty(_result_, *"isSymbolicLink"*, _isSymbolicLink_).
           1. Return _result_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/fstat">man fstat</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/fstat">man fstat</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-file-class-pattern-prototype-write">
         <h1>write ( _buffer_, _offset_ )</h1>
@@ -3883,7 +3939,9 @@ print(2);
           1. Let _count_ be GetProperty(_buffer_, *"byteLength"*).
           1. Write _count_ bytes from _pointer_ into _fd_ at _offset_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/pwrite">man pwrite</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/pwrite">man pwrite</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-file-class-pattern-read-write-data">
         <h1>read / write data</h1>
@@ -3925,7 +3983,9 @@ print(2);
         <emu-alg>
           1. Throw.
         </emu-alg>
-        <emu-note>Use the *openDirectory* method of a Directory instance to create Directory instances.</emu-note>
+        <emu-note>
+          <p>Use the *openDirectory* method of a Directory instance to create Directory instances.</p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-directory-class-pattern-prototype-close">
         <h1>close ( )</h1>
@@ -3950,7 +4010,9 @@ print(2);
           1. Create a directory specified by _path_ relative to _fd_ .
           1. Return *true*.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/mkdirat">man mkdirat</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/mkdirat">man mkdirat</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-directory-class-pattern-prototype-createlink">
         <h1>createLink ( _path_, _target_ )</h1>
@@ -3979,7 +4041,9 @@ print(2);
           1. Remove the entry specified by _path_ relative to _fd_.
           1. Return *true*.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/unlinkat">man unlinkat</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/unlinkat">man unlinkat</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-directory-class-pattern-prototype-move">
         <h1>move ( _fromPath_, _toPath_ [, _directory_ ] )</h1>
@@ -3995,7 +4059,9 @@ print(2);
             1. Let _fd2_ be GetInternalField(_directory_, *"resources"*).
           1. Rename the entry specified by _fromPath_ relative to _fd_ into the entry specified by _toPath_ relative to _fd2_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/renameat">man renameat</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/renameat">man renameat</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-directory-class-pattern-prototype-opendirectory">
         <h1>openDirectory ( _options_ )</h1>
@@ -4102,7 +4168,9 @@ print(2);
 	1. SetProperty(_result_, *"isSymbolicLink"*, _isNone_).
 1. Return _result_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/fstatat">man fstatat</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/fstatat">man fstatat</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-directory-class-pattern-prototype-symbol-iterator">
         <h1>[Symbol.iterator] ( )</h1>
@@ -4126,7 +4194,9 @@ print(2);
           1. Let _stream_ be the result of opening a directory stream corresponding to _fd2_.
           1. SetInternalField(*this*, *"stream"*, _stream_).
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/2/dup2">man dup</a> and <a href="https://linux.die.net/man/3/fdopendir">man fdopendir</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/2/dup2">man dup</a> and <a href="https://linux.die.net/man/3/fdopendir">man fdopendir</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-directory-iterator-class-prototype-next">
         <h1>next ( )</h1>
@@ -4151,7 +4221,9 @@ print(2);
             1. SetProperty(_result_, *"value"*, _name_).
           1. Return _result_.
         </emu-alg>
-        <emu-note>See <a href="https://linux.die.net/man/3/readdir">man readdir</a></emu-note>
+        <emu-note>
+          <p>See <a href="https://linux.die.net/man/3/readdir">man readdir</a></p>
+        </emu-note>
       </emu-annex>
       <emu-annex id="alg-directory-iterator-class-prototype-return">
         <h1>return ( )</h1>
@@ -4607,7 +4679,11 @@ print(2);
 1. Return _result_.
 				</emu-alg>
 			</emu-annex>
-			<emu-note>The store and restore methods are only present on platforms that support the serialization/deserialization of resources into/from records</emu-note>
+			<emu-note>
+        <ul>
+          <li>The store and restore methods are only present on platforms that support the serialization/deserialization of resources into/from records</li>
+			  </ul>
+      </emu-note>
 			<emu-annex id="alg-gattclient-prototype-get-maximumWrite">
 				<h1>get maximumWrite ( )</h1>
 				<emu-alg>
