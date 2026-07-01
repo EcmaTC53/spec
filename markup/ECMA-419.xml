@@ -52,7 +52,7 @@
 <p><img src="./img/ecma-logo.svg" id="ecma-logo" alt="Ecma International"></p>
 
 <emu-biblio href="./biblio.json"></emu-biblio>
-<emu-import href="./changes.xml"></emu-import>
+<!-- <emu-import href="./changes.xml"></emu-import> -->
 <emu-import href="./main.xml"></emu-import>
 <emu-import href="./annex.xml"></emu-import>
 <emu-import href="./footer.xml"></emu-import>
