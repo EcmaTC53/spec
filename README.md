@@ -1,15 +1,17 @@
 # Ecma TC53
 
 ## Published Standards
-- [ECMA-419 3nd Edition, June 2025.](https://419.ecma-international.org/3.0/index.html) ECMAScript® embedded systems API specification
-- [ECMA-419 2nd Edition, June 2023.](https://419.ecma-international.org/2.0/index.html) ECMAScript® embedded systems API specification
-- [ECMA-419 1st Edition, June 2021.](https://419.ecma-international.org/1.0/index.html) ECMAScript® embedded systems API specification
+- ECMAScript® Embedded Systems API Specification
+	- [ECMA-419 4th Edition, June 2026](https://419.ecma-international.org/4.0/index.html)
+	- [ECMA-419 3rd Edition, June 2025](https://419.ecma-international.org/3.0/index.html)
+	- [ECMA-419 2nd Edition, June 2023](https://419.ecma-international.org/2.0/index.html)
+	- [ECMA-419 1st Edition, June 2021](https://419.ecma-international.org/1.0/index.html)
 - [ECMA TR/109 1st Edition, June 2021.](https://www.ecma-international.org/wp-content/uploads/ECMA_TR-109_1st_edition_june_2021.pdf) Class specifications for embedded hardware components
 - [ECMA TR/110 1st Edition, June 2021.](https://www.ecma-international.org/wp-content/uploads/ECMA_TR-110_1st_edition_june_2021.pdf) Recommendations and best practices for scripts on connected sensing devices
 
-## Latest drafts (markdown) 
+## Latest drafts
 
-- [ECMAScript® Embedded Systems API Specification](./docs/tc53.md) – working draft for 4th Edition
+- [ECMAScript® Embedded Systems API Specification](./markup/main.md) - working draft for 5th Edition
 - Technical Report: [Recommendations and Best Practices for Scripts on Connected Sensing Devices](./docs/Technical%20Reports/provenance.md)
 - Technical Report: [Class Specifications for Embedded Hardware Components](./docs/Technical%20Reports/hardware-components.md)
 
@@ -23,7 +25,7 @@
 - [Digital provider - Microchip MCP23X17](./docs/Hardware%20Components/providers/Digital-Microchip-MCP23X17.md)
 
 ## Latest drafts (HTML) 
- - [ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/web/spec.html) – working draft for 4th Edition
+ - [ECMAScript® Embedded Systems API Specification](https://EcmaTC53.github.io/spec/markup/out/ECMA-419.html) – working draft for 5th Edition
  - [Ambient Light and Proximity sensor - STMicroelectronics Vl6180](https://EcmaTC53.github.io/spec/web/AmbientLight-Proximity-STMicroelectronics-VL6180.html)
  - [Temperature sensor - Texas Instruments TMP102](https://EcmaTC53.github.io/spec/web/Temperature-TexasInstruments-TMP102.html)
  - [Touch controller - FocalTech FT6x06](https://EcmaTC53.github.io/spec/web/Touch-FocalTech-FT6x06.html)

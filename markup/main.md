@@ -1,3 +1,11 @@
+## Changes since the fourth edition
+
+- Note adoption of 4th Edition by General Assembly
+
+> **WARNING**: This is a working draft. It is likely to change. Feedback is welcome.
+
+> **NOTE**: This change log is maintained for the convenience of reviewers and will not be incorporated into the Standard.
+
 ## Introduction
 
 This Standard defines APIs for use on embedded systems. Embedded systems are far more diverse than personal computers, smartphones, and web servers where ECMAScript is most widely used. The diversity of embedded hardware is a consequence of devices being optimized for a specific product or class of products.
@@ -16,7 +24,7 @@ The second edition extended IO with asynchronous capabilities used by I²C and t
 
 The third edition introduced new IO classes for audio input, audio output, and image input, such as cameras. It included persistent storage classes for files, flash memory partitions, and key-value pair stores, and to apply over-the-air firmware updates. It was adopted by the General Assembly of June 2025.
 
-This fourth edition introduces Bluetooth LE support for centrals and peripherals, and DNS-SD discovery and advertising.
+This fourth edition introduces Bluetooth LE support for centrals and peripherals, and DNS-SD discovery and advertising. It was adopted by the General Assembly of June 2026.
 
 <!-- text here to indicate when this revision was adopted -->
 
