@@ -45,14 +45,14 @@
   shortname: ECMA-419
   status: draft
   location: https://tc39.es/ecma402/
-  date: 2026-03-20
+  date: 2026-07-15
   committee: 53
-  version: 4<sup>th</sup> Edition
+  version: 5<sup>th</sup> Edition
 </pre>
 <p><img src="./img/ecma-logo.svg" id="ecma-logo" alt="Ecma International"></p>
 
 <emu-biblio href="./biblio.json"></emu-biblio>
-<!-- <emu-import href="./changes.xml"></emu-import> -->
+<emu-import href="./changes.xml"></emu-import>
 <emu-import href="./main.xml"></emu-import>
 <emu-import href="./annex.xml"></emu-import>
 <emu-import href="./footer.xml"></emu-import>

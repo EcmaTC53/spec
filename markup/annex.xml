@@ -338,7 +338,7 @@ print(2);
             1. Mark *this* as eligible for garbage collection.
             1. ClearInternalFields(*this*).
             1. Free _resources_.
-            1. Execute step 5.2 and 5.3 of the Base Class Pattern *close* method.
+            1. Execute step 4.c of the Asynchronous Base Class Pattern *close* method.
         </emu-alg>
       </emu-annex>
       <emu-annex id="alg-io-async-class-pattern-prototype-read">

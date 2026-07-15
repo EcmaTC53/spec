@@ -1,11 +1,3 @@
-## Changes since the fourth edition
-
-- Note adoption of 4th Edition by General Assembly
-
-> **WARNING**: This is a working draft. It is likely to change. Feedback is welcome.
-
-> **NOTE**: This change log is maintained for the convenience of reviewers and will not be incorporated into the Standard.
-
 ## Introduction
 
 This Standard defines APIs for use on embedded systems. Embedded systems are far more diverse than personal computers, smartphones, and web servers where ECMAScript is most widely used. The diversity of embedded hardware is a consequence of devices being optimized for a specific product or class of products.
