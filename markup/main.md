@@ -2,6 +2,7 @@
 
 - Fix step 5.d of the Asynchronous IO Class Pattern close method algorithm
 - HTTP Server [constructor option](#http-server-class-pattern) `io` renamed to `socket` (matches HTTP Client and consistent with other IO constructor options objects)
+- add `remoteAddress` to [BLE Server GATT Connection](#bluetoothle-gattserverconnection)
 
 
 ## Introduction
@@ -2767,6 +2768,8 @@ The following properties are present on the constructor. The property names and 
 
 ## 26 Bluetooth LE Central
 
+<a id="bluetoothle-central-gapclient"></a>
+
 ### GAPClient Class Pattern
 
 The `GAPClient` conforms to the IO Class Pattern.
@@ -2837,6 +2840,8 @@ Returns an `ArrayBuffer` instance containing the data of the BLE ADType specifie
 | `name` | The complete name (ADType 9) or short name (ADType 8) of the peripheral, if available, as a string. |
 | `services` | An array of UUID strings for all advertised services (incomplete and complete; 16, 32, and 128 bit - ADTypes 2 through 7 inclusive). `undefined` if there are no advertised services |
 | `manufacturerData` | An object with a `manufacturer` property with a number indicating the manufacturer and a `data` property with an `ArrayBuffer` containing the manufacturer data (ADType 255).|
+
+<a id="bluetoothle-central-gattclient"></a>
 
 ### GATTClient Class Pattern
 
@@ -3281,6 +3286,7 @@ The `replyToPasskey` method delivers a response to an action received by the `on
 | Property | Description |
 | :---: | :--- |
 | `maximumWrite` | A number indicating the maximum number of bytes allowed for any transmission (MTU), such as `notify` or the returned buffer from the `onRead` callback. |
+| `remoteAddress` | A string indicating the address of the  remote Bluetooth LE peripheral. The value is suitable for passing as the `address` to instantiate a [`GATTClient`](#bluetoothle-central-gattclient), and its format is host-dependent. Returns `undefined` if unavailable.  |
 
 <a id="bluetoothle-gattservercharacteristic"></a>
 
