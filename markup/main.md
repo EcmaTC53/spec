@@ -5,6 +5,7 @@
 - add `remoteAddress` to [BLE Server GATT Connection](#bluetoothle-gattserverconnection)
 - setting `format` to unsupported value throws, type of exception is not specified
 - Be explicit when constructor options object is extended with an `io` property
+- Add `onSample` callback and explain `sample()` may return `undefined` in [Sensor Class Pattern](#sensor-class-pattern)
 
 
 ## Introduction
@@ -1638,6 +1639,7 @@ class ExamplePeripheral {
 
 <!-- NOTE: this assumes the configuration property is implemented from the sensor provenance section -->
 
+<a id="sensor-class-pattern"></a>
 
 ## 13 Sensor Class Pattern
 
@@ -1691,19 +1693,25 @@ The `configure` method is inherited from the Peripheral Class Pattern. For senso
 
 The `sample` method returns readings from the sensor. The Sensor Class Pattern defines no arguments for the `sample` method, though individual sensor types may.
 
-The `sample` method returns an object containing one or more properties. The returned object is mutable. The implementation must return a different object on each invocation to allow callers to accumulate multiple sensor readings.
+The `sample` method returns an object containing one or more properties. The returned object is mutable. The implementation must return a fresh object on each invocation to allow callers to accumulate multiple sensor readings.
 
+If the `sample` method does not have a new sensor reading available, either because it has not obtained one yet or because no new reading is available since the last call to `sample`, it returns `undefined`. This behavior prevents callers from misinterpreting a stale sensor reading as an unchanged reading.
+ 
 > **NOTE**: A sensor implementation of `sample` may accept an input argument of the object to use for the sensor data as an optimization to reduce memory manager work. If supported, this must be specified for the Sensor Class' `sample` method.
 
 If the sample data includes timestamps (e.g. when the sample was collected), those timestamps in the returned sample object should conform to the `time` or `ticks` properties of the Sample Object specified by the Provenance Sensor Class Pattern.
 
 ### Callbacks
 
-The Sensor Class Pattern specifies one callback that is set by the options object passed to the constructor. Individual sensor classes may provide additional callbacks, for instance, to indicate when a sample is available or a sensed condition has been met.
+The Sensor Class Pattern specifies two optional callbacks that are set by the options object passed to the constructor. Individual sensor classes may provide additional callbacks, for instance, to indicate when a sensed condition has been met.
 
 **`onError()`**
 
 The `onError` callback is invoked on a non-recoverable error to indicate that the sensor instance can no longer be used. The only method that should be called is `close`.
+
+**`onSample()`**
+
+The `onSample` callback is invoked when there is a new sensor sample available. The sample is retrieved by calling the instance's `sample()` method. Sensors are not required to implement support for `onSample`.
 
 ## 14 Sensor classes
 
