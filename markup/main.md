@@ -4,6 +4,7 @@
 - HTTP Server [constructor option](#http-server-class-pattern) `io` renamed to `socket` (matches HTTP Client and consistent with other IO constructor options objects)
 - add `remoteAddress` to [BLE Server GATT Connection](#bluetoothle-gattserverconnection)
 - setting `format` to unsupported value throws, type of exception is not specified
+- Be explicit when constructor options object is extended with an `io` property
 
 
 ## Introduction
@@ -2164,8 +2165,8 @@ The RTC Class Pattern conforms to the Peripheral Class Pattern.
 
 | Property | Description |
 | :---: | :--- |
-| `clock` | A class constructor options object that describes the hardware connection for the RTC. This property is required. |
-| `interrupt` | A Digital class constructor options object that describes the hardware connection to the RTC's interrupt. This property is optional. |
+| `clock` | An IO class constructor options object that describes the hardware connection for the RTC, extended with an `io` property set to the constructor of that IO class (commonly I²C or SPI). This property is required. |
+| `interrupt` | A Digital class constructor options object that describes the hardware connection to the RTC's interrupt, extended with an `io` property set to a Digital constructor. This property is optional. |
 | `onAlarm()` | A function to invoke when an alarm is triggered by the RTC. This property is optional. |
 
 ### `configure` method
@@ -2344,7 +2345,7 @@ import Resolver from "embedded:network/dns/resolver/udp";
 
 | Property | Description |
 | :---: | :--- |
-| `socket` | A UDP class constructor options object for a UDP socket. This property is required. |
+| `socket` | A UDP socket constructor options object extended with an `io` property set to a UDP socket constructor. This property is required. |
 | `servers` | Array of one or more IP address strings to use as DNS servers. This property is required. |
 
 ### DNS over HTTPS (DoH)
@@ -2358,7 +2359,7 @@ import Resolver from "embedded:network/dns/resolver/doh";
 
 | Property | Description |
 | :---: | :--- |
-| `http` | An HTTP Client class constructor options object. This property is required. |
+| `http` | An HTTP Client class constructor options object extended with an `io` property set to an HTTP Client constructor. This property is required. |
 | `servers` | An array of one or more objects containing `host` and `address` properties to use as DoH servers. This property is required. |
 
 <a id="ntp-client"></a>
@@ -2376,9 +2377,9 @@ import NTP from "embedded:network/ntp/client";
 
 | Property | Description |
 | :---: | :--- |
-| `socket` | [UDP class constructor options object](#udp-socket-constructor-options). This property is required. |
+| `socket` | A [UDP socket constructor options object](#udp-socket-constructor-options) extended with an `io` property set to a UDP socket constructor. This property is required. |
 | `servers` | An array of one or more strings indicating the NTP hosts to use to synchronize time. This property is required. |
-| `dns` | [A Domain Name Resolver class constructor options object](#dns-resolver) to use to resolve the `servers`. This property is required. |
+| `dns` | [A Domain Name Resolver class constructor options object](#dns-resolver), extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `servers`. This property is required. |
 
 ### `getTime` method
 The `getTime` method initiates a time synchronization operation. Only one time synchronization operation may be active at a time. `getTime` throws on requests made before the current request completes. The sole argument is a required [completion callback function](#base-pattern-async) that is invoked when synchronization completes. If successful, the ECMAScript time value is provided in the second argument as a `Number`.
@@ -2398,10 +2399,10 @@ The `HTTPClient` class data format is always `"buffer"`.
 
 | Property | Description |
 | :---: | :--- |
-| `socket` | An object containing a `TCP` class constructor options object. This property is required. |
+| `socket` | A TCP socket constructor options object extended with an `io` property set to a TCP socket constructor. This property is required. |
 | `port` | The remote port number to connect to as a number. This property is optional and defaults to 80. |
 | `host` | The remote hostname to connect to as a string. This property is required. |
-| `dns` | A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required. |
+| `dns` | A Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `host`. This property is required. |
 | `onError` | A function to invoke when the remote connection closes. This property is optional. |
 
 ### `close` method
@@ -2462,7 +2463,7 @@ The `HTTPServer` class data format is always `"buffer"`.
 
 | Property | Description |
 | :---: | :--- |
-| `socket` | An object containing a `TCP Listener` class constructor options object. This property is required. |
+| `socket` | A TCP listener socket constructor options object extended with an `io` property set to a TCP listener socket constructor. This property is required. |
 | `port` | The port number to listen on, as a number. This property is optional and defaults to 80. |
 | `onConnect(connection)` | A function to invoke when a new connection is initiated. It is passed an HTTP Server Connection instance as the sole argument. This property is required. |
 
@@ -2611,14 +2612,14 @@ The `WebSocketClient` class data format is either `"number"` for individual byte
 
 | Property | Description |
 | :---: | :--- |
-| `socket` | An object containing a TCP Class constructor options object. This property is optional. |
+| `socket` | A TCP socket constructor options object extended with an `io` property set to a TCP socket constructor. This property is optional. |
 | `host` | The remote hostname to connect to as a string. This property is optional. |
 | `attach` | An instance of a TCP Class. This property is optional. |
 | `port` | The remote port number to connect to as a number. This property is optional and defaults to 80. |
 | `path` | The WebSocket endpoint to access as a string. This property is optional and defaults to `"/"`. |
 | `protocol` | The WebSocket sub-protocol as a string. To provide multiple subprotocols, separate them with commas and no white space like an HTTP header with multiple values. This property is optional. |
 | `headers` | A `Map` of HTTP headers to add to the request. The map keys are the header names and their values are the header values. This property is optional. |
-| `dns` | A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required. |
+| `dns` | A Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `host`. This property is required. |
 | `onReadable(count, options)` | A function to invoke when part of a WebSocket binary or text message is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. It has a `binary` property set to `true` for binary messages and `false` for text messages. This property is optional. |
 | `onWritable(count)` | A function to invoke when more data may be written to the connection. The sole argument indicates the number of bytes that maybe written. This property is optional. |
 | `onError(error)` | A function to invoke when the remote connection terminates unexpectedly. This property is optional. |
@@ -2698,10 +2699,10 @@ The `MQTTClient` class data format is always `"buffer"`.
 
 | Property | Description |
 | :---: | :--- |
-| `socket` | An object containing a TCP Class constructor options object. This property is required. |
+| `socket` | A TCP socket constructor options object extended with an `io` property set to a TCP socket constructor. This property is required. |
 | `port` | The remote port number to connect to as a number. This property is optional and defaults to 1883. |
 | `host` | The remote hostname to connect to as a string. This property is required. |
-| `dns` | A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required. |
+| `dns` | A Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `host`. This property is required. |
 | `onReadable(count, options)` | A function to invoke when part of an MQTT message is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. For the first fragment of a message, the options object contains `topic` property with a string indicating the message topic, a `QoS` property with a number indicating the quality of service, and a `byteLength` property with a number indicating the total number of bytes in the message. The `onReadable` property is optional. |
 | `onWritable(count)` | A function to invoke when more data may be written to the connection. The sole argument is a number indicating how many bytes may be written. This property is optional. |
 | `onError(error)` | A function to invoke when the remote connection terminates. This property is optional. |
@@ -3776,7 +3777,7 @@ The DNS-SD Class Pattern provides local network name claiming, service discovery
 
 | Property | Description |
 | :---: | :--- |
-| `socket` | A [UDP class constructor options object](#udp-socket-constructor-options). This property is required. |
+| `socket` | A [UDP socket constructor options object](#udp-socket-constructor-options) extended with an `io` property set to a UDP socket constructor. This property is required. |
 
 ### Methods
 
@@ -3971,40 +3972,40 @@ The host provider instance should include its Sensor constructors in its `sensor
 The host provider instance should include its Display constructors through its `display` property.
 
 ### Real-time clocks
-The host provider instance should include a default Real-time clock constructor options object on its `rtc` property.
+The host provider instance's `rtc` property should be the default Real-time clock constructor options object, extended with an `io` property set to a Real-time clock constructor.
 
 ### Domain Name resolver
-The host provider instance should include a default Domain Name Resolver class constructor options object on its `network.dns.resolver` property.
+The host provider instance's `network.dns.resolver` property should be the default Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor.
 
 ### NTP client
-The host provider instance should include a default NTP Client class constructor options object on its `network.ntp.client` property.
+The host provider instance's `network.ntp.client` property should be the default NTP Client class constructor options object, extended with an `io` property set to an NTP Client constructor.
 
 ### HTTP client
-The host provider instance should include a default HTTP Client class constructor options object on its `network.http.client` property.
+The host provider instance's `network.http.client` property should be the default HTTP Client class constructor options object, extended with an `io` property set to an HTTP Client constructor.
 
 ### HTTPS client
-The host provider instance should include a default secure HTTP Client class constructor options object on its `network.https.client` property.
+The host provider instance's `network.https.client` property should be the default HTTP Client class constructor options object for secure connections, extended with an `io` property set to an HTTP Client constructor.
 
 ### HTTP server
-The host provider instance should include a default HTTP Server class constructor options object on its `network.http.server` property.
+The host provider instance's `network.http.server` property should be the default HTTP Server class constructor options object, extended with an `io` property set to an HTTP Server constructor.
 
 ### MQTT client
-The host provider instance should include a default MQTT Client class constructor options object on its `network.mqtt.client` property. <!-- "server" would be network.mqtt.broker -->
+The host provider instance's `network.mqtt.client` property should be the default MQTT Client class constructor options object, extended with an `io` property set to an MQTT Client constructor. <!-- "server" would be network.mqtt.broker -->
 
 ### MQTTS client
-The host provider instance should include a default secure MQTT Client class constructor options object on its `network.mqtts.client` property. <!-- "server" would be network.mqtts.broker -->
+The host provider instance's `network.mqtts.client` property should be the default MQTT Client class constructor options object for secure connections, extended with an `io` property set to an MQTT Client constructor. <!-- "server" would be network.mqtts.broker -->
 
 ### WS (WebSocket) client
-The host provider instance should include a default WebSocket Client class constructor options object on its `network.ws.client` property.
+The host provider instance's `network.ws.client` property should be the default WebSocket Client class constructor options object, extended with an `io` property set to a WebSocket Client constructor.
 
 ### WSS (WebSocket Secure) client
-The host provider instance should include a default secure WebSocket Client class constructor options object on its `network.wss.client` property.
+The host provider instance's `network.wss.client` property should be the default WebSocket Client class constructor options object for secure connections, extended with an `io` property set to a WebSocket Client constructor.
 
 ### TLS client
-The host provider instance should include a default TLS Client class constructor options object on its `network.tls.client` property.
+The host provider instance's `network.tls.client` property should be the default TLS Client class constructor options object, extended with an `io` property set to a TLS Client constructor.
 
 ### Network Interfaces
-The host provider instance should include a Network Interface class constructor options object for each of its network interfaces on its `network.interface` property.
+The host provider instance's `network.interface` property should contain a Network Interface class constructor options object for each of its network interfaces, each extended with an `io` property set to a Network Interface constructor.
 
 ```javascript
 const Ethernet0 = device.network.interface.Ethernet0;
