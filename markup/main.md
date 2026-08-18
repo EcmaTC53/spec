@@ -403,13 +403,17 @@ For example, consider a microcontroller may support two serial connections, each
 
 The options object contains the specification of the hardware resources to be used by the instance. For example, the digital class indicates the physical pin to use with a `pin` property that has a pin specifier value.
 
-If the constructor requires a resource that is already in use — whether by a script or the native host — an `Error` exception is thrown.
+If the constructor requires a resource that is already in use — whether by a script or the native host — an exception is thrown.
 
 This Standard allows but does not require, an implementation to open multiple instances for the same hardware resource if the instances cannot interfere with each other's operation. For example, this can work for a digital input but would not for a digital output.
 
 The IO Class Pattern is designed to be used both with IO types that have only a current value (e.g. Digital, analog, PWM) and IO types that use streams of data (e.g. serial, SPI).
 
-The IO Class Pattern reserves the `io` property name in the options object. If present, it must be ignored by IO implementations.
+The IO Class Pattern reserves the `io` property name in the options object. If present, it must be ignored by IO implementations. This requirement supports the [Host provider instance](#host-provider-instance) which includes constructor options objects for host resources which include an `io` property set to the corresponding constructor. For example, the following fragment instantiates the default Real-Time Clock (RTC) through the Host provider instance.
+
+```js
+const rtc = new device.rtc.io(device.rtc);
+```
 
 <a id="io-pattern-read"></a>
 
