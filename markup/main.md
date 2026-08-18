@@ -1,3 +1,9 @@
+## Changes since the fourth edition
+
+- Fix step 5.d of the Asynchronous IO Class Pattern close method algorithm
+- HTTP Server [constructor option](#http-server-class-pattern) `io` renamed to `socket` (matches HTTP Client and consistent with other IO constructor options objects)
+
+
 ## Introduction
 
 This Standard defines APIs for use on embedded systems. Embedded systems are far more diverse than personal computers, smartphones, and web servers where ECMAScript is most widely used. The diversity of embedded hardware is a consequence of devices being optimized for a specific product or class of products.
@@ -18,6 +24,7 @@ The third edition introduced new IO classes for audio input, audio output, and i
 
 This fourth edition introduces Bluetooth LE support for centrals and peripherals, and DNS-SD discovery and advertising. It was adopted by the General Assembly of June 2026.
 
+This fifth edition...
 <!-- text here to indicate when this revision was adopted -->
 
 
@@ -2432,6 +2439,8 @@ For HTTP requests using chunked transfer-encoding, calling `write` with no argum
 
 The `write` method returns the number of bytes that may be written. This may be reduced by more than the size of the payload due to overhead in the protocol.
 
+<a id="http-server-class-pattern"></a>
+
 ## 21 HTTP Server Class Pattern
 
 The HTTP Server Class Pattern responds to Hypertext Transfer Protocol (HTTP/1.1) requests. It conforms to the Base Class Pattern.
@@ -2447,7 +2456,7 @@ The `HTTPServer` class data format is always `"buffer"`.
 
 | Property | Description |
 | :---: | :--- |
-| `io` | An object containing a `TCP Listener` class constructor options object. This property is required. |
+| `socket` | An object containing a `TCP Listener` class constructor options object. This property is required. |
 | `port` | The port number to listen on, as a number. This property is optional and defaults to 80. |
 | `onConnect(connection)` | A function to invoke when a new connection is initiated. It is passed an HTTP Server Connection instance as the sole argument. This property is required. |
 
@@ -3227,6 +3236,8 @@ The `properties` property is an object with flags for use in the `properties` pr
 
 > **NOTE**: Use logical OR to combine these flags, not arithmetic ADD.
 
+> **NOTE**: No values are specified for these flags. They may vary between implementations.
+
 <a id="bluetoothle-gattserver-advertise"></a>
 
 #### `advertise`
@@ -3586,8 +3597,10 @@ If the domain is in read-only mode (`"r"`), the `write` method throws an `Error`
 The Key-Value Domain instance conforms to the [ECMAScript Iterable interface](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iterable-interface) through its `[Symbol.Iterator]` method. The iterator returns the keys within the domain as strings.
 
 ```javascript
-for (const key of device.keyValue)
+const settings = device.keyValue.open("settings");
+for (const key of settings)
 	console.log(key);
+settings.close();
 ```
 
 See Annex A for the [formal algorithms](#alg-key-value-domain-iterator-class) of the Key-Value Domain Iterator class.
