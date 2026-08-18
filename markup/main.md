@@ -3,6 +3,7 @@
 - Fix step 5.d of the Asynchronous IO Class Pattern close method algorithm
 - HTTP Server [constructor option](#http-server-class-pattern) `io` renamed to `socket` (matches HTTP Client and consistent with other IO constructor options objects)
 - add `remoteAddress` to [BLE Server GATT Connection](#bluetoothle-gattserverconnection)
+- setting `format` to unsupported value throws, type of exception is not specified
 
 
 ## Introduction
@@ -468,7 +469,7 @@ The following values are defined by the IO Class Pattern for the `format` proper
 | `uint32` | a 32-bit unsigned integer
 | `uint64` | a 64-bit unsigned integer
 
-The `format` property is implemented as a getter and setter. Attempting to set the `format` property to an unsupported value does not change the value and instead throws an `Error` exception.
+The `format` property is implemented as a getter and setter. Attempting to set the `format` property to an unsupported value does not change the value and instead throws an exception.
 
 <a id="io-pattern-callbacks"></a>
 
