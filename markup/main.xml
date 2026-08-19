@@ -10,6 +10,7 @@
       <p>The second edition extended IO with asynchronous capabilities used by I²C and the system management bus. It introduced new sensor classes, including many gas sensors; classes to manage and monitor network interfaces; client support for common network protocols including HTTP, MQTT, NTP, DNS, WebSocket, and TLS; server support for the HTTP and WebSocket protocols; and a real-time clock peripheral class. It was adopted by the General Assembly of June 2023.</p>
       <p>The third edition introduced new IO classes for audio input, audio output, and image input, such as cameras. It included persistent storage classes for files, flash memory partitions, and key-value pair stores, and to apply over-the-air firmware updates. It was adopted by the General Assembly of June 2025.</p>
       <p>This fourth edition introduces Bluetooth LE support for centrals and peripherals, and DNS-SD discovery and advertising. It was adopted by the General Assembly of June 2026.</p>
+      <p>This fifth edition...</p>
     </emu-intro>
     <emu-clause id="scope">
       <h1> Scope</h1>
@@ -46,10 +47,12 @@
         <li>IETF RFC 6762, <i>Multicast DNS</i> <br/><a href="https://www.rfc-editor.org/rfc/rfc6762">https://www.rfc-editor.org/rfc/rfc6762</a></li>
         <li>IETF RFC 6763, <i>DNS-Based Service Discovery</i> <br/><a href="https://www.rfc-editor.org/rfc/rfc6763">https://www.rfc-editor.org/rfc/rfc6763</a></li>
         <li>IETF RFC 4122, <i>A Universally Unique IDentifier (UUID) URN Namespace</i> <br/><a href="https://www.rfc-editor.org/rfc/rfc4122">https://www.rfc-editor.org/rfc/rfc4122</a></li>
+        <li>IETF RFC 8910, <i>Captive-Portal Identification in DHCP and Router Advertisements (RAs)</i> <br/><a href="https://www.rfc-editor.org/rfc/rfc8910">https://www.rfc-editor.org/rfc/rfc8910</a></li>
         <li>IEEE 802 <br/><a href="https://standards.ieee.org/featured/ieee-802/">https://standards.ieee.org/featured/ieee-802/</a></li>
         <li>ITU X.690, <i>Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)</i> <br/><a href="https://www.itu.int/rec/T-REC-X.690">https://www.itu.int/rec/T-REC-X.690</a></li>
         <li>OASIS MQTT 3.1.1 Standard <br/><a href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html</a></li>
         <li>Bluetooth Core Specification 6.2 <br/> <a href="https://www.bluetooth.com/specifications/specs/core-specification-6-2/">https://www.bluetooth.com/specifications/specs/core-specification-6-2/</a></li>
+        <li>World Geodetic System 1984 (WGS 84). Office of Geomatics, National Geospatial Intelligence Agency. 2008. <br/><a href="https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84">https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84</a></li>
       </ul>
     </emu-clause>
     <emu-clause id="terms-and-definitions">
@@ -206,9 +209,7 @@ import Digital from "embedded:io/digital";
       <emu-clause id="disposable-buffer">
         <h1>Disposable Buffer</h1>
         <p>This Standard uses the term "Disposable Buffer" to mean an instance of a <emu-xref href="#byte-buffer">Byte Buffer</emu-xref> with a `close` method which immediately releases the memory used by the backing buffer. After invoking `close`, the buffer shall behave as a detached buffer.</p>
-        <emu-note>
-          <p>The Disposable Buffer behavior is intended to be forward-compatible with the <a href="https://github.com/tc39/proposal-explicit-resource-management">Explicit Resource Management</a> proposal. The Disposable Buffer's `close` method is an alias for the `[Symbol.dispose]` method specified by that proposal.</p>
-          </emu-note>
+        <p>A disposable buffer should have a `[Symbol.dispose]` property as an alias for `close` method to support ECMAScript's Explicit Resource Management.</p>
       </emu-clause>
       <emu-clause id="uuid">
         <h1>UUID</h1>
@@ -269,6 +270,10 @@ import Digital from "embedded:io/digital";
         <h1>target property</h1>
         <p>The `target` property is opaque to the object's implementation. It may be initialized by the constructor using the `target` property in the options object. Scripts may both read and write the target property, though it is typically only set at construction.</p>
       </emu-clause>
+      <emu-clause id="base-class-pattern-symbol-dispose-property">
+        <h1>[Symbol.dispose] property</h1>
+        <p>The `[Symbol.dispose]` property is an alias for the `close` method, if the `close()` method is synchronous, to support ECMAScript's Explicit Resource Management.</p>
+      </emu-clause>
       <emu-clause id="base-class-pattern-callbacks">
         <h1>Callbacks</h1>
         <p>Instances of the Base Class Pattern typically use function callbacks to deliver asynchronous events.</p>
@@ -314,10 +319,13 @@ new Button({
       <emu-clause id="io-pattern-constructor">
         <h1>constructor</h1>
         <p>The options object contains the specification of the hardware resources to be used by the instance. For example, the digital class indicates the physical pin to use with a `pin` property that has a pin specifier value.</p>
-        <p>If the constructor requires a resource that is already in use — whether by a script or the native host — an `Error` exception is thrown.</p>
+        <p>If the constructor requires a resource that is already in use — whether by a script or the native host — an exception is thrown.</p>
         <p>This Standard allows but does not require, an implementation to open multiple instances for the same hardware resource if the instances cannot interfere with each other's operation. For example, this can work for a digital input but would not for a digital output.</p>
         <p>The IO Class Pattern is designed to be used both with IO types that have only a current value (e.g. Digital, analog, PWM) and IO types that use streams of data (e.g. serial, SPI).</p>
-        <p>The IO Class Pattern reserves the `io` property name in the options object. If present, it must be ignored by IO implementations.</p>
+        <p>The IO Class Pattern reserves the `io` property name in the options object. If present, it must be ignored by IO implementations. This requirement supports the <emu-xref href="#host-provider-instance">Host provider instance</emu-xref> which includes constructor options objects for host resources which include an `io` property set to the corresponding constructor. For example, the following fragment instantiates the default Real-Time Clock (RTC) through the Host provider instance.</p>
+          <pre><code class="javascript">
+const rtc = new device.rtc.io(device.rtc);
+          </code></pre>
       </emu-clause>
       <emu-clause id="io-pattern-read">
         <h1>read method</h1>
@@ -359,7 +367,7 @@ new Button({
           <tr><td>`uint32`</td><td>a 32-bit unsigned integer</td></tr>
           <tr><td>`uint64`</td><td>a 64-bit unsigned integer</td></tr>
         </tbody></table></emu-table>
-        <p>The `format` property is implemented as a getter and setter. Attempting to set the `format` property to an unsupported value does not change the value and instead throws an `Error` exception.</p>
+        <p>The `format` property is implemented as a getter and setter. Attempting to set the `format` property to an unsupported value does not change the value and instead throws an exception.</p>
       </emu-clause>
       <emu-clause id="io-pattern-callbacks">
         <h1>Callbacks</h1>
@@ -1401,7 +1409,8 @@ let t = new Temperature({
       <emu-clause id="sensor-class-pattern-sample-method">
         <h1>sample method</h1>
         <p>The `sample` method returns readings from the sensor. The Sensor Class Pattern defines no arguments for the `sample` method, though individual sensor types may.</p>
-        <p>The `sample` method returns an object containing one or more properties. The returned object is mutable. The implementation must return a different object on each invocation to allow callers to accumulate multiple sensor readings.</p>
+        <p>The `sample` method returns an object containing one or more properties. The returned object is mutable. The implementation must return a fresh object on each invocation to allow callers to accumulate multiple sensor readings.</p>
+        <p>If the `sample` method does not have a new sensor reading available, either because it has not obtained one yet or because no new reading is available since the last call to `sample`, it returns `undefined`. This behavior prevents callers from misinterpreting a stale sensor reading as an unchanged reading.</p>
         <emu-note>
           <p>A sensor implementation of `sample` may accept an input argument of the object to use for the sensor data as an optimization to reduce memory manager work. If supported, this must be specified for the Sensor Class' `sample` method.</p>
           </emu-note>
@@ -1409,9 +1418,11 @@ let t = new Temperature({
       </emu-clause>
       <emu-clause id="sensor-class-pattern-callbacks">
         <h1>Callbacks</h1>
-        <p>The Sensor Class Pattern specifies one callback that is set by the options object passed to the constructor. Individual sensor classes may provide additional callbacks, for instance, to indicate when a sample is available or a sensed condition has been met.</p>
+        <p>The Sensor Class Pattern specifies two optional callbacks that are set by the options object passed to the constructor. Individual sensor classes may provide additional callbacks, for instance, to indicate when a sensed condition has been met.</p>
         <p><b>`onError()`</b></p>
         <p>The `onError` callback is invoked on a non-recoverable error to indicate that the sensor instance can no longer be used. The only method that should be called is `close`.</p>
+        <p><b>`onSample()`</b></p>
+        <p>The `onSample` callback is invoked when there is a new sensor sample available. The sample is retrieved by calling the instance's `sample()` method. Sensors are not required to implement support for `onSample`.</p>
       </emu-clause>
     </emu-clause>
     <emu-clause id="sensor-classes">
@@ -1738,6 +1749,40 @@ let t = new Temperature({
           </tbody></table></emu-table>
         </emu-clause>
       </emu-clause>
+      <emu-clause id="sensor-location">
+        <h1>Location</h1>
+        <p>The `Location` class implements access to a location provider. It may be used for GPS, GNSS, and other location technologies. The property name `location` is used when part of a compound sensor.</p>
+        <p>See Annex A for the <emu-xref href="#alg-sensor-location">formal algorithms</emu-xref> of the `Location` sensor class.</p>
+        <p>Properties which share a name with the <a href="https://www.w3.org/TR/geolocation/">W3C Geolocation API</a> have compatible values.</p>
+      </emu-clause>
+      <emu-clause id="sensor-classes-properties-of-configure-options-object">
+        <h1>Properties of configure options object</h1>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
+          <tr><td>`enableHighAccuracy`</td><td>A boolean that requests the most accurate position fix available when `true`. This property is optional and defaults to `false`.</td></tr>
+          <tr><td>`maximumAge`</td><td>A number specifying the maximum age in milliseconds of an acceptable cached position. This property is optional and defaults to `0`.</td></tr>
+          <tr><td>`timeout`</td><td>A number specifying the maximum time in milliseconds to wait for a position fix before invoking `onError`. This property is optional and defaults to no timeout.</td></tr>
+        </tbody></table></emu-table>
+      </emu-clause>
+      <emu-clause id="sensor-classes-properties-of-sample-object">
+        <h1>Properties of sample object</h1>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
+          <tr><td>`latitude`</td><td>A number that represents the position's latitude in decimal degrees in the WGS84 coordinate system. This property is required.</td></tr>
+          <tr><td>`longitude`</td><td>A number that represents the position's longitude in decimal degrees in the WGS84 coordinate system. This property is required.</td></tr>
+          <tr><td>`accuracy`</td><td>A number that represents the estimated accuracy radius in meters of the position given by `latitude` and `longitude`. This property is optional.</td></tr>
+          <tr><td>`altitude`</td><td>A number that represents the height in meters above the WGS84 ellipsoid. This property is optional.</td></tr>
+          <tr><td>`altitudeAccuracy`</td><td>A number that represents the estimated accuracy in meters of `altitude`. This property is optional.</td></tr>
+          <tr><td>`heading`</td><td>A number that represents the direction of travel in degrees clockwise from true north, in the range `[0, 360)`. This property is optional.</td></tr>
+          <tr><td>`speed`</td><td>A number that represents the magnitude of the horizontal velocity in meters per second. This property is optional.</td></tr>
+          <tr><td>`timestamp`</td><td>A number that indicates the when the position was acquired as an ECMAScript time value. The value conforms to the [`time` property<emu-xref href="#provenance-sample"></emu-xref> of the Provenance Sensor Class Pattern. This property is optional.</td></tr>
+        </tbody></table></emu-table>
+        <emu-note>
+          <p>The sample object uses the W3C Geolocation API's `timestamp` property name rather than the Provenance Sensor Class Pattern's `time` property name for interoperability with the Web platform. An implementation may include both `time` and `timestamp` properties, with the same values, to conform to both.</p>
+          </emu-note>
+      </emu-clause>
     </emu-clause>
     <emu-clause id="display-class-pattern">
       <h1> Display Class Pattern</h1>
@@ -1861,8 +1906,8 @@ function adaptInvalid(options) {
         <emu-table><table>
           <thead><tr><th>Property</th><th>Description</th></tr></thead>
           <tbody>
-          <tr><td>`clock`</td><td>A class constructor options object that describes the hardware connection for the RTC. This property is required.</td></tr>
-          <tr><td>`interrupt`</td><td>A Digital class constructor options object that describes the hardware connection to the RTC's interrupt. This property is optional.</td></tr>
+          <tr><td>`clock`</td><td>An IO class constructor options object that describes the hardware connection for the RTC, extended with an `io` property set to the constructor of that IO class (commonly I²C or SPI). This property is required.</td></tr>
+          <tr><td>`interrupt`</td><td>A Digital class constructor options object that describes the hardware connection to the RTC's interrupt, extended with an `io` property set to a Digital constructor. This property is optional.</td></tr>
           <tr><td>`onAlarm()`</td><td>A function to invoke when an alarm is triggered by the RTC. This property is optional.</td></tr>
         </tbody></table></emu-table>
       </emu-clause>
@@ -1891,7 +1936,6 @@ function adaptInvalid(options) {
       <h1> Network Interface Class Pattern</h1>
       <p>The Network Interface Class Pattern builds on the Base Class Pattern to provide access to the network interfaces of a device to monitor the connection state and perform operations.</p>
       <p>The physical network interfaces may be physically built into the microcontroller or a separate peripheral. The logical network interfaces are managed by the host.</p>
-      <p>Creating an instance of a Network Interface class binds to the host's network interface; it does not initialize the network interface. Closing an instance of a Network Interface class unbinds from the host's network interface; it does not uninitialize the network interface.</p>
       <p>There may be multiple simultaneous instances of a Network Interface class, all bound to the same logical network interface.</p>
       <p>See Annex A for the <emu-xref href="#alg-network-interface-class-pattern">formal algorithms</emu-xref> of the Network Interface Class Pattern.</p>
         <emu-clause id="network-interface-class-pattern-properties-of-constructor-options-object">
@@ -1941,6 +1985,7 @@ function adaptInvalid(options) {
           <pre><code class="javascript">
 import Ethernet from "embedded:network/interface/ethernet";
           </code></pre>
+        <p>Creating an instance of the Ethernet Network Interface class binds to the host's Ethernet network interface, initializing if necessary; it does not modify an active connection. Closing an instance unbinds from the host's Ethernet network interface; it does not disconnect or uninitialize the network interface.</p>
         <p>See Annex A for the <emu-xref href="#alg-ethernet-network-interface">formal algorithms</emu-xref> of the Ethernet Network Interface.</p>
         <emu-clause id="network-interface-class-pattern-ethernet-network-interface-connection-property">
           <h1>connection property</h1>
@@ -1958,6 +2003,7 @@ import Ethernet from "embedded:network/interface/ethernet";
           <pre><code class="javascript">
 import WiFi from "embedded:network/interface/wifi";
           </code></pre>
+        <p>Creating an instance of the Wi-Fi Network Interface class binds to the host's Wi-Fi network interface, initializing if necessary; it does not modify an active connection. Closing an instance unbinds from the host's Wi-Fi network interface; it does not disconnect or uninitialize the network interface.</p>
         <p>See Annex A for the <emu-xref href="#alg-wifi-network-interface">formal algorithms</emu-xref> of the Wi-Fi Network Interface.</p>
         <emu-clause id="network-interface-class-pattern-wi-fi-network-interface-connect-method">
           <h1>connect method</h1>
@@ -2015,6 +2061,80 @@ import WiFi from "embedded:network/interface/wifi";
           <p>The channel number of the connected access point as a number or `undefined` if not connected. Read-only.</p>
         </emu-clause>
       </emu-clause>
+      <emu-clause id="network-interface-wifi-accesspoint">
+        <h1>Wi-Fi Access Point Network Interface</h1>
+        <p>The Wi-Fi Access Point Network Interface is a logical subclass of the <emu-xref href="#network-interface">Network Interface Class Pattern</emu-xref> that manages a Wi-Fi access point. Wi-Fi stations connect to the access point.</p>
+          <pre><code class="javascript">
+import WiFiAccessPoint from "embedded:network/interface/wifi/accesspoint";
+          </code></pre>
+        <p>The access point begins operation when an instance is created. Closing the instance ends operation of the access point.</p>
+        <p>The number of access points a host can operate simultaneously depends on its capabilities. Many hosts support just one. The constructor throws an exception if no access point is available.</p>
+        <p>See Annex A for the <emu-xref href="#alg-wifi-access-point-network-interface">formal algorithms</emu-xref> of the Wi-Fi Access Point Network Interface.</p>
+        <emu-clause id="network-interface-wifi-accesspoint-properties-of-constructor-options-object">
+          <h1>Properties of constructor options object</h1>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
+            <tr><td>`SSID`</td><td>Name of the access point as a string. This property is required.</td></tr>
+            <tr><td>`password`</td><td>The access point's password as a string of at least 8 characters. This property is required for `authentication` modes other than `"none"`.</td></tr>
+            <tr><td>`authentication`</td><td>The authentication mode of the access point as a string. This property is optional. The default authentication mode is `"none"` when no `password` is provided and otherwise an implementation dependent mode of at least WPA2 strength.</td></tr>
+            <tr><td>`channel`</td><td>Wi-Fi channel for the access point as a number. This property is optional. If omitted, the host selects the channel.</td></tr>
+            <tr><td>`hidden`</td><td>Boolean indicating the access point should not broadcast its SSID. This property is optional and defaults to `false`.</td></tr>
+            <tr><td>`max`</td><td>Maximum number of stations that may be connected simultaneously as a number. This property is optional and the default is implementation dependent.</td></tr>
+            <tr><td>`interval`</td><td>Time between beacon transmissions in milliseconds as a number. This property is optional and the default is implementation dependent.</td></tr>
+            <tr><td>`onConnect(station)`</td><td>A callback function invoked when a station connects to the access point. The `station` argument is the <emu-xref href="#wifi-accesspoint-station">`Station` instance</emu-xref> of the connecting station. This property is optional.</td></tr>
+            <tr><td>`onDisconnect(station)`</td><td>A callback function invoked when a station disconnects from the access point. The `station` argument is the `Station` instance of the disconnecting station. This property is optional.</td></tr>
+          </tbody></table></emu-table>
+          <p>The following values are defined for the `authentication` property.</p>
+          <emu-table><table>
+            <thead><tr><th>Value</th><th>Description</th></tr></thead>
+            <tbody>
+            <tr><td>`"none"`</td><td>Open, no authentication</td></tr>
+            <tr><td>`"wpa2_psk"`</td><td>WPA2 PSK</td></tr>
+            <tr><td>`"wpa_wpa2_psk"`</td><td>WPA/WPA2 PSK</td></tr>
+            <tr><td>`"wpa3_psk"`</td><td>WPA3 PSK</td></tr>
+            <tr><td>`"wpa2_wpa3_psk"`</td><td>WPA2/WPA3 PSK</td></tr>
+          </tbody></table></emu-table>
+          <p>The authentication modes supported are implementation dependent. The constructor throws an exception if the requested mode is unsupported.</p>
+          <p>The valid ranges of the `channel`, `max`, and `interval` properties are implementation dependent. The constructor throws an exception on values outside the valid range.</p>
+        </emu-clause>
+        <emu-clause id="network-interface-wifi-accesspoint-connect-and-disconnect-methods">
+          <h1>connect and disconnect methods</h1>
+          <p>The access point does not connect to a network. Instead, it creates a network for devices to connect to. This makes the `connect` and `disconnect` methods meaningless and consequently they are not present.</p>
+        </emu-clause>
+        <emu-clause id="network-interface-wifi-accesspoint-configure-method">
+          <h1>configure method</h1>
+          <p>The following property is defined for the options object.</p>
+          <emu-table><table>
+            <thead><tr><th>Property</th><th>Description</th></tr></thead>
+            <tbody>
+            <tr><td>`portal`</td><td>URL of a captive portal page as a string, provided to stations using the DHCP captive portal option (RFC 8910).</td></tr>
+          </tbody></table></emu-table>
+        </emu-clause>
+        <emu-clause id="network-interface-wifi-accesspoint-connection-property">
+          <h1>connection property</h1>
+          <p>For a Wi-Fi access point network interface, `connection` 200 ("disconnected") indicates that the access point is not operating and `connection` 400 ("connected") indicates that the access point is operating and stations may connect.</p>
+        </emu-clause>
+        <emu-clause id="network-interface-wifi-accesspoint-ssid-property">
+          <h1>SSID property</h1>
+          <p>The Service Set Identifier of the access point as a string. Read-only.</p>
+        </emu-clause>
+        <emu-clause id="network-interface-wifi-accesspoint-channel-property">
+          <h1>channel property</h1>
+          <p>The channel number in use by the access point as a number. Read-only.</p>
+        </emu-clause>
+        <emu-clause id="wifi-accesspoint-station">
+          <h1>Station instances</h1>
+          <p>Each station connected to the access point is represented by a `Station` instance. The host creates the instance when the station connects and provides it to the `onConnect` callback. Scripts cannot create `Station` instances directly.</p>
+          <p>A `Station` instance is usable until its `onDisconnect` callback returns, after which the instance is closed. Closing the access point detaches all `Station` instances without invoking `onDisconnect`.</p>
+          <p><b>`close` method</b></p>
+          <p>Initiates disconnection of the station from the access point. The `onDisconnect` callback is invoked when the disconnection completes.</p>
+          <p><b>`MAC` property</b></p>
+          <p>The MAC address of the station as a string. Read-only.</p>
+          <p><b>`address` property</b></p>
+          <p>The IP address assigned to the station as a string or `undefined` if no address has been assigned. Read-only.</p>
+        </emu-clause>
+      </emu-clause>
     </emu-clause>
     <emu-clause id="dns-resolver">
       <h1> Domain Name Resolver Class Pattern</h1>
@@ -2044,7 +2164,7 @@ import Resolver from "embedded:network/dns/resolver/udp";
           <emu-table><table>
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
             <tbody>
-            <tr><td>`socket`</td><td>A UDP class constructor options object for a UDP socket. This property is required.</td></tr>
+            <tr><td>`socket`</td><td>A UDP socket constructor options object extended with an `io` property set to a UDP socket constructor. This property is required.</td></tr>
             <tr><td>`servers`</td><td>Array of one or more IP address strings to use as DNS servers. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2060,7 +2180,7 @@ import Resolver from "embedded:network/dns/resolver/doh";
           <emu-table><table>
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
             <tbody>
-            <tr><td>`http`</td><td>An HTTP Client class constructor options object. This property is required.</td></tr>
+            <tr><td>`http`</td><td>An HTTP Client class constructor options object extended with an `io` property set to an HTTP Client constructor. This property is required.</td></tr>
             <tr><td>`servers`</td><td>An array of one or more objects containing `host` and `address` properties to use as DoH servers. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2078,9 +2198,9 @@ import NTP from "embedded:network/ntp/client";
           <emu-table><table>
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
             <tbody>
-            <tr><td>`socket`</td><td><emu-xref href="#udp-socket-constructor-options">UDP class constructor options object</emu-xref>. This property is required.</td></tr>
+            <tr><td>`socket`</td><td>A <emu-xref href="#udp-socket-constructor-options">UDP socket constructor options object</emu-xref> extended with an `io` property set to a UDP socket constructor. This property is required.</td></tr>
             <tr><td>`servers`</td><td>An array of one or more strings indicating the NTP hosts to use to synchronize time. This property is required.</td></tr>
-            <tr><td>`dns`</td><td><emu-xref href="#dns-resolver">A Domain Name Resolver class constructor options object</emu-xref> to use to resolve the `servers`. This property is required.</td></tr>
+            <tr><td>`dns`</td><td><emu-xref href="#dns-resolver">A Domain Name Resolver class constructor options object</emu-xref>, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `servers`. This property is required.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
       <emu-clause id="ntp-client-gettime-method">
@@ -2102,10 +2222,10 @@ import HTTPClient from "embedded:network/http/client";
           <emu-table><table>
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
             <tbody>
-            <tr><td>`socket`</td><td>An object containing a `TCP` class constructor options object. This property is required.</td></tr>
+            <tr><td>`socket`</td><td>A TCP socket constructor options object extended with an `io` property set to a TCP socket constructor. This property is required.</td></tr>
             <tr><td>`port`</td><td>The remote port number to connect to as a number. This property is optional and defaults to 80.</td></tr>
             <tr><td>`host`</td><td>The remote hostname to connect to as a string. This property is required.</td></tr>
-            <tr><td>`dns`</td><td>A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required.</td></tr>
+            <tr><td>`dns`</td><td>A Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `host`. This property is required.</td></tr>
             <tr><td>`onError`</td><td>A function to invoke when the remote connection closes. This property is optional.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
@@ -2162,7 +2282,7 @@ import HTTPServer from "embedded:network/http/server";
         <emu-table><table>
           <thead><tr><th>Property</th><th>Description</th></tr></thead>
           <tbody>
-          <tr><td>`io`</td><td>An object containing a `TCP Listener` class constructor options object. This property is required.</td></tr>
+          <tr><td>`socket`</td><td>A TCP listener socket constructor options object extended with an `io` property set to a TCP listener socket constructor. This property is required.</td></tr>
           <tr><td>`port`</td><td>The port number to listen on, as a number. This property is optional and defaults to 80.</td></tr>
           <tr><td>`onConnect(connection)`</td><td>A function to invoke when a new connection is initiated. It is passed an HTTP Server Connection instance as the sole argument. This property is required.</td></tr>
         </tbody></table></emu-table>
@@ -2302,14 +2422,14 @@ import WebSocketClient from "embedded:network/ws/client";
         <emu-table><table>
           <thead><tr><th>Property</th><th>Description</th></tr></thead>
           <tbody>
-          <tr><td>`socket`</td><td>An object containing a TCP Class constructor options object. This property is optional.</td></tr>
+          <tr><td>`socket`</td><td>A TCP socket constructor options object extended with an `io` property set to a TCP socket constructor. This property is optional.</td></tr>
           <tr><td>`host`</td><td>The remote hostname to connect to as a string. This property is optional.</td></tr>
           <tr><td>`attach`</td><td>An instance of a TCP Class. This property is optional.</td></tr>
           <tr><td>`port`</td><td>The remote port number to connect to as a number. This property is optional and defaults to 80.</td></tr>
           <tr><td>`path`</td><td>The WebSocket endpoint to access as a string. This property is optional and defaults to `"/"`.</td></tr>
           <tr><td>`protocol`</td><td>The WebSocket sub-protocol as a string. To provide multiple subprotocols, separate them with commas and no white space like an HTTP header with multiple values. This property is optional.</td></tr>
           <tr><td>`headers`</td><td>A `Map` of HTTP headers to add to the request. The map keys are the header names and their values are the header values. This property is optional.</td></tr>
-          <tr><td>`dns`</td><td>A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required.</td></tr>
+          <tr><td>`dns`</td><td>A Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `host`. This property is required.</td></tr>
           <tr><td>`onReadable(count, options)`</td><td>A function to invoke when part of a WebSocket binary or text message is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. It has a `binary` property set to `true` for binary messages and `false` for text messages. This property is optional.</td></tr>
           <tr><td>`onWritable(count)`</td><td>A function to invoke when more data may be written to the connection. The sole argument indicates the number of bytes that maybe written. This property is optional.</td></tr>
           <tr><td>`onError(error)`</td><td>A function to invoke when the remote connection terminates unexpectedly. This property is optional.</td></tr>
@@ -2339,6 +2459,10 @@ import WebSocketClient from "embedded:network/ws/client";
         <p>The `write` method may be used to send all or part of a single binary or text message based on the properties of the options object.</p>
         <p>The options object is optional. If not provided, the default values are used.</p>
         <p>The return value is the number of bytes that may be written. This may be reduced by more than the size of the payload due to overhead in the protocol.</p>
+      </emu-clause>
+      <emu-clause id="websocket-client-protocol-property">
+        <h1>protocol property</h1>
+        <p>The subprotocol negotiated by the connection handshake as a string. If the subprotocol is unknown, returns `undefined`. Read-only.</p>
       </emu-clause>
       <emu-clause id="websocket-client-static-properties-of-the-constructor">
         <h1>Static properties of the constructor</h1>
@@ -2390,10 +2514,10 @@ import MQTTClient from "embedded:network/mqtt/client";
         <emu-table><table>
           <thead><tr><th>Property</th><th>Description</th></tr></thead>
           <tbody>
-          <tr><td>`socket`</td><td>An object containing a TCP Class constructor options object. This property is required.</td></tr>
+          <tr><td>`socket`</td><td>A TCP socket constructor options object extended with an `io` property set to a TCP socket constructor. This property is required.</td></tr>
           <tr><td>`port`</td><td>The remote port number to connect to as a number. This property is optional and defaults to 1883.</td></tr>
           <tr><td>`host`</td><td>The remote hostname to connect to as a string. This property is required.</td></tr>
-          <tr><td>`dns`</td><td>A Domain Name Resolver class constructor options object to use to resolve the `host`. This property is required.</td></tr>
+          <tr><td>`dns`</td><td>A Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `host`. This property is required.</td></tr>
           <tr><td>`onReadable(count, options)`</td><td>A function to invoke when part of an MQTT message is available to read. The first argument is the number of bytes available to read. The second argument is an options object. It has a `more` property set to `false` if this is the last fragment of a message and `true` if there is at least one more fragment. For the first fragment of a message, the options object contains `topic` property with a string indicating the message topic, a `QoS` property with a number indicating the quality of service, and a `byteLength` property with a number indicating the total number of bytes in the message. The `onReadable` property is optional.</td></tr>
           <tr><td>`onWritable(count)`</td><td>A function to invoke when more data may be written to the connection. The sole argument is a number indicating how many bytes may be written. This property is optional.</td></tr>
           <tr><td>`onError(error)`</td><td>A function to invoke when the remote connection terminates. This property is optional.</td></tr>
@@ -2463,7 +2587,7 @@ import MQTTClient from "embedded:network/mqtt/client";
     </emu-clause>
     <emu-clause id="bluetoothle-central">
       <h1> Bluetooth LE Central</h1>
-      <emu-clause id="bluetoothle-central-gapclient-class-pattern">
+      <emu-clause id="bluetoothle-central-gapclient">
         <h1>GAPClient Class Pattern</h1>
         <p>The `GAPClient` conforms to the IO Class Pattern.</p>
           <pre><code class="javascript">
@@ -2485,7 +2609,7 @@ const scan = new GAPClient({
     }
 });
           </code></pre>
-        <emu-clause id="bluetoothle-central-gapclient-class-pattern-properties-of-constructor-options-object">
+        <emu-clause id="bluetoothle-central-gapclient-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
           <emu-table><table>
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
@@ -2493,22 +2617,22 @@ const scan = new GAPClient({
             <tr><td>`services`</td><td>An array of BLE UUID service values. Advertisements that do not contain at least one of the specified services are ignored. If there is no `services` property, all advertisements are provided. This property is optional.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gapclient-class-pattern-callbacks">
+        <emu-clause id="bluetoothle-central-gapclient-callbacks">
           <h1>Callbacks</h1>
           <p><b>`onError(error)`</b></p>
           <p>The `onError` callback is invoked on a non-recoverable error to indicate that the `GAPClient` instance can no longer be used.</p>
           <p><b>`onReadable(count)`</b></p>
           <p>The `onReadable` callback is invoked when one or more advertising packets are available to be read. The `count` argument is a number indicating the number of packets available.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gapclient-class-pattern-data-format">
+        <emu-clause id="bluetoothle-central-gapclient-data-format">
           <h1>Data format</h1>
           <p>The `GAPClient` class data format is always `"buffer"`.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gapclient-class-pattern-close-method">
+        <emu-clause id="bluetoothle-central-gapclient-close-method">
           <h1>close() method</h1>
           <p>Conforms to the IO Class pattern's `close` method.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gapclient-class-pattern-read-method">
+        <emu-clause id="bluetoothle-central-gapclient-read-method">
           <h1>read() method</h1>
           <p>Returns a single advertising packet as a `GAPClientAdvertisement` instance or `undefined` when there are no advertising packets available to read. </p>
         </emu-clause>
@@ -2533,10 +2657,10 @@ const scan = new GAPClient({
           </tbody></table></emu-table>
         </emu-clause>
       </emu-clause>
-      <emu-clause id="bluetoothle-central-gattclient-class-pattern">
+      <emu-clause id="bluetoothle-central-gattclient">
         <h1>GATTClient Class Pattern</h1>
         <p>The `GATTClient` conforms to the IO Class Pattern.</p>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-properties-of-constructor-options-object">
+        <emu-clause id="bluetoothle-central-gattclient-properties-of-constructor-options-object">
           <h1>Properties of constructor options object</h1>
           <emu-table><table>
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
@@ -2550,7 +2674,7 @@ const scan = new GAPClient({
             <tr><td>`security.ioCapabilities`</td><td>A value that indicates the device input and output capabilities. The allowed values are `"none"`: the device has no capabilities, `"display"`: the device has a way to show a passkey, `"numbers"`: the device has a way to enter a passkey, `"display+numbers"`: the device has both, `"display+confirm"`: the device has a way to show and confirm a passkey. This property is optional and defaults to `"none"`.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-callbacks">
+        <emu-clause id="bluetoothle-central-gattclient-callbacks">
           <h1>Callbacks</h1>
           <p><b>`onReady()`</b></p>
           <p>The `onReady` callback is invoked once the GATTClient instance is ready for use. The MTU negotiation has been completed when this callback is invoked. Note that the `onReady` callback is invoked before the connection's security, if any, has been negotiated.</p>
@@ -2589,53 +2713,53 @@ onReadable(count) {
 }
             </code></pre>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-data-format">
+        <emu-clause id="bluetoothle-central-gattclient-data-format">
           <h1>Data format</h1>
           <p>The `GATTClient` class data format is always `"buffer"`.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-close-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-close-callback-method">
           <h1>close([callback]) method</h1>
           <p>In addition to the behaviors defined in the Base Class Pattern, all pending operations are cancelled. The <emu-xref href="#base-pattern-async">completion callback function</emu-xref> is invoked after all requested operations are either completed or cancelled, their callbacks invoked, and the connection to the peripheral disconnected.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-getprimaryservices-services-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-getprimaryservices-services-callback-method">
           <h1>getPrimaryServices([services,] callback) method</h1>
           <p>The `getPrimaryServices` method discovers services on the peripheral that match the BLE UUID values in the services array argument. If the services array argument is omitted, all primary services are discovered. When discovery is complete, the <emu-xref href="#base-pattern-async">completion callback function</emu-xref> is invoked with an array of `GATTClientService` instances. The array contains instances for matching services discovered on the peripheral; if no matching services are discovered, the array is empty. The order of the service instances in the array passed to the callback may not correspond to the order of the BLE UUID values in the `services` array argument.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-getcharacteristics-service-characteristics-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-getcharacteristics-service-characteristics-callback-method">
           <h1>getCharacteristics(service, [characteristics,] callback) method</h1>
           <p>The `getCharacteristics` method discovers characteristics within the `service` instance that match the BLE UUID values in the characteristics array argument. If the characteristics array argument is omitted, all characteristics are discovered. When discovery is complete, the <emu-xref href="#base-pattern-async">completion callback function</emu-xref> is invoked with an array of `GATTClientCharacteristic` instances. The array contains instances for matching characteristics discovered within the service; if no matching characteristics are discovered, the array is empty. The order of the characteristics instances in the array passed to the callback may not correspond to the order of the BLE UUID values in the `characteristics` array argument.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-getdescriptors-characteristic-descriptors-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-getdescriptors-characteristic-descriptors-callback-method">
           <h1>getDescriptors(characteristic, [descriptors,] callback) method</h1>
           <p>The `getDescriptors` method discovers descriptors within the `characteristic` instance that match the BLE UUID values in the descriptors array argument. If the descriptors array argument is omitted, all descriptors are discovered. When discovery is complete, the <emu-xref href="#base-pattern-async">completion callback function</emu-xref> is invoked with an array of `GATTClientDescriptor` instances. The array contains instances for matching descriptors discovered within the service; if no matching descriptors are discovered, the array is empty. The order of the descriptors instances in the array passed to the callback may not correspond to the order of the BLE UUID values in the `descriptors` array argument.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-read-characteristic-descriptor-options-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-read-characteristic-descriptor-options-callback-method">
           <h1>read(characteristic | descriptor, [options,] callback) method</h1>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-read-method">
+        <emu-clause id="bluetoothle-central-gattclient-read-method">
           <h1>read() method</h1>
           <p>The `read` method reads characteristics, characteristic notifications, and descriptors.</p>
           <p>To read the current value of a characteristic or descriptor, call the `read` method with a first argument of the corresponding characteristic or descriptor instance. The optional second argument, `options`, is unused by this Standard. The <emu-xref href="#base-pattern-async">completion callback function</emu-xref> is passed an `ArrayBuffer` instance with the value returned by the peripheral.</p>
           <p>To read a received characteristic notification, call the `read` method with no arguments. The notified value is returned as an `ArrayBuffer` instance with a `handle` property that identifies the characteristic the value corresponds to. If no characteristic notification is available, the `read` method returns `undefined`. Notifications are returned by the `read` method in the order received from the peripheral.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-write-characteristic-descriptor-value-options-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-write-characteristic-descriptor-value-options-callback-method">
           <h1>write(characteristic | descriptor, value[, options][, callback]) method</h1>
           <p>The `write` method writes characteristics and descriptors.</p>
           <p>To write a value to a characteristic or descriptor, call the `write` method with a first argument of the corresponding characteristic or descriptor instance and the `value` argument as a Byte Buffer. The <emu-xref href="#base-pattern-async">completion callback function</emu-xref> receives only the result code argument.</p>
           <p>The `write` method uses the "write with response" GATT transaction by default. To use the "write without response" GATT transaction, pass the optional `options` argument as a JavaScript object with a `response` property set to `false`.</p>
           <p>An exception is thrown if the Byte Buffer `value` passed to `write` is larger than the value of the instance's `maximumWrite` property.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-subscribe-characteristic-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-subscribe-characteristic-callback-method">
           <h1>subscribe(characteristic[, callback]) method</h1>
           <p>The `subscribe` method enables notifications and indications for a characteristic. Specify the characteristic by passing the characteristic instance. The <emu-xref href="#base-pattern-async">completion callback function</emu-xref> receives only the result code argument.</p>
           <p>The `subscribe` method controls both notifications or indications, based on the capabilities reported by the `properties` of the characteristic. If a characteristic supports both notifications and indications, notifications are used.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-unsubscribe-characteristic-callback-method">
+        <emu-clause id="bluetoothle-central-gattclient-unsubscribe-characteristic-callback-method">
           <h1>unsubscribe(characteristic[, callback]) method</h1>
           <p>The `unsubscribe` method disables notifications and indications for a characteristic. Specify the characteristic by passing the characteristic instance. The <emu-xref href="#base-pattern-async">completion callback function</emu-xref> receives only the result code argument.</p>
           <p>The `unsubscribe` method controls both notifications and indications, based on the capabilities reported by the `properties` of the characteristic. If a characteristic supports both notifications and indications, notifications are used.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-replytopasskey-action-data-method">
+        <emu-clause id="bluetoothle-central-gattclient-replytopasskey-action-data-method">
           <h1>replyToPasskey(action[, data]) method</h1>
           <p>The `replyToPasskey` method delivers a response to an action received by the `onPasskey` callback. The `action` argument must match the `action` argument provided to the `onPasskey` callback. The `data` argument depends on the value of the `action` argument.</p>
           <emu-table><table>
@@ -2649,18 +2773,18 @@ onReadable(count) {
             <p>The `replyToPasskey` method should only be called for values of the `action` argument in the preceding table.</p>
             </emu-note>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-store-service-characteristic-descriptor-method">
+        <emu-clause id="bluetoothle-central-gattclient-store-service-characteristic-descriptor-method">
           <h1>store(service | characteristic | descriptor) method</h1>
           <p>The `store` method creates an `ArrayBuffer` instance from a service, characteristic, or descriptor instance. This buffer is used with the `restore` method to reinstantiate the service, characteristic, or descriptor after reconnecting to a peripheral to eliminate re-discovery.</p>
           <p>The content of the returned buffer is host-dependent and consequently may not be shared across hosts.</p>
           <p>This method is optional. Scripts can check for the presence of the `store` method to determine if it is available.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-restore-buffer-method">
+        <emu-clause id="bluetoothle-central-gattclient-restore-buffer-method">
           <h1>restore(buffer) method</h1>
           <p>The `restore` method instantiates a service, characteristic, or descriptor from a buffer created by the `store` method.</p>
           <p>This method is optional. Scripts can check for the presence of the `restore` method to determine if it is available.</p>
         </emu-clause>
-        <emu-clause id="bluetoothle-central-gattclient-class-pattern-properties-of-gattclient-instance">
+        <emu-clause id="bluetoothle-central-gattclient-properties-of-gattclient-instance">
           <h1>Properties of GATTClient instance</h1>
           <emu-table><table>
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
@@ -2901,6 +3025,9 @@ new GATTServer({
           <emu-note>
             <p>Use logical OR to combine these flags, not arithmetic ADD.</p>
             </emu-note>
+          <emu-note>
+            <p>No values are specified for these flags. They may vary between implementations.</p>
+            </emu-note>
         </emu-clause>
         <emu-clause id="bluetoothle-gattserver-advertise">
           <h1>advertise</h1>
@@ -2921,6 +3048,13 @@ new GATTServer({
         <emu-clause id="bluetoothle-gattserverconnection-close-method">
           <h1>close() method</h1>
           <p>The `close` method terminates the connection.</p>
+        </emu-clause>
+        <emu-clause id="bluetoothle-gattserverconnection-disconnect-callback-method">
+          <h1>disconnect([callback]) method</h1>
+          <p>The `disconnect` method initiates the process of cleanly terminating the connection. The callback, if provided, is invoked when the disconnection attempt completes.</p>
+          <emu-note>
+            <p>While both `disconnect` and `close` methods terminate the connection, `disconnect` is a clean termination whereas `close` drops the connection immediately. Once the disconnect completes, it is still necessary to call `close()` to release all resources held by the instance.</p>
+            </emu-note>
         </emu-clause>
         <emu-clause id="bluetoothle-gattserverconnection-notify-characteristic-value-callback-method">
           <h1>notify(characteristic, value[, callback]) method</h1>
@@ -2946,6 +3080,7 @@ new GATTServer({
             <thead><tr><th>Property</th><th>Description</th></tr></thead>
             <tbody>
             <tr><td>`maximumWrite`</td><td>A number indicating the maximum number of bytes allowed for any transmission (MTU), such as `notify` or the returned buffer from the `onRead` callback.</td></tr>
+            <tr><td>`remoteAddress`</td><td>A string indicating the address of the  remote Bluetooth LE peripheral. The value is suitable for passing as the `address` to instantiate a <emu-xref href="#bluetoothle-central-gattclient">`GATTClient`</emu-xref>, and its format is host-dependent. Returns `undefined` if unavailable.</td></tr>
           </tbody></table></emu-table>
         </emu-clause>
       </emu-clause>
@@ -3215,8 +3350,10 @@ settings.close();
             <h1>[Symbol.iterator] method</h1>
             <p>The Key-Value Domain instance conforms to the <a href="https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iterable-interface">ECMAScript Iterable interface</a> through its `[Symbol.Iterator]` method. The iterator returns the keys within the domain as strings.</p>
               <pre><code class="javascript">
-for (const key of device.keyValue)
+const settings = device.keyValue.open("settings");
+for (const key of settings)
     console.log(key);
+settings.close();
               </code></pre>
             <p>See Annex A for the <emu-xref href="#alg-key-value-domain-iterator-class">formal algorithms</emu-xref> of the Key-Value Domain Iterator class.</p>
           </emu-clause>
@@ -3363,7 +3500,7 @@ import update from "embedded:update";
         <emu-table><table>
           <thead><tr><th>Property</th><th>Description</th></tr></thead>
           <tbody>
-          <tr><td>`socket`</td><td>A <emu-xref href="#udp-socket-constructor-options">UDP class constructor options object</emu-xref>. This property is required.</td></tr>
+          <tr><td>`socket`</td><td>A <emu-xref href="#udp-socket-constructor-options">UDP socket constructor options object</emu-xref> extended with an `io` property set to a UDP socket constructor. This property is required.</td></tr>
         </tbody></table></emu-table>
       </emu-clause>
       <emu-clause id="dns-sd-methods">
@@ -3553,51 +3690,51 @@ let spi = new device.io.SPI(device.spi.default);
       </emu-clause>
       <emu-clause id="host-provider-instance-real-time-clocks">
         <h1>Real-time clocks</h1>
-        <p>The host provider instance should include a default Real-time clock constructor options object on its `rtc` property.</p>
+        <p>The host provider instance's `rtc` property should be the default Real-time clock constructor options object, extended with an `io` property set to a Real-time clock constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-domain-name-resolver">
         <h1>Domain Name resolver</h1>
-        <p>The host provider instance should include a default Domain Name Resolver class constructor options object on its `network.dns.resolver` property.</p>
+        <p>The host provider instance's `network.dns.resolver` property should be the default Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-ntp-client">
         <h1>NTP client</h1>
-        <p>The host provider instance should include a default NTP Client class constructor options object on its `network.ntp.client` property.</p>
+        <p>The host provider instance's `network.ntp.client` property should be the default NTP Client class constructor options object, extended with an `io` property set to an NTP Client constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-http-client">
         <h1>HTTP client</h1>
-        <p>The host provider instance should include a default HTTP Client class constructor options object on its `network.http.client` property.</p>
+        <p>The host provider instance's `network.http.client` property should be the default HTTP Client class constructor options object, extended with an `io` property set to an HTTP Client constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-https-client">
         <h1>HTTPS client</h1>
-        <p>The host provider instance should include a default secure HTTP Client class constructor options object on its `network.https.client` property.</p>
+        <p>The host provider instance's `network.https.client` property should be the default HTTP Client class constructor options object for secure connections, extended with an `io` property set to an HTTP Client constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-http-server">
         <h1>HTTP server</h1>
-        <p>The host provider instance should include a default HTTP Server class constructor options object on its `network.http.server` property.</p>
+        <p>The host provider instance's `network.http.server` property should be the default HTTP Server class constructor options object, extended with an `io` property set to an HTTP Server constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-mqtt-client">
         <h1>MQTT client</h1>
-        <p>The host provider instance should include a default MQTT Client class constructor options object on its `network.mqtt.client` property. </p>
+        <p>The host provider instance's `network.mqtt.client` property should be the default MQTT Client class constructor options object, extended with an `io` property set to an MQTT Client constructor. </p>
       </emu-clause>
       <emu-clause id="host-provider-instance-mqtts-client">
         <h1>MQTTS client</h1>
-        <p>The host provider instance should include a default secure MQTT Client class constructor options object on its `network.mqtts.client` property. </p>
+        <p>The host provider instance's `network.mqtts.client` property should be the default MQTT Client class constructor options object for secure connections, extended with an `io` property set to an MQTT Client constructor. </p>
       </emu-clause>
       <emu-clause id="host-provider-instance-ws-websocket-client">
         <h1>WS (WebSocket) client</h1>
-        <p>The host provider instance should include a default WebSocket Client class constructor options object on its `network.ws.client` property.</p>
+        <p>The host provider instance's `network.ws.client` property should be the default WebSocket Client class constructor options object, extended with an `io` property set to a WebSocket Client constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-wss-websocket-secure-client">
         <h1>WSS (WebSocket Secure) client</h1>
-        <p>The host provider instance should include a default secure WebSocket Client class constructor options object on its `network.wss.client` property.</p>
+        <p>The host provider instance's `network.wss.client` property should be the default WebSocket Client class constructor options object for secure connections, extended with an `io` property set to a WebSocket Client constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-tls-client">
         <h1>TLS client</h1>
-        <p>The host provider instance should include a default TLS Client class constructor options object on its `network.tls.client` property.</p>
+        <p>The host provider instance's `network.tls.client` property should be the default TLS Client class constructor options object, extended with an `io` property set to a TLS Client constructor.</p>
       </emu-clause>
       <emu-clause id="host-provider-instance-network-interfaces">
         <h1>Network Interfaces</h1>
-        <p>The host provider instance should include a Network Interface class constructor options object for each of its network interfaces on its `network.interface` property.</p>
+        <p>The host provider instance's `network.interface` property should contain a Network Interface class constructor options object for each of its network interfaces, each extended with an `io` property set to a Network Interface constructor.</p>
           <pre><code class="javascript">
 const Ethernet0 = device.network.interface.Ethernet0;
 const eth0 = new Ethernet0.io(Ethernet0);
@@ -3666,7 +3803,7 @@ const update = device.update.open({partition});
           <tr><td>`classification`</td><td>Identification of the sensor classification of the sensor instance. Required for instances of defined classes.</td></tr>
           <tr><td>`uniqueID`</td><td>Hard-coded unique identifiers associated with the sensor part. This includes serial numbers, time and date of manufacture, etc. Optional.</td></tr>
         </tbody></table></emu-table>
-        <emu-clause id="provenance-sensor-class-pattern-identification-property-properties-of-sample-object">
+        <emu-clause id="provenance-sample">
           <h1>Properties of sample Object</h1>
           <p>The Provenance Sensor Class Pattern extends the sample object described in the Sensor Class Pattern to include the following properties.</p>
           <emu-table><table>
@@ -3679,5 +3816,53 @@ const update = device.update.open({partition});
           <p>In the event disparate sensing modalities may be measured from a single sensor as discretely-sampled events (e.g. requesting from an IMU first acceleration and only later angular rate), those modalities are assumed to be treated as independent sensors for the purposes of recording `time`, `ticks`, and `faults`.</p>
           <p>See Annex A for the <emu-xref href="#alg-sensor-prov-class-pattern">formal algorithms</emu-xref> of the Provenance Sensor Class Pattern.</p>
         </emu-clause>
+      </emu-clause>
+    </emu-clause>
+    <emu-clause id="cryptographic-digest-class-pattern">
+      <h1> Cryptographic Digest Class Pattern</h1>
+      <p>The Cryptographic Digest Class Pattern implements incremental calculation of a cryptographic hash. It conforms to the IO Class Pattern.</p>
+      <emu-clause id="cryptographic-digest-class-pattern-properties-of-constructor-options-object">
+        <h1>Properties of constructor options object</h1>
+        <emu-table><table>
+          <thead><tr><th>Property</th><th>Description</th></tr></thead>
+          <tbody>
+          <tr><td>`algorithm`</td><td>String identifying the hash algorithm. This property is required.</td></tr>
+          <tr><td>`H`</td><td>Byte buffer of 16 bytes containing initialization data for the `"GHASH"` algorithm. This property is required when `algorithm` is `"GHASH"`.</td></tr>
+          <tr><td>`additionalData`</td><td>A byte buffer to initialize the GHASH algorithm's `y0` value. This property is optional and only used for when `algorithm` is `"GHASH"`.</td></tr>
+        </tbody></table></emu-table>
+        <emu-clause id="cryptographic-digest-class-pattern-properties-of-constructor-options-object-supported-algorithms">
+          <h1>Supported algorithms</h1>
+          <emu-table><table>
+            <thead><tr><th>Value</th><th>Block size (bytes)</th><th>Output size (bytes)</th></tr></thead>
+            <tbody>
+            <tr><td>`"MD5"`</td><td>64</td><td>16</td></tr>
+            <tr><td>`"SHA1"`</td><td>64</td><td>20</td></tr>
+            <tr><td>`"SHA224"`</td><td>64</td><td>28</td></tr>
+            <tr><td>`"SHA256"`</td><td>64</td><td>32</td></tr>
+            <tr><td>`"SHA384"`</td><td>128</td><td>48</td></tr>
+            <tr><td>`"SHA512"`</td><td>128</td><td>64</td></tr>
+            <tr><td>`"GHASH"`</td><td>16</td><td>16</td></tr>
+          </tbody></table></emu-table>
+        </emu-clause>
+      </emu-clause>
+      <emu-clause id="cryptographic-digest-class-pattern-write-data">
+        <h1>write(data)</h1>
+        <p>The `data` argument is a byte buffer containing the data to add to the digest. This parameter is required.</p>
+      </emu-clause>
+      <emu-clause id="cryptographic-digest-class-pattern-read-buffer">
+        <h1>read([buffer])</h1>
+        <p>Returns the current digest. Additional data may be added to the digest after calling the `read` method.</p>
+        <p>If the `buffer` argument is provided, the digest is stored into the buffer starting as offset 0 and the size of the digest returned (`outputSize`). The byte buffer must be at least `outputSize` bytes or an exception thrown. If the `buffer` argument is omitted, a new `ArrayBuffer` of `outputSize` bytes is allocated to store the digest and returned.</p>
+      </emu-clause>
+      <emu-clause id="cryptographic-digest-class-pattern-reset">
+        <h1>reset()</h1>
+        <p>Discards the accumulated digest state, returning the instance to its initial state. Takes no parameters and returns no value.</p>
+      </emu-clause>
+      <emu-clause id="cryptographic-digest-class-pattern-instance-properties">
+        <h1>Instance properties</h1>
+        <p><b>`blockSize `</b></p>
+        <p>The internal block size of the algorithm in bytes as a number. This property is read-only.</p>
+        <p><b>`outputSize `</b></p>
+        <p>The byte length of the digest as a number. This property is read-only.</p>
       </emu-clause>
     </emu-clause>

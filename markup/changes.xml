@@ -4,6 +4,16 @@
       <ul>
         <li>Note adoption of 4th Edition by General Assembly</li>
         <li>Fix step 5.d of the Asynchronous IO Class Pattern `close` method <emu-xref href="#alg-io-async-class-pattern-prototype-close">algorithm</emu-xref></li>
+        <li>HTTP Server <emu-xref href="#http-server-class-pattern">constructor option</emu-xref> `io` renamed to `socket` (matches HTTP Client and consistent with other IO constructor options objects)</li>
+        <li>add `remoteAddress` and `disconnect()` to <emu-xref href="#bluetoothle-gattserverconnection">BLE Server GATT Connection</emu-xref></li>
+        <li>setting `format` to unsupported value throws, type of exception is not specified</li>
+        <li>Be explicit when constructor options object is extended with an `io` property</li>
+        <li>Add `onSample` callback and explain `sample()` may return `undefined` in <emu-xref href="#sensor-class-pattern">Sensor Class Pattern</emu-xref></li>
+        <li>[Symbol.dispose]</li>
+        <li>Add `protocol` getter to <emu-xref href="#websocket-client">WebSocket client</emu-xref> for negotiated subprotocol</li>
+        <li>Add <emu-xref href="#sensor-location">Location sensor</emu-xref></li>
+        <li>Add <emu-xref href="#cryptographic-digest-class-pattern">Cryptographic Digest Class Pattern</emu-xref></li>
+        <li>Add <emu-xref href="#network-interface-wifi-accesspoint">Wi-Fi Access Point Network Interface</emu-xref> amd small supporting updates to other <emu-xref href="##network-interface">network interfaces</emu-xref>.</li>
       </ul>
       <emu-note type="editor">
         <p>This is a working draft. It is likely to change. Feedback is welcome.</p>
