@@ -7,6 +7,7 @@
 - Be explicit when constructor options object is extended with an `io` property
 - Add `onSample` callback and explain `sample()` may return `undefined` in [Sensor Class Pattern](#sensor-class-pattern)
 - [Symbol.dispose]
+- Add `protocol` getter to [WebSocket client](#websocket-client) for negotiated subprotocol
 
 ## Introduction
 
@@ -2665,6 +2666,10 @@ The `write` method may be used to send all or part of a single binary or text me
 The options object is optional. If not provided, the default values are used.
 
 The return value is the number of bytes that may be written. This may be reduced by more than the size of the payload due to overhead in the protocol.
+
+### `protocol` property
+
+The subprotocol negotiated by the connection handshake as a string. If the subprotocol is unknown, returns `undefined`. Read-only.
 
 ### Static properties of the constructor
 
