@@ -2,7 +2,7 @@
 
 - Fix step 5.d of the Asynchronous IO Class Pattern close method algorithm
 - HTTP Server [constructor option](#http-server-class-pattern) `io` renamed to `socket` (matches HTTP Client and consistent with other IO constructor options objects)
-- add `remoteAddress` to [BLE Server GATT Connection](#bluetoothle-gattserverconnection)
+- add `remoteAddress` and `disconnect()` to [BLE Server GATT Connection](#bluetoothle-gattserverconnection)
 - setting `format` to unsupported value throws, type of exception is not specified
 - Be explicit when constructor options object is extended with an `io` property
 - Add `onSample` callback and explain `sample()` may return `undefined` in [Sensor Class Pattern](#sensor-class-pattern)
@@ -3285,6 +3285,12 @@ The `GATTServerConnection` class conforms to the [Base Class Pattern](#base-clas
 
 The `close` method terminates the connection.
 
+#### `disconnect([callback])` method
+
+The `disconnect` method initiates the process of cleanly terminating the connection. The callback, if provided, is invoked when the disconnection attempt completes.
+
+> **Note**: While both `disconnect` and `close` methods terminate the connection, `disconnect` is a clean termination whereas `close` drops the connection immediately. Once the disconnect completes, it is still necessary to call `close()` to release all resources held by the instance.
+ 
 #### `notify(characteristic, value[, callback])` method
 
 The `notify` notifies the central that the value of specified `GATTServerCharacteristic` has changed to the `value` argument. The `value` argument is a byte buffer. This method should only be called for characteristics with an active subscription. The callback, if provided, is invoked with only an `error` argument.
