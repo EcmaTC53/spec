@@ -8,6 +8,7 @@
 - Add `onSample` callback and explain `sample()` may return `undefined` in [Sensor Class Pattern](#sensor-class-pattern)
 - [Symbol.dispose]
 - Add `protocol` getter to [WebSocket client](#websocket-client) for negotiated subprotocol
+- Add [Location sensor](#sensor-location)
 
 ## Introduction
 
@@ -78,6 +79,7 @@ The following referenced documents are required for the application of this docu
 - ITU X.690, *Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)* <br>[https://www.itu.int/rec/T-REC-X.690](https://www.itu.int/rec/T-REC-X.690)
 - OASIS MQTT 3.1.1 Standard <br>[http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
 - Bluetooth Core Specification 6.2 <br> [https://www.bluetooth.com/specifications/specs/core-specification-6-2/](https://www.bluetooth.com/specifications/specs/core-specification-6-2/)
+- World Geodetic System 1984 (WGS 84). Office of Geomatics, National Geospatial Intelligence Agency. 2008. <br>[https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84](https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84)
 
 ## 4 Terms and definitions
 
@@ -2029,6 +2031,37 @@ See Annex A for the [formal algorithms](#alg-sensor-VolatileOrganicCompounds) of
 | Property | Description |
 | :---: | :--- |
 | `tvoc` | A number that represents the sampled total volatile organic compounds in parts per billion. This property is required.
+
+<a id="sensor-location"></a>
+
+### Location
+
+The `Location` class implements access to a location provider. It may be used for GPS, GNSS, and other location technologies. The property name `location` is used when part of a compound sensor.
+
+See Annex A for the [formal algorithms](#alg-sensor-location) of the `Location` sensor class.
+
+Properties which share a name with the [W3C Geolocation API](https://www.w3.org/TR/geolocation/) have compatible values.
+
+### Properties of configure options object
+| Property | Description |
+|---|---|
+| `enableHighAccuracy` | A boolean that requests the most accurate position fix available when `true`. This property is optional and defaults to `false`. |
+| `maximumAge` | A number specifying the maximum age in milliseconds of an acceptable cached position. This property is optional and defaults to `0`. |
+| `timeout` | A number specifying the maximum time in milliseconds to wait for a position fix before invoking `onError`. This property is optional and defaults to no timeout. |
+
+### Properties of sample object
+| Property | Description |
+|---|---|
+| `latitude` | A number that represents the position's latitude in decimal degrees in the WGS84 coordinate system. This property is required. |
+| `longitude` | A number that represents the position's longitude in decimal degrees in the WGS84 coordinate system. This property is required. |
+| `accuracy` | A number that represents the estimated accuracy radius in meters of the position given by `latitude` and `longitude`. This property is optional. |
+| `altitude` | A number that represents the height in meters above the WGS84 ellipsoid. This property is optional. |
+| `altitudeAccuracy` | A number that represents the estimated accuracy in meters of `altitude`. This property is optional. |
+| `heading` | A number that represents the direction of travel in degrees clockwise from true north, in the range `[0, 360)`. This property is optional. |
+| `speed` | A number that represents the magnitude of the horizontal velocity in meters per second. This property is optional. |
+| `timestamp` | A number that indicates the when the position was acquired as an ECMAScript time value. The value conforms to the [`time` property[](#provenance-sample) of the Provenance Sensor Class Pattern. This property is optional. |
+
+>**Note**: The sample object uses the W3C Geolocation API's `timestamp` property name rather than the Provenance Sensor Class Pattern's `time` property name for interoperability with the Web platform. An implementation may include both `time` and `timestamp` properties, with the same values, to conform to both.
 
 ## 15 Display Class Pattern
 
@@ -4116,6 +4149,8 @@ Identification information recommended for the `identification` property include
 | `model` | Identification of the manufacturer and part number of the sensor. Required.
 | `classification` | Identification of the sensor classification of the sensor instance. Required for instances of defined classes.
 | `uniqueID` | Hard-coded unique identifiers associated with the sensor part. This includes serial numbers, time and date of manufacture, etc. Optional.
+
+<a id="provenance-sample"></a>
 
 #### Properties of `sample` Object
 
