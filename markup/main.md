@@ -10,6 +10,7 @@
 - Add `protocol` getter to [WebSocket client](#websocket-client) for negotiated subprotocol
 - Add [Location sensor](#sensor-location)
 - Add [Cryptographic Digest Class Pattern](#cryptographic-digest-class-pattern)
+- Add [Wi-Fi Access Point Network Interface](#network-interface-wifi-accesspoint) amd small supporting updates to other [network interfaces](##network-interface).
 
 ## Introduction
 
@@ -76,6 +77,7 @@ The following referenced documents are required for the application of this docu
 - IETF RFC 6762, *Multicast DNS* <br>[https://www.rfc-editor.org/rfc/rfc6762](https://www.rfc-editor.org/rfc/rfc6762)
 - IETF RFC 6763, *DNS-Based Service Discovery* <br>[https://www.rfc-editor.org/rfc/rfc6763](https://www.rfc-editor.org/rfc/rfc6763)
 - IETF RFC 4122, *A Universally Unique IDentifier (UUID) URN Namespace* <br>[https://www.rfc-editor.org/rfc/rfc4122](https://www.rfc-editor.org/rfc/rfc4122)
+- IETF RFC 8910, *Captive-Portal Identification in DHCP and Router Advertisements (RAs)* <br>[https://www.rfc-editor.org/rfc/rfc8910](https://www.rfc-editor.org/rfc/rfc8910)
 - IEEE 802 <br>[https://standards.ieee.org/featured/ieee-802/](https://standards.ieee.org/featured/ieee-802/)
 - ITU X.690, *Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)* <br>[https://www.itu.int/rec/T-REC-X.690](https://www.itu.int/rec/T-REC-X.690)
 - OASIS MQTT 3.1.1 Standard <br>[http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
@@ -421,7 +423,7 @@ The IO Class Pattern is designed to be used both with IO types that have only a 
 
 The IO Class Pattern reserves the `io` property name in the options object. If present, it must be ignored by IO implementations. This requirement supports the [Host provider instance](#host-provider-instance) which includes constructor options objects for host resources which include an `io` property set to the corresponding constructor. For example, the following fragment instantiates the default Real-Time Clock (RTC) through the Host provider instance.
 
-```js
+```javascript
 const rtc = new device.rtc.io(device.rtc);
 ```
 
@@ -2246,8 +2248,6 @@ The Network Interface Class Pattern builds on the Base Class Pattern to provide 
 
 The physical network interfaces may be physically built into the microcontroller or a separate peripheral. The logical network interfaces are managed by the host.
 
-Creating an instance of a Network Interface class binds to the host's network interface; it does not initialize the network interface. Closing an instance of a Network Interface class unbinds from the host's network interface; it does not uninitialize the network interface.
-
 There may be multiple simultaneous instances of a Network Interface class, all bound to the same logical network interface.
 
 See Annex A for the [formal algorithms](#alg-network-interface-class-pattern) of the Network Interface Class Pattern.
@@ -2294,6 +2294,8 @@ The Ethernet Network Interface is a logical subclass of the [Network Interface C
 import Ethernet from "embedded:network/interface/ethernet";
 ```
 
+Creating an instance of the Ethernet Network Interface class binds to the host's Ethernet network interface, initializing if necessary; it does not modify an active connection. Closing an instance unbinds from the host's Ethernet network interface; it does not disconnect or uninitialize the network interface.
+
 See Annex A for the [formal algorithms](#alg-ethernet-network-interface) of the Ethernet Network Interface.
 
 #### `connection` property
@@ -2309,6 +2311,8 @@ The Wi-Fi Network Interface is a logical subclass of the [Network Interface Clas
 ```javascript
 import WiFi from "embedded:network/interface/wifi";
 ```
+
+Creating an instance of the Wi-Fi Network Interface class binds to the host's Wi-Fi network interface, initializing if necessary; it does not modify an active connection. Closing an instance unbinds from the host's Wi-Fi network interface; it does not disconnect or uninitialize the network interface.
 
 See Annex A for the [formal algorithms](#alg-wifi-network-interface) of the Wi-Fi Network Interface.
 
@@ -2361,6 +2365,87 @@ The Radio Signal Strength Indicator of the connected access point as a number or
 
 #### `channel` property
 The channel number of the connected access point as a number or `undefined` if not connected. Read-only.
+
+<a id="network-interface-wifi-accesspoint"></a>
+
+### Wi-Fi Access Point Network Interface
+The Wi-Fi Access Point Network Interface is a logical subclass of the [Network Interface Class Pattern](#network-interface) that manages a Wi-Fi access point. Wi-Fi stations connect to the access point.
+
+```javascript
+import WiFiAccessPoint from "embedded:network/interface/wifi/accesspoint";
+```
+
+The access point begins operation when an instance is created. Closing the instance ends operation of the access point.
+
+The number of access points a host can operate simultaneously depends on its capabilities. Many hosts support just one. The constructor throws an exception if no access point is available.
+
+See Annex A for the [formal algorithms](#alg-wifi-access-point-network-interface) of the Wi-Fi Access Point Network Interface.
+
+#### Properties of constructor options object
+
+| Property | Description |
+| :---: | :--- |
+| `SSID` | Name of the access point as a string. This property is required. |
+| `password` | The access point's password as a string of at least 8 characters. This property is required for `authentication` modes other than `"none"`. |
+| `authentication` | The authentication mode of the access point as a string. This property is optional. The default authentication mode is `"none"` when no `password` is provided and otherwise an implementation dependent mode of at least WPA2 strength. |
+| `channel` | Wi-Fi channel for the access point as a number. This property is optional. If omitted, the host selects the channel. |
+| `hidden` | Boolean indicating the access point should not broadcast its SSID. This property is optional and defaults to `false`. |
+| `max` | Maximum number of stations that may be connected simultaneously as a number. This property is optional and the default is implementation dependent. |
+| `interval` | Time between beacon transmissions in milliseconds as a number. This property is optional and the default is implementation dependent. |
+| `onConnect(station)` | A callback function invoked when a station connects to the access point. The `station` argument is the [`Station` instance](#wifi-accesspoint-station) of the connecting station. This property is optional. |
+| `onDisconnect(station)` | A callback function invoked when a station disconnects from the access point. The `station` argument is the `Station` instance of the disconnecting station. This property is optional. |
+
+The following values are defined for the `authentication` property.
+
+| Value | Description |
+| :---: | :--- |
+| `"none"` | Open, no authentication |
+| `"wpa2_psk"` | WPA2 PSK |
+| `"wpa_wpa2_psk"` | WPA/WPA2 PSK |
+| `"wpa3_psk"` | WPA3 PSK |
+| `"wpa2_wpa3_psk"` | WPA2/WPA3 PSK |
+
+The authentication modes supported are implementation dependent. The constructor throws an exception if the requested mode is unsupported.
+
+The valid ranges of the `channel`, `max`, and `interval` properties are implementation dependent. The constructor throws an exception on values outside the valid range.
+
+#### `connect` and `disconnect` methods
+The access point does not connect to a network. Instead, it creates a network for devices to connect to. This makes the `connect` and `disconnect` methods meaningless and consequently they are not present.
+
+#### `configure` method
+The following property is defined for the options object.
+
+| Property | Description |
+| :---: | :--- |
+| `portal` | URL of a captive portal page as a string, provided to stations using the DHCP captive portal option (RFC 8910). |
+
+#### `connection` property
+For a Wi-Fi access point network interface, `connection` 200 ("disconnected") indicates that the access point is not operating and `connection` 400 ("connected") indicates that the access point is operating and stations may connect.
+
+#### `SSID` property
+The Service Set Identifier of the access point as a string. Read-only.
+
+#### `channel` property
+The channel number in use by the access point as a number. Read-only.
+
+<a id="wifi-accesspoint-station"></a>
+
+#### `Station` instances
+Each station connected to the access point is represented by a `Station` instance. The host creates the instance when the station connects and provides it to the `onConnect` callback. Scripts cannot create `Station` instances directly.
+
+A `Station` instance is usable until its `onDisconnect` callback returns, after which the instance is closed. Closing the access point detaches all `Station` instances without invoking `onDisconnect`.
+
+**`close` method**
+
+Initiates disconnection of the station from the access point. The `onDisconnect` callback is invoked when the disconnection completes.
+
+**`MAC` property**
+
+The MAC address of the station as a string. Read-only.
+
+**`address` property**
+
+The IP address assigned to the station as a string or `undefined` if no address has been assigned. Read-only.
 
 <a id="dns-resolver"></a>
 
@@ -4202,7 +4287,6 @@ If the `buffer` argument is provided, the digest is stored into the buffer start
 ### `reset()`
 
 Discards the accumulated digest state, returning the instance to its initial state. Takes no parameters and returns no value.
-
 
 ### Instance properties
 
