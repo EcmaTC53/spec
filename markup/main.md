@@ -9,6 +9,7 @@
 - [Symbol.dispose]
 - Add `protocol` getter to [WebSocket client](#websocket-client) for negotiated subprotocol
 - Add [Location sensor](#sensor-location)
+- Add [Cryptographic Digest Class Pattern](#cryptographic-digest-class-pattern)
 
 ## Introduction
 
@@ -350,6 +351,10 @@ For asynchronous `close`:
 
 The `target` property is opaque to the object's implementation. It may be initialized by the constructor using the `target` property in the options object. Scripts may both read and write the target property, though it is typically only set at construction.
 
+### `[Symbol.dispose]` property
+
+The `[Symbol.dispose]` property is an alias for the `close` method, if the `close()` method is synchronous, to support ECMAScript's Explicit Resource Management.
+
 ### Callbacks
 
 Instances of the Base Class Pattern typically use function callbacks to deliver asynchronous events.
@@ -381,12 +386,6 @@ The callbacks are stored internally by the implementation. They are not public m
 A callback function may only be invoked when no script is running in its host virtual machine to respect the [single-thread evaluation semantics of ECMAScript](https://tc39.es/ecma262/#sec-happens-before). This means that callbacks may not be invoked by the instance from within its public method calls, including the constructor.
 
 Callbacks must be invoked in the same virtual machine in which they were created.
-
-### Instance properties
-
-| Property | Description |
-| :---: | :--- |
-| `[Symbol.dispose]` | Alias for the `close` method, if the `close()` method is synchronous, to support ECMAScript's Explicit Resource Management. |
 
 ## 9 IO Class Pattern
 
@@ -4166,3 +4165,51 @@ In the event disparate sensing modalities may be measured from a single sensor a
 
 See Annex A for the [formal algorithms](#alg-sensor-prov-class-pattern) of the Provenance Sensor Class Pattern.
 
+<a id="cryptographic-digest-class-pattern"></a>
+
+## 31 Cryptographic Digest Class Pattern
+
+The Cryptographic Digest Class Pattern implements incremental calculation of a cryptographic hash. It conforms to the IO Class Pattern.
+
+### Properties of constructor options object
+| Property | Description |
+|---|---|
+| `algorithm` | String identifying the hash algorithm. This property is required. |
+| `H` | Byte buffer of 16 bytes containing initialization data for the `"GHASH"` algorithm. This property is required when `algorithm` is `"GHASH"`. |
+| `additionalData` | A byte buffer to initialize the GHASH algorithm's `y0` value. This property is optional and only used for when `algorithm` is `"GHASH"`. |
+
+#### Supported algorithms
+| Value | Block size (bytes) | Output size (bytes) |
+|---|---|---|
+| `"MD5"` | 64 | 16 |
+| `"SHA1"` | 64 | 20 |
+| `"SHA224"` | 64 | 28 |
+| `"SHA256"` | 64 | 32 |
+| `"SHA384"` | 128 | 48 |
+| `"SHA512"` | 128 | 64 |
+| `"GHASH"` | 16 | 16 |
+
+### `write(data)`
+
+The `data` argument is a byte buffer containing the data to add to the digest. This parameter is required.
+
+### `read([buffer])`
+
+Returns the current digest. Additional data may be added to the digest after calling the `read` method.
+
+If the `buffer` argument is provided, the digest is stored into the buffer starting as offset 0 and the size of the digest returned (`outputSize`). The byte buffer must be at least `outputSize` bytes or an exception thrown. If the `buffer` argument is omitted, a new `ArrayBuffer` of `outputSize` bytes is allocated to store the digest and returned.
+
+### `reset()`
+
+Discards the accumulated digest state, returning the instance to its initial state. Takes no parameters and returns no value.
+
+
+### Instance properties
+
+**`blockSize `**
+
+The internal block size of the algorithm in bytes as a number. This property is read-only.
+
+**`outputSize `**
+
+The byte length of the digest as a number. This property is read-only.
