@@ -6,7 +6,7 @@
 - setting `format` to unsupported value throws, type of exception is not specified
 - Be explicit when constructor options object is extended with an `io` property
 - Add `onSample` callback and explain `sample()` may return `undefined` in [Sensor Class Pattern](#sensor-class-pattern)
-
+- [Symbol.dispose]
 
 ## Introduction
 
@@ -265,7 +265,7 @@ This Standard uses the term "Byte Buffer" to mean an instance of the following E
 
 This Standard uses the term "Disposable Buffer" to mean an instance of a [Byte Buffer](#byte-buffer) with a `close` method which immediately releases the memory used by the backing buffer. After invoking `close`, the buffer shall behave as a detached buffer.
 
-> **NOTE**: The Disposable Buffer behavior is intended to be forward-compatible with the [Explicit Resource Management](https://github.com/tc39/proposal-explicit-resource-management) proposal. The Disposable Buffer's `close` method is an alias for the `[Symbol.dispose]` method specified by that proposal.
+A disposable buffer should have a `[Symbol.dispose]` property as an alias for `close` method to support ECMAScript's Explicit Resource Management.
 
 <a id="uuid"></a>
 
@@ -378,6 +378,12 @@ The callbacks are stored internally by the implementation. They are not public m
 A callback function may only be invoked when no script is running in its host virtual machine to respect the [single-thread evaluation semantics of ECMAScript](https://tc39.es/ecma262/#sec-happens-before). This means that callbacks may not be invoked by the instance from within its public method calls, including the constructor.
 
 Callbacks must be invoked in the same virtual machine in which they were created.
+
+### Instance properties
+
+| Property | Description |
+| :---: | :--- |
+| `[Symbol.dispose]` | Alias for the `close` method, if the `close()` method is synchronous, to support ECMAScript's Explicit Resource Management. |
 
 ## 9 IO Class Pattern
 
