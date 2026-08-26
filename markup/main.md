@@ -1,3 +1,29 @@
+<<<<<<< Updated upstream
+=======
+## Changes since the fourth edition
+
+- Fix step 5.d of the Asynchronous IO Class Pattern close method algorithm
+- HTTP Server [constructor option](#http-server-class-pattern) `io` renamed to `socket` (matches HTTP Client and consistent with other IO constructor options objects)
+- add `remoteAddress` and `disconnect()` to [BLE Server GATT Connection](#bluetoothle-gattserverconnection)
+- setting `format` to unsupported value throws, type of exception is not specified
+- Be explicit when constructor options object is extended with an `io` property
+- Add `onSample` callback and explain `sample()` may return `undefined` in [Sensor Class Pattern](#sensor-class-pattern)
+- `[Symbol.dispose]`
+- Add `protocol` getter to [WebSocket client](#websocket-client) for negotiated subprotocol
+- Add [Location sensor](#sensor-location)
+- Add [Cryptographic Digest Class Pattern](#cryptographic-digest-class-pattern)
+- Add [Wi-Fi Access Point Network Interface](#network-interface-wifi-accesspoint) amd small supporting updates to other [network interfaces](##network-interface).
+
+## To do for the fifth edition
+
+- Add fifth edition text to intro
+- New sections in Annex
+	- Location
+	- Cryptographic Digest
+	- Wi-Fi Access Point
+- DNS-SD (missing from fourth edition)
+
+>>>>>>> Stashed changes
 ## Introduction
 
 This Standard defines APIs for use on embedded systems. Embedded systems are far more diverse than personal computers, smartphones, and web servers where ECMAScript is most widely used. The diversity of embedded hardware is a consequence of devices being optimized for a specific product or class of products.
@@ -1074,7 +1100,7 @@ See Annex A for the [formal algorithms](#alg-io-tcp-listener) of the `Listener` 
 #### Properties of constructor options object
 | Property | Description |
 | :---: | :--- |
-| `port` | A number specifying the port to listen on. This property is optional and defaults to 0.
+| `port` | A number specifying the port to listen on. This property is optional and defaults to `0` which requests an ephemeral port.
 | `address` | A string with the IP address of the network interface to bind to. This property is optional.
 
 #### Methods
@@ -2046,7 +2072,7 @@ Properties which share a name with the [W3C Geolocation API](https://www.w3.org/
 | `altitudeAccuracy` | A number that represents the estimated accuracy in meters of `altitude`. This property is optional. |
 | `heading` | A number that represents the direction of travel in degrees clockwise from true north, in the range `[0, 360)`. This property is optional. |
 | `speed` | A number that represents the magnitude of the horizontal velocity in meters per second. This property is optional. |
-| `timestamp` | A number that indicates the when the position was acquired as an ECMAScript time value. The value conforms to the [`time` property[](#provenance-sample) of the Provenance Sensor Class Pattern. This property is optional. |
+| `timestamp` | A number that indicates the when the position was acquired as an ECMAScript time value. The value conforms to the [`time` property](#provenance-sample) of the Provenance Sensor Class Pattern. This property is optional. |
 
 >**Note**: The sample object uses the W3C Geolocation API's `timestamp` property name rather than the Provenance Sensor Class Pattern's `time` property name for interoperability with the Web platform. An implementation may include both `time` and `timestamp` properties, with the same values, to conform to both.
 
@@ -2582,7 +2608,7 @@ The `HTTPServer` class data format is always `"buffer"`.
 | Property | Description |
 | :---: | :--- |
 | `socket` | A TCP listener socket constructor options object extended with an `io` property set to a TCP listener socket constructor. This property is required. |
-| `port` | The port number to listen on, as a number. This property is optional and defaults to 80. |
+| `port` | The port number to listen on, as a number. To request an ephemeral port number, pass `0`. This property is optional and defaults to 80. |
 | `onConnect(connection)` | A function to invoke when a new connection is initiated. It is passed an HTTP Server Connection instance as the sole argument. This property is required. |
 
 ### `close` method
@@ -2648,6 +2674,9 @@ If the route is set from within the `onRequest` callback, the `onRequest` callba
 <!-- N.B. this synchronous callback does not follow-up ECMA-419 guidance on callbacks -->
 
 The instance copies the callback functions. Changes to the properties of the route after setting the route are ignored.
+
+#### `port` property
+The read-only `port` property provides the local port the server is bound to as a number.
 
 ## 22 HTTP Server Connection routes
 
