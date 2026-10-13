@@ -64,6 +64,7 @@ The following referenced documents are required for the application of this docu
 - IETF RFC 6763, *DNS-Based Service Discovery* <br>[https://www.rfc-editor.org/rfc/rfc6763](https://www.rfc-editor.org/rfc/rfc6763)
 - IETF RFC 4122, *A Universally Unique IDentifier (UUID) URN Namespace* <br>[https://www.rfc-editor.org/rfc/rfc4122](https://www.rfc-editor.org/rfc/rfc4122)
 - IETF RFC 8910, *Captive-Portal Identification in DHCP and Router Advertisements (RAs)* <br>[https://www.rfc-editor.org/rfc/rfc8910](https://www.rfc-editor.org/rfc/rfc8910)
+- IETF RFC 3986, *Uniform Resource Identifier (URI): Generic Syntax* <br>[https://www.rfc-editor.org/rfc/rfc3986](https://www.rfc-editor.org/rfc/rfc8910)
 - IEEE 802 <br>[https://standards.ieee.org/featured/ieee-802/](https://standards.ieee.org/featured/ieee-802/)
 - ITU X.690, *Information technology - ASN.1 encoding rules: Specification of Basic Encoding Rules (BER), Canonical Encoding Rules (CER) and Distinguished Encoding Rules (DER)* <br>[https://www.itu.int/rec/T-REC-X.690](https://www.itu.int/rec/T-REC-X.690)
 - OASIS MQTT 3.1.1 Standard <br>[http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
@@ -1182,7 +1183,7 @@ The following TLS version strings are defined: `"TLSv1.3"`, `"TLSv1.2"`, `"TLSv1
 | `tls.maximumVersion` | A TLS version string indicating the maximum acceptable TLS version for the connection. This property is optional and the default is implementation dependent. |
 | `tls.applicationLayerProtocol` | Supports Application-Layer Protocol Negotiation Extension (ALPN). A `String` or Byte Buffer to indicate support for a single application layer protocol or an `Array` of one or more `String` and Byte Buffers to indicate support for multiple application layer protocols. This property is optional. |
 | `tls.maximumFragmentLength` | Supports Maximum Fragment Length. A number indicating the maximum fragment size in bytes. This property is optional. If not present, the maximum fragment length is not negotiated. |
-| `tls.ca` | A Byte Buffer or an `Array` of Byte Buffer containing certificates chains for the connection. This property is optional. |
+| `tls.ca` | A Byte Buffer or an `Array` of Byte Buffers containing certificates chains for the connection. This property is optional. |
 | `tls.clientKey` | A Byte Buffer or an `Array` of Byte Buffers containing client keys for the connection. This property is optional. |
 | `tls.clientCertificate` | A Byte Buffer or an `Array` of Byte Buffers containing client certificates for the connection. This property is optional. |
 
@@ -2538,7 +2539,7 @@ The options object supports the following properties:
 | Property | Description |
 | :---: | :--- |
 | `method` | The HTTP method to use to access the resource as a string. This property is optional and defaults to `"GET"`. |
-| `path` | The HTTP resource to access as a string. This property is optional and defaults to `"/"`. |
+| `path` | The HTTP resource to access as a string. This property is optional and defaults to `"/"`. Paths must begin with a slash per [RFC 3986, Section 3.3](https://www.rfc-editor.org/info/rfc3986/#section-3.3), except when a path of `"*"` is used with the `OPTIONS` method.|
 | `headers` | A `Map` instance containing request headers. The map keys are the header names and their values are the header values. This property is optional. |
 | `headersMask` | An `Array` of header names to limit the response headers provided to `onHeaders`. Headers not included may be excluded. Header names must be lowercase. This property is optional; if not specified all headers are provided to `onHeaders`. |
 | `onHeaders(status, headers, statusText)` | A function to invoke to provide the HTTP status result code, the response headers as a `Map`, and the HTTP status message as a string. The map keys are the header names normalized to lowercase and their values are the header values. This property is optional. |
@@ -2737,7 +2738,7 @@ The `WebSocketClient` class data format is either `"number"` for individual byte
 | `host` | The remote hostname to connect to as a string. This property is optional. |
 | `attach` | An instance of a TCP Class. This property is optional. |
 | `port` | The remote port number to connect to as a number. This property is optional and defaults to 80. |
-| `path` | The WebSocket endpoint to access as a string. This property is optional and defaults to `"/"`. |
+| `path` | The WebSocket endpoint to access as a string. This property is optional and defaults to `"/"`. Paths must begin with a slash per [RFC 3986, Section 3.3](https://www.rfc-editor.org/info/rfc3986/#section-3.3). |
 | `protocol` | The WebSocket sub-protocol as a string. To provide multiple subprotocols, separate them with commas and no white space like an HTTP header with multiple values. This property is optional. |
 | `headers` | A `Map` of HTTP headers to add to the request. The map keys are the header names and their values are the header values. This property is optional. |
 | `dns` | A Domain Name Resolver class constructor options object, extended with an `io` property set to a Domain Name Resolver constructor, to use to resolve the `host`. This property is required. |
@@ -3467,7 +3468,7 @@ The Files module's default export is a [Directory instance](#storage-directory-c
 
 > **NOTE 1**: The Files module is designed to follow POSIX API semantics to allow direct implementation on POSIX and the many other environments that use POSIX as a model for their file APIs.
 
-> **NOTE 2**: For implementations of the Files module on POSIX, new files should be created with `0666` permissions, new directories should be created with `0777` permissions, and that directories should be opened with `O_RDONLY` flags.
+> **NOTE 2**: For implementations of the Files module on POSIX, new files should be created with `0666` permissions, new directories should be created with `0777` permissions, and directories should be opened with `O_RDONLY` flags.
 
 <a id="storage-file-subpath"></a>
 
