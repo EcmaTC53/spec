@@ -4257,11 +4257,11 @@ The Cryptographic Digest Class Pattern implements incremental calculation of a c
 | Value | Block size (bytes) | Output size (bytes) |
 |---|---|---|
 | `"MD5"` | 64 | 16 |
-| `"SHA1"` | 64 | 20 |
-| `"SHA224"` | 64 | 28 |
-| `"SHA256"` | 64 | 32 |
-| `"SHA384"` | 128 | 48 |
-| `"SHA512"` | 128 | 64 |
+| `"SHA-1"` | 64 | 20 |
+| `"SHA-224"` | 64 | 28 |
+| `"SHA-256"` | 64 | 32 |
+| `"SHA-384"` | 128 | 48 |
+| `"SHA-512"` | 128 | 64 |
 | `"GHASH"` | 16 | 16 |
 
 ### `write(data)`
