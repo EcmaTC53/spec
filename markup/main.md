@@ -4226,7 +4226,7 @@ Identification information recommended for the `identification` property include
 
 <a id="provenance-sample"></a>
 
-#### Properties of `sample` Object
+### Properties of `sample` Object
 
 The Provenance Sensor Class Pattern extends the sample object described in the Sensor Class Pattern to include the following properties.
 
